@@ -16,7 +16,7 @@
         <div class="top">
           <div class="d-flex align-center">
             <div class="title font-24" style="margin:0 auto ">研战到底</div>
-            <div>
+            <div v-show="showLogin">
               <router-link class="title" tag="span" to="./login">登录</router-link>
               <!-- <div class="title" style="margin-right:4px">登录</div> -->
             </div>
@@ -111,10 +111,10 @@ import listScroll from "@/components/ListScroll";
 // import swiper from '@/components/Swiper'
 import navBar from "@/components/NavBar";
 import { getData } from "@/service/home";
-
+import { getUserInfoMe } from '@/service/user'
 import { Toast } from "vant";
 import { useStore } from "vuex";
-
+import { getLocal } from '@/common/js/utils'
 export default {
   name: "home",
   components: {
@@ -126,6 +126,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const state = reactive({
+      showLogin: true,
       timestamp: 0,
       to: "",
       index: "",
@@ -166,7 +167,27 @@ export default {
       //更新scroll
 
       Toast.clear();
+      const token = getLocal('token')
+      if (token) {
+        await getUserInfo()
+        state.showLogin = false
+      }else{
+        
+        console.log("首页 没有token")
+      }
+      //设置用户信息
+     
     });
+
+    const getUserInfo =async ()=>{
+      const res =await getUserInfoMe()
+      // console.log("==========getUserInfo")
+      // console.log(res.content)
+      store.commit("setUserInfo", res.content)
+      // console.log(store.state.userInfo)
+
+
+    }
 
     nextTick(() => {
       window.addEventListener("scroll", () => {

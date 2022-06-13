@@ -21,3 +21,6 @@ export function register(params) {
 export function getUserInfo() {
   return axios.get('/yaj/yan-user/getUserInfo');
 }
+export function getUserInfoMe() {
+  return axios.get('/yaj/yan-user/getUserInfoMe');
+}

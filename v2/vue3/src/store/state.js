@@ -11,4 +11,5 @@ export default {
   cartCount: 0,
   to: '',
 	que: '',
+  userInfo: {},
 }

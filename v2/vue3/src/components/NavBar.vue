@@ -21,7 +21,7 @@
       </router-link>
       <router-link  class="nav-list-item" to="chat">
         <van-icon  name="shopping-cart-o" :badge="!count ? '' : count" />
-        <span>智能匹配</span>
+        <span>聊天</span>
       </router-link>
       <router-link  class="nav-list-item" to="me">
         <i class="nbicon nblvsefenkaicankaoxianban-"></i>

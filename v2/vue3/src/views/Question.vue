@@ -20,17 +20,22 @@
           <div class="que-content">
             {{ question.queContent }}
           </div>
-          <div class="que-follow">
-            <div class="left">
-              <div class="watch">
-                <image src="../../static/images/eye.png"></image>
-                <text>{{ question.quediv }}</text>
-              </div>
-              <div class="comment">
-                <image src="../../static/images/comment2.png"></image>
-                <text>27</text>
-              </div>
+          <div class="que-follow d-flex justify-space-between">
+            <div class="watch">
+              <img
+                style="width:30px;height:30px;"
+                src="../static/images/eye.png"
+              />
+              <text>{{ question.queText }}</text>
             </div>
+            <div class="d-flex align-center">
+              <img
+                style="width:30px;height:30px;"
+                src="../static/images/comment2.png"
+              />
+              <text>27</text>
+            </div>
+
             <div class="right">
               关注
             </div>
@@ -63,12 +68,9 @@
                   <div class="answer-body">
                     <div>
                       <!-- 富文本 -->
-                      <div>
-                        {{ item.answerContent }}
-                      </div>
-                      <!-- <rich-text :nodes="item.answerContent"></rich-text> -->
+                      <p v-html="item.answerContent"></p>
                     </div>
-                    <div class="answer-actions flex-wrp">
+                    <div class=" d-flex justify-space-between answer-actions flex-wrp">
                       <div class="like dot flex-item">
                         <a>3.9K 赞同 </a>
                       </div>
@@ -86,20 +88,22 @@
           </div>
         </list-scroll>
       </div>
-      <div class="bottom_1">
-        <div class="invite ">
-          <image
-            src="../../static/images/invite.png"
-            style="width:60rpx;height:60rpx;padding:auto 6rpx;margin-left:8rpx;margin-right:8rpx;"
-          ></image>
+      <div class="bottom_1 ">
+        <div class="d-flex">
+        <div class="invite d-flex align-center">
+          <img
+            src="../static/images/invite.png"
+            style="width:30px;height:30px;padding:auto 3px;margin-left:4px;margin-right:4px;"
+          />
           <text style="margin-bottom:24rpx;">邀请回答</text>
         </div>
-        <div class="write">
-          <image
-            src="../../static/images/write.png"
-            style="width:60rpx;height:60rpx;padding:auto 6rpx;margin-left:8rpx;margin-right:8rpx;"
-          ></image>
+        <div class="write d-flex align-center">
+          <img
+            src="../static/images/write.png"
+           style="width:30px;height:30px;padding:auto 3px;margin-left:4px;margin-right:4px;"
+          />
           <text @click="writeAnswer">写回答</text>
+        </div>
         </div>
       </div>
     </div>
@@ -175,7 +179,7 @@ export default {
 @import "../common/style/vuetify";
 .user-box {
   background: rgb(222, 183, 241);
-  height: 100%; 
+  height: 100%;
 }
 
 .answer-feed {
@@ -235,21 +239,7 @@ export default {
   vertical-align: middle;
 }
 
-.question-item .que-follow .left {
-  float: left;
-  padding: 10rpx 0;
-}
-
-.question-item .que-follow .left text {
-  color: #afafaf;
-  height: 25px;
-  vertical-align: middle;
-  padding: 9px 0;
-  font-size: 12px;
-}
-
 .question-item .que-follow .right {
-  float: right;
   padding: 5px 26px;
   color: #ffffff;
   background: #9932cc;
@@ -259,7 +249,7 @@ export default {
 
 .bottom_1 {
   position: fixed;
-  bottom: 100px;
+  bottom: 55px;
   width: 310px;
   margin-left: 30px;
   /* height: 195rpx; */
@@ -268,7 +258,7 @@ export default {
 
 .invite {
   border-right: solid 2px #ebebeb;
-  float: left;
+
   width: 150px;
   margin-right: 2px;
   border-radius: 9px;
@@ -277,7 +267,7 @@ export default {
 
 .write {
   border-right: solid 2px #ebebeb;
-  float: right;
+
   width: 150px;
   margin-left: 2px;
   border-radius: 9px;

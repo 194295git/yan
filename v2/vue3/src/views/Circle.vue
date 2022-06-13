@@ -31,7 +31,7 @@
           <div class="right left_auto" @click="course">寻找课程</div>
           <div class="notify-item flex-wrp">
             <div class="avatar flex-item1">
-              <image src="/static/images/icon1.jpeg"></image>
+              <img style="width:30px;height:30px" src="../static/images/icon1.jpeg"/>
             </div>
             <div class="notify-content flex-item1">
               <text class="notify-source">Rebecca 回答了问题</text>
@@ -43,7 +43,8 @@
 
           <div class="notify-item flex-wrp">
             <div class="avatar flex-item1">
-              <image src="../static/images/icon1.jpeg"></image>
+              <img style="width:30px;height:30px" src="../static/images/icon1.jpeg"/>
+              
             </div>
             <div class="notify-content flex-item1">
               <text class="notify-source">Rebecca 回答了问题</text>
@@ -57,7 +58,8 @@
           <div class="front">资讯</div>
           <div class="notify-item flex-wrp">
             <div class="avatar flex-item1">
-              <image src="/static/images/icon1.jpeg"></image>
+               <img style="width:30px;height:30px" src="../static/images/icon1.jpeg"/>
+             
             </div>
             <div class="notify-content flex-item1">
               <text class="notify-source">Rebecca 回答了问题</text>
@@ -69,7 +71,8 @@
 
           <div class="notify-item flex-wrp">
             <div class="avatar flex-item1">
-              <image src="/static/images/icon1.jpeg"></image>
+               <img style="width:30px;height:30px" src="../static/images/icon1.jpeg"/>
+             
             </div>
             <div class="notify-content flex-item1">
               <text class="notify-source">Rebecca 回答了问题</text>
@@ -209,6 +212,7 @@ export default {
   background: rgb(225, 189, 243);
   color: white;
   font-size: 14px;
+  height: 30px;
   /* line-height: 100rpx; */
   margin: 0 0 4px 0;
   z-index: 9999;

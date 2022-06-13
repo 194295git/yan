@@ -6,7 +6,7 @@
  * Copyright (c) 2020 陈尼克 all rights reserved.
  * 版权所有，侵权必究！
  */
-
+// import { setLocal } from '@/common/js/utils'
 export default {
   addCart (state, payload) {
     state.cartCount = payload.count
@@ -21,6 +21,10 @@ export default {
   setQueQuestion(state, res) {
 
     state.que = res
+  },
+  setUserInfo(state, res) {
+    state.userInfo = res || null;
+
   },
 }
 

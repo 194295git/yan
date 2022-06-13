@@ -13,34 +13,33 @@
     <s-header :name="'回答'"></s-header>
     <div class="container">
       <div class="xian"></div>
+      <!-- 头部 -->
       <div class="question box" @click="bindQueTap">
         <div class="question-title">{{ que }}</div>
 
-        <div class="que-follow">
-          <div class="watch">
-            <image src="../../static/images/eye.png"></image>
+        <div class="d-flex align-center justify-space-between">
+          <div class="d-flex">
+            <img style="width:20px;height:20px;" src="../static/images/eye.png"/>
             <div>300</div>
           </div>
-          <div class="comment">
-            <image src="../../static/images/comment2.png"></image>
+          <div class="d-flex">
+            <img style="width:20px;height:20px;"  src="../static/images/comment2.png"/>
             <div>27</div>
           </div>
 
           <div class="follow">
-            <div>十 关注</div>
+            <div>+ 关注</div>
           </div>
         </div>
       </div>
-				<!-- <div>
-					{{answer}}
-				</div> -->
+      <!-- 正文 -->
       <div  class="scroll">
         <div>
           <div class="answerer-wrp box">
             <div class="bg-half">
               <div class="answerer d-flex">
                 <div class="avatar flex-item">
-                  <image :src="answer.avatarUrl"></image>
+                  <img style="width:30px;height:30px" :src="answer.avatarUrl"/>
                 </div>
                 <div class="answerer-info">
                   <div class="answerer-name">{{ answer.answerName }}</div>
@@ -48,17 +47,19 @@
                 </div>
               </div>
               <div class="answer-content">
-                <image
-                  src="../../static/images/1444983318907-_DSC1826.jpg"
-                  style="height: 200rpx;"
+                <img
+                  src="../static/images/1444983318907-_DSC1826.jpg"
+                  style="height: 100px;"
                 />
-                <div class="answerer-cont">{{ answer.answerContent }}</div>
+                <p class="answerer-cont" v-html="answer.answerContent" />
+                
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="box">
+      <!-- 评论 -->
+      <div class="box-comment">
         <div v-for="(item, index) in commentList" :key="index">
           <div class="box2 d-flex commentBox">
             <van-image
@@ -98,6 +99,7 @@
           <!-- 可以使用 CellGroup 作为容器 -->
           <van-cell-group inset>
             <van-field
+              class="comment"
               v-model="value"
               label="评论"
               placeholder="欢迎留下美丽的评论"
@@ -105,20 +107,21 @@
           </van-cell-group>
         </div>
       </div>
-
+      <!-- 底部 -->
       <div class="answer-footer flex-wrp">
         <div class="operation-wrp flex-item">
-          <div class="operation flex-wrp flex-tab">
+          <div class="operation d-flex flex-tab">
             <div class="operation-btn d-flex" @click="like()">
-              <image src="../../static/images/heart2.png"></image>
+              <img src="../static/images/heart2.png"/>
               <div class="font-white">{{ answer.answerLike }}</div>
             </div>
             <div class="operation-btn d-flex">
-              <image src="../../static/images/star2.png"></image>
+              <img src="../static/images/star2.png"/>
               <div>收藏</div>
             </div>
             <div class="operation-btn d-flex" @click="commment()">
-              <image src="../../static/images/comment.png"></image>
+              <img src="../static/images/comment.png"/>
+              <div>评论</div>
             </div>
           </div>
         </div>
@@ -168,17 +171,18 @@ export default {
       state.que = que;
 
       await getAnswerData();
-			console.log(state.answer)
+      console.log("onMounted")
+      console.log(state.answer)
+
       await getCommentData();
     });
     const getAnswerData = async () => {
       const data = await getAnswer(state.option_id);
-			console.log(data.content)
       state.answer = data.content;
+      
     };
     const getCommentData = async () => {
       const data2 = await getComment(state.option_id);
-      state.answer = data2.content;
       state.commentList = data2.content;
     };
 
@@ -293,7 +297,9 @@ export default {
 
 .answerer-cont {
   width: 95%;
+  color: #40bcd0;
   margin: 1.5px auto;
+  z-index: 100;
 }
 
 .question .follow {
@@ -301,22 +307,13 @@ export default {
   border-radius: 10%;
   padding: 5rpx 8rpx;
   font-size: 22rpx;
+  height: 30px;
   background: rgb(162, 114, 206);
 }
 
-.que-follow {
-  /* border: 1px solid #000; */
-  padding: 2rpx 10rpx;
-  display: flex;
-  justify-content: space-between;
-}
 
-.que-follow image {
-  width: 50rpx;
-  height: 50rpx;
-  margin: 0 10rpx 0 0;
-  vertical-align: middle;
-}
+
+
 
 .answerer .follow div {
   display: inline-block;
@@ -344,9 +341,9 @@ export default {
 
 .answer-footer {
   position: fixed;
-  bottom: 80px;
+  bottom: 40px;
   height: 35px;
-  width: 300px;
+  width: 350px;
   padding: 5px 20px 2px;
   /* border: 1px solid black; */
 }
@@ -390,11 +387,12 @@ export default {
 
 .answer-footer .operation-btn {
   flex: 1;
-  div-align: center;
+  text-align: center;
   /* border: 1px solid #000; */
   background: rgb(197, 154, 238);
   border-radius: 9px;
   margin: 0px 5px;
+  height: 20px
 }
 
 .answer-footer .operation image {
@@ -411,10 +409,17 @@ export default {
 }
 
 .scroll {
-  height: 35vh;
+  height: 45vh;
+}
+.box-comment{
+  position: fixed;
+  padding: 20px;
+  bottom: 55px;
+  margin: 0 auto;
 }
 
 .commentBox {
+  
   width: 88vw;
   border: 1px solid white;
   border-radius: 2px;
@@ -423,5 +428,9 @@ export default {
 .user-box {
   background: rgb(222, 183, 241);
   height: 100%;
+}
+.comment{
+  margin: 12px 3px;
+  padding: 0 3px;
 }
 </style>

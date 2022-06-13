@@ -24,8 +24,8 @@ export default class SocketService {
     }
     // let token = $.cookie('123');
     // let token = '4E6EF539AAF119D82AC4C2BC84FBA21F';
-    let url = 'ws://127.0.1:8888';
-    this.ws = new WebSocket(url, 'echo-protocol');
+    let url = 'ws://127.0.1:8888/websocket';
+    this.ws = new WebSocket(url);
     // 连接成功的事件
     this.ws.onopen = () => {
       console.log('连接服务端成功了');
@@ -44,9 +44,9 @@ export default class SocketService {
       }, 500 * this.connectRetryCount);
     };
     // 得到服务端发送过来的数据
-    this.ws.onmessage = msg => {
-      console.log(msg.data, '从服务端获取到了数据');
-    };
+    // this.ws.onmessage = msg => {
+    //   // console.log(msg.data, '从服务端获取到了数据');
+    // };
   }
   // 回调函数的注册
   registerCallBack(socketType, callBack) {

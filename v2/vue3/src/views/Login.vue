@@ -75,8 +75,10 @@ import { reactive, toRefs } from 'vue'
 import { login, register } from '@/service/user'
 import { setLocal } from '@/common/js/utils'
 import { Toast } from 'vant'
+
 export default {
   setup() {
+    
     const state = reactive({
       username: '',
       password: '',
@@ -103,8 +105,10 @@ export default {
         })
         console.log("token",data)
         setLocal('token', data.content)
+        
         // 需要刷新页面，否则 axios.js 文件里的 token 不会被重置
         window.location.href = '/'
+        
       } else {
         await register({
           "username": values.username1,
@@ -116,6 +120,15 @@ export default {
         state.verify = ''
       }
     }
+    // const getUserInfo =async ()=>{
+    //   const res =await getUserInfoMe()
+    //   console.log("==========getUserInfo")
+    //   console.log(res.content)
+    //   store.$store.commit("setUserInfo", res.content)
+
+    // }
+
+
 
     return {
       ...toRefs(state),
