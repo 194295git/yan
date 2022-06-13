@@ -12,12 +12,6 @@ server:
   servlet:
     context-path: /
 
-aliyun:
-  oss:
-    file:
-      endpoint: oss-cn-beijing.aliyuncs.com
-      keyid: LTAI4G2yzJPeHa3oZmzW733p
-      keysecret: QdR7IcpAy8x69gD92aqaf1RG0FMmWn
-      bucketname: edu-renyun
+
 
 
