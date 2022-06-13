@@ -1,0 +1,57 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/major_watch/major_watch",
+    "pages/like/like",
+    "pages/match/match",
+    "pages/me/me",
+    "pages/province_search/province_search",
+    "pages/course/course",
+    "pages/admissions_line/admissions_line",
+    "pages/question/question",
+    "pages/answer/answer",
+    "pages/major_watch_son/major_watch_son",
+    "pages/question_submit/question_submit",
+    "pages/major_related_question/major_related_question"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "研战到底",
+    "navigationBarBackgroundColor": "#9932CC",
+    "backgroundColor": "#9932CC"
+  },
+  "tabBar": {
+    "selectedColor": "#F57A82",
+    "backgroundColor": "#FFE1FF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "/static/images/tab/first.png",
+        "selectedIconPath": "/static/images/tab/first.png"
+      },
+      {
+        "pagePath": "pages/like/like",
+        "text": "圈层",
+        "iconPath": "/static/images/tab/level.png",
+        "selectedIconPath": "/static/images/tab/level.png"
+      },
+      {
+        "pagePath": "pages/admissions_line/admissions_line",
+        "text": "智能匹配",
+        "iconPath": "/static/images/tab/search.png",
+        "selectedIconPath": "/static/images/tab/search.png"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的",
+        "iconPath": "/static/images/tab/me.png",
+        "selectedIconPath": "/static/images/tab/me.png"
+      }
+    ]
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap45.json"
+}

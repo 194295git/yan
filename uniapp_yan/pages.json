@@ -1,0 +1,192 @@
+{	
+	"easycom": { "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue" }, 
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "研战到底",
+				"backgroundColor":"#9932CC"
+				
+			}
+		}
+	    ,{
+            "path" : "pages/major_watch/major_watch",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "专业",
+                "enablePullDownRefresh": false,
+				"backgroundColor":"#9932CC"
+            }
+            
+        }
+		,{
+		    "path" : "pages/like/like",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "圈层",
+		        "enablePullDownRefresh": false,
+				"backgroundColor":"#9932CC"
+		    }
+		    
+		}
+		
+		,{
+		    "path" : "pages/match/match",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "智能匹配",
+		        "enablePullDownRefresh": false,
+				"backgroundColor":"#9932CC"
+		    }
+		    
+		} 
+		,{
+            "path" : "pages/me/me",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的",
+                "enablePullDownRefresh": false,
+				"backgroundColor":"#9932CC"
+            }
+            
+        }
+        ,{
+            "path" : "pages/province_search/province_search",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "智能推荐",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/course/course",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "课程",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/admissions_line/admissions_line",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "智能匹配",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/question/question",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/answer/answer",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/major_watch_son/major_watch_son",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "专业",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/question_submit/question_submit",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/major_related_question/major_related_question",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/login/login",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/edit_user/edit_user",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+       
+        ,{
+            "path" : "pages/answer/answerSumit/answerSumit",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "研战到底",
+		"navigationBarBackgroundColor": "#9932CC",
+		"backgroundColor": "#9932CC"
+	}, 
+	
+	"tabBar": {
+	    "selectedColor": "#F57A82",
+	    "backgroundColor": "#FFE1FF",
+	    "borderStyle": "white",
+	    "list": [
+	      {
+	        "pagePath": "pages/index/index",
+	        "text": "首页",
+	        "iconPath": "/static/images/tab/first.png",
+	        "selectedIconPath": "/static/images/tab/first.png"
+	      },
+	      {
+	        "pagePath": "pages/like/like",
+	        "text": "圈层",
+	        "iconPath": "/static/images/tab/level.png",
+	        "selectedIconPath": "/static/images/tab/level.png"
+	      },
+	      {
+	        "pagePath": "pages/admissions_line/admissions_line",
+	        "text": "智能匹配",
+	        "iconPath": "/static/images/tab/search.png",
+	        "selectedIconPath": "/static/images/tab/search.png"
+	      },
+	      {
+	        "pagePath": "pages/me/me",
+	        "text": "我的",
+	        "iconPath": "/static/images/tab/me.png",
+	        "selectedIconPath": "/static/images/tab/me.png"
+	      }
+	    ]
+	  }
+}

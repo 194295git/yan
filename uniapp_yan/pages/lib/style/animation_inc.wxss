@@ -1,0 +1,53 @@
+@keyframes chevron {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes inc_college_hidden {
+  0% {
+    left: 0rpx;
+  }
+  100% {
+   left: -750rpx;
+  }
+}
+
+@keyframes inc_college_back {
+  0% {
+    left: -750rpx;
+  }
+  100% {
+   left: 0rpx;
+  }
+}
+
+@keyframes inc_company_hidden {
+  0% {
+    right: -750rpx;
+  }
+  100% {
+   right: 0rpx;
+  }
+}
+
+@keyframes inc_company_back {
+  0% {
+    right: 0rpx;
+  }
+  100% {
+   right: -750rpx;
+  }
+}

@@ -1,0 +1,36 @@
+
+.radio{
+		-webkit-transform:scale(0.7);
+		        transform:scale(0.7);
+		/* -webkit-appearance:none; */
+		display: inline-block;
+/* 		border:1px solid #ccc;
+		width:16px;
+		height: 16px; */
+		-webkit-border-radius:2px;
+		        border-radius:2px;
+	
+		margin-right: 5px;
+		position: relative;
+}
+.question{
+		width: 640rpx;
+		background: #ffffff;
+		padding: 25rpx 70rpx 25rpx 0;
+		border-bottom: solid 1px #ebebeb;
+		/* border: 1px solid black; */
+		-webkit-border-radius: 18rpx;
+		        border-radius: 18rpx;
+		margin: 5rpx auto;
+		text-indent: 8rpx;
+}
+.submit{
+	
+	  background-color: #40BCD0;
+	  width: 80%;
+	  margin: 40rpx auto 4rpx;
+	  text-align: center;
+	  padding: 10rpx;
+}
+
+

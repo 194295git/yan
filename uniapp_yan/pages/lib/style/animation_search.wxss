@@ -1,0 +1,22 @@
+@keyframes list_shock {
+  0% {
+    left: 0px;
+    top: 0px;
+  }
+  25% {
+    left: 5px;
+    top: 5px;
+  }
+  50% {
+    left: -5px;
+    top: -5px;
+  }
+  75% {
+    left: 5px;
+    top: 5px;
+  }
+  100% {
+    left: 0px;
+    top: 0px;
+  }
+}

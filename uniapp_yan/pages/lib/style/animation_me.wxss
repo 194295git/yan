@@ -1,0 +1,161 @@
+@keyframes Bubble_move {
+  0% {
+    top: 0rpx;
+    left: 0rpx;
+  }
+
+  10%{
+    left: 10rpx;
+  }
+
+  20%{
+    left: -10rpx;
+  }
+
+  25% {
+    top: 20rpx;
+  }
+
+
+  30%{
+    left: 10rpx;
+  }
+
+  40%{
+    left: -10rpx;
+  }
+
+  50% {
+    top: -20rpx;
+  }
+
+  60%{
+    left: 10rpx;
+  }
+
+  70%{
+    left: -10rpx;
+  }
+
+
+  75% {
+    top: 20rpx;
+  }
+
+  80%{
+    left: 10rpx;
+  }
+
+  90%{
+    left: -10rpx;
+  }
+
+  100% {
+    top: 0rpx;
+    left: 0rpx;
+  }
+}
+
+
+
+@keyframes little_move {
+  0% {
+    opacity: 0;
+    bottom: 0rpx;
+    margin-left: 0rpx;
+  }
+
+  15%{
+     margin-left: -15rpx;
+  }
+
+  40%{
+    opacity: 1;
+     margin-left: 25rpx;
+  }
+
+
+  65%{
+     margin-left: 15rpx;
+  }
+
+  75% {
+    bottom: 250rpx;
+  }
+
+  100% {
+    opacity: 0;
+    bottom: 300rpx;
+    margin-left: 0rpx;
+  }
+}
+
+@keyframes little_move2 {
+  0% {
+    opacity: 0;
+    bottom: 0rpx;
+  }
+
+  30%{
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    bottom: 300rpx;
+  }
+}
+
+@keyframes curtain_black{
+  0%{
+    opacity:0;
+  }
+
+  100%{
+    opacity:0.4;
+  }
+}
+
+@keyframes curtain_black_reverse{
+  0%{
+    opacity:0.4;
+  }
+
+  100%{
+    opacity:0;
+  }
+}
+
+@keyframes grade_input{
+  0%{
+    opacity:0;
+    transform: scale(0);
+  }
+
+  100%{
+    opacity:1;
+   transform: scale(1);
+  }
+}/*分数输入框动画*/
+
+@keyframes grade_input_word{
+  0%{
+    color: #fff
+  }
+
+  100%{
+    color: #888888
+  }
+}/*分数输入框动画*/
+
+@keyframes grade_input_reverse{
+  0%{
+    opacity:1;
+    transform: scale(1);
+  }
+
+  100%{
+    opacity:0;
+    transform: scale(0.2);
+  }
+}/*分数输入框动画倒放*/

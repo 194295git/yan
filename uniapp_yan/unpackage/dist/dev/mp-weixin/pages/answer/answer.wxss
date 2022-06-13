@@ -1,0 +1,215 @@
+
+.container {
+    padding: 0;
+    font-size: 14rpx;
+    height: 1200rpx;
+    background: rgb(221, 175, 248);
+    color: #000;
+    /* border: 1px solid #000; */
+}
+.xian{
+  width: 210rpx;
+  height: 3rpx;
+ 
+  border: 1px solid grey;
+  margin: 18rpx auto 4rpx;
+}
+rich-text{
+  width: 670rpx;
+  display: block;
+  font-size: 28rpx;
+  color: 353535;
+  letter-spacing: 1rpx;
+}
+.question {
+    /* position: relative; */
+    width: 585rpx;
+    padding: 40rpx 50rpx 30rpx;
+    /* background: #298DE5; */
+    background: white;
+
+    font-size: 38rpx;
+    line-height: 48rpx;
+    -webkit-border-radius: 25rpx;
+            border-radius: 25rpx;
+    margin: 15rpx auto;
+}
+.answerer-wrp{
+    /* position: relative;
+    width: 600rpx;
+    height: 150rpx; */
+    /* background: #fff; */
+    -webkit-border-radius: 25rpx;
+            border-radius: 25rpx;
+    margin: 5rpx auto;
+}
+.answerer-wrp .bg-half{
+
+  background: white;
+   -webkit-border-radius: 25rpx;
+           border-radius: 25rpx;
+}
+.answerer {
+    position: relative;
+    margin: 0 auto;
+    width: 600rpx;
+    height: 90rpx;
+    padding: 30rpx;
+    -webkit-border-radius: 3px;
+            border-radius: 3px;
+}
+.answerer .avatar {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+            flex: 1;
+    width: 90rpx;
+    height: 90rpx;
+}
+.answerer .avatar image {
+    display: inline-block;
+    width: 90rpx;
+    height: 90rpx;
+    -webkit-border-radius: 90rpx;
+            border-radius: 90rpx;
+}
+.answerer .answerer-info{
+    -webkit-box-flex: 5;
+    -webkit-flex: 5;
+            flex: 5;
+    text-align: left;
+    padding: 10rpx 20rpx;
+    line-height: 38rpx;
+}
+.answerer .answerer-info text{
+    display: block;
+}
+.answerer .answerer-info .answerer-name{
+    font-size: 32rpx;
+}
+.answerer .answerer-info .answerer-des{
+    font-size: 22rpx;
+    color: #808080;
+    line-height: 28rpx;
+}
+.answerer-cont{
+  width: 95%;
+  margin: 3rpx auto;
+}
+.question .follow{
+    text-align: right;
+    /* margin-top: 75rpx; */
+    padding: 5rpx 8rpx;
+    font-size: 22rpx;
+    background: rgb(162, 114, 206)
+}
+.que-follow{
+  width: 580rpx;
+  /* border: 1px solid #000; */
+  padding: 2rpx 10rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+}
+.que-follow image{
+    width: 50rpx;
+    height: 50rpx;
+    margin: 0 10rpx 0 0;
+    vertical-align: middle;
+}
+.answerer .follow text{
+    display: inline-block; 
+    padding: 15rpx 20rpx;
+    color: #40bcd0;
+    border: solid 2px #40bcd0;
+    -webkit-border-radius: 6rpx;
+            border-radius: 6rpx;
+}
+.answer-content{
+    padding: 30rpx 40rpx;
+    width: 600rpx;
+    /* border: 1px solid black; */
+    margin: 4rpx auto;
+    /* background: #ffffff; */
+}
+.answer-content text{
+    font-size: 32rpx;
+    color: #454545;
+    line-height: 44rpx;
+}
+.answer-content image{
+    width: 100%;
+    margin: 20rpx 0;
+}
+.answer-footer{
+    position: fixed;
+    bottom: 0;
+    height: 70rpx;
+    width: 600rpx;
+    padding: 10rpx 40rpx 5rpx;
+    /* border: 1px solid black; */
+}
+.answer-footer .good{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+            flex: 1;
+    /*display: inline-block;*/
+    height: 40rpx;
+    border: solid 1px #d1d1d1;
+    -webkit-border-radius: 3px;
+            border-radius: 3px;
+    padding: 10rpx 8rpx;
+    margin: 10rpx 0;
+}
+.answer-footer .good .good-bad{
+    display: inline-block;
+}
+.answer-footer .good image{
+    display: inline-block;
+    width: 38rpx;
+    height: 38rpx;
+    vertical-align: middle;
+}
+.answer-footer .good .good-num{
+    display: inline-block;
+    padding: 10rpx 4rpx;
+    /*font-size: 24rpx;*/
+}
+.answer-footer .operation-wrp{
+    -webkit-box-flex: 5;
+    -webkit-flex: 5;
+            flex: 5;
+}
+.answer-footer .operation{
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+            justify-content: space-between;
+    /* padding: 0 0 0 60rpx; */
+    /* border: 1px solid black; */
+}
+.answer-footer .operation-btn{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+            flex: 1;
+    text-align: center;
+    /* border: 1px solid #000; */
+    background: rgb(197, 154, 238);
+    -webkit-border-radius: 18rpx;
+            border-radius: 18rpx;
+    margin: 0px 13rpx;
+}
+.answer-footer .operation image{
+    display: block;
+    margin: 0 auto;
+    width: 50rpx;
+    height: 50rpx;
+}
+.answer-footer .operation-btn text{
+    display: block;
+    font-size: 14rpx;
+    color: #bebebe;
+}
+
+

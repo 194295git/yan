@@ -1,0 +1,115 @@
+@keyframes list_shock {
+  0% {
+    opacity: 0;
+    left: 25px;
+    top: 25px;
+  }
+
+  100% {
+    opacity: 1;
+    left: 0px;
+    top: 0px;
+  }
+}
+
+@keyframes list_spread {
+  0% {
+    opacity: 1;
+    height: 80rpx;
+    width: 80rpx;
+  }
+
+  100% {
+    opacity: 0;
+    height: 200rpx;
+    width: 200rpx;
+  }
+}
+
+@keyframes list_spread2 {
+  0% {
+    opacity: 1;
+    height: 80rpx;
+    width: 80rpx;
+  }
+
+  100% {
+    opacity: 0;
+    height: 200rpx;
+    width: 200rpx;
+  }
+}
+
+@keyframes inc_college_hidden {
+  0% {
+    left: 0rpx;
+  }
+
+  100% {
+    left: -750rpx;
+  }
+}
+
+@keyframes inc_college_back {
+  0% {
+    left: -750rpx;
+  }
+
+  100% {
+    left: 0rpx;
+  }
+}
+
+@keyframes inc_major_hidden {
+  0% {
+    right: -750rpx;
+  }
+
+  100% {
+    right: 0rpx;
+  }
+}
+
+@keyframes inc_major_back {
+  0% {
+    right: 0rpx;
+  }
+
+  100% {
+    right: -750rpx;
+  }
+}
+
+@keyframes block_shock {
+  0% {
+    top: -30rpx;
+    height: 150rpx;
+  }
+
+  20% {
+    top: -15rpx;
+    height: 120rpx;
+  }
+
+  40% {
+    top: -50rpx;
+    height: 190rpx;
+  }
+
+  60% {
+    top: -15rpx;
+    height: 120rpx;
+  }
+
+  80% {
+    top: -50rpx;
+    height: 190rpx;
+  }
+
+  100% {
+    top: -30rpx;
+    height: 150rpx;
+  }
+}
+
+
