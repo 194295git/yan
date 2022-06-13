@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rose.yaj.mapper.YanGroupMapper">
+
+    <insert id="addMember">
+        insert into yan_group_relation(group_id,member_id) values
+        <foreach collection ="memberIds" item="member" separator =",">
+            (#{groupId}, #{member})
+        </foreach >
+
+    </insert>
+    <select id="getGroupOpenid" resultType="string">
+        select member_id from yan_group_relation where group_id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.generator.dao.YanMajorQuestionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.generator.entity.YanMajorQuestionEntity" id="yanMajorQuestionMap">
+        <result property="id" column="id"/>
+        <result property="majorId" column="major_id"/>
+        <result property="question" column="question"/>
+    </resultMap>
+
+
+</mapper>

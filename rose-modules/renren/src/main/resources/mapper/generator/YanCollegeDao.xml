@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.generator.dao.YanCollegeDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.generator.entity.YanCollegeEntity" id="yanCollegeMap">
+        <result property="id" column="id"/>
+        <result property="code1" column="code1"/>
+        <result property="direction" column="direction"/>
+        <result property="name" column="name"/>
+        <result property="nizhao" column="nizhao"/>
+        <result property="school" column="school"/>
+        <result property="shuju" column="shuju"/>
+        <result property="tongzhao" column="tongzhao"/>
+        <result property="tuimian" column="tuimian"/>
+        <result property="xh" column="xh"/>
+        <result property="yuan" column="yuan"/>
+    </resultMap>
+
+
+</mapper>

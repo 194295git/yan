@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.generator.dao.YanQuestionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.generator.entity.YanQuestionEntity" id="yanQuestionMap">
+        <result property="questionId" column="question_id"/>
+        <result property="openid" column="openid"/>
+        <result property="queTitle" column="que_title"/>
+        <result property="queContent" column="que_content"/>
+        <result property="queTagId" column="que_tag_id"/>
+        <result property="queView" column="que_view"/>
+        <result property="queCollect" column="que_collect"/>
+        <result property="feedSourceImg" column="feed_source_img"/>
+        <result property="queComment" column="que_comment"/>
+        <result property="queAnswerListId" column="que_answer_list_id"/>
+    </resultMap>
+
+
+</mapper>

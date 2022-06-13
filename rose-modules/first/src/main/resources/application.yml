@@ -1,0 +1,81 @@
+spring:
+  datasource:
+    username: root
+    password: 1942951600
+    url: jdbc:mysql://localhost:3306/yan?characterEncoding=utf-8&useSSL=false&useUnicode=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: yan-first
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.56.10:8848
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+  rabbitmq:
+    host: 192.168.56.10
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-confirms: true
+    publisher-returns: true
+    template:
+      mandatory: true
+    listener:
+      simple:
+        acknowledge-mode: manual
+
+
+mybatis-plus:
+  mapper-locations: classpath*:com/rose/yaj/mapper/xml/*Mapper.xml
+  configuration:
+    call-setters-on-nulls: true
+  global-config:
+    db-config:
+      # auto设置主键自增
+      id-type: auto
+      # 配置逻辑删除 1代表删除 0代表未删除
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+server:
+  #  port: 443
+  port: 8999
+  tomcat:
+    uri-encoding: utf-8
+  servlet:
+    context-path: /
+
+
+#rocketmq:
+#  name-server: 192.168.56.10:9876
+#  producer:
+#    group: Netty-group
+#    sendMessageTimeout: 300000
+
+
+
+myRabbitmq:
+  queue: yan-queue
+  exchange: yan-exchange
+  routeKey: yan
+  MQConfig:
+    # 订单队列
+    queues: yan.netty.queue
+    routingKey: netty
+    exchange: yan-exchange
+
+
+
+
+
+aliyun:
+  oss:
+    file:
+      endpoint: oss-cn-beijing.aliyuncs.com
+      keyid: LTAI4G2yzJPeHa3oZmzW733p
+      keysecret: QdR7IcpAy8x69gD92aqaf1RG0FMmWn
+      bucketname: edu-renyun
