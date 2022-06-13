@@ -1,0 +1,92 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.56.10:8848
+        # \u8BF7\u6C42\u53C2\u6570\u4E2D\u5E26\u4E86 baidu \u5C31\u53BB\u8F6C\u53D1\u5230 http://www.baidu.com
+#    sentinel:
+#      transport:
+#        dashboard: localhost:8333
+    gateway:
+      routes:
+## lb: 所有mall-product的请求都会被截取掉 /api/
+#        - id: order_route
+#          uri: lb://order
+#          predicates:
+#            - Host=order.glmall.com
+#
+#        - id: product_route
+#          uri: lb://mall-product
+#          predicates:
+#            - Path=/api/product/**
+#          filters:
+#            - RewritePath=/api/(?<segment>.*), /$\{segment}
+        - id: yan_file
+          uri: lb://yan-file
+          predicates:
+            - Path=/api/file/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+#        - id: admin_route
+#          uri: lb://renren-fast
+#          predicates:
+#            - Path=/api/**
+#          filters:
+#            - RewritePath=/api/(?<segment>.*), /renren-fast/$\{segment}
+
+#        - id: coupon_route
+#          uri: lb://mall-coupon
+#          predicates:
+#            - Path=/api/coupon/**
+#          filters:
+#            - RewritePath=/api/(?<segment>.*), /$\{segment}
+#
+#        - id: ware_route
+#          uri: lb://mall-ware
+#          predicates:
+#            - Path=/api/ware/**
+#          filters:
+#            - RewritePath=/api/(?<segment>.*), /$\{segment}
+#        #  OSS签名的转发
+#        - id: third_party_route
+#          uri: lb://mall-third-party
+#          predicates:
+#            - Path=/api/third/party/**
+#          filters:
+#            - RewritePath=/api/(?<segment>.*), /$\{segment}
+#        - id: admin_route
+#          uri: lb://renren-fast
+#          predicates:
+#            - Path=/api/**
+#          filters:
+#            - RewritePath=/api/(?<segment>.*), /renren-fast/$\{segment}
+#        - id: search_route
+#          uri: lb://mall-search
+#          predicates:
+#            - Host=search.glmall.com
+#        - id: auth_route
+#          uri: lb://mall-auth-server
+#          predicates:
+#            - Host=auth.glmall.com
+#        - id: seckill_route
+#          uri: lb://mall-seckill
+#          predicates:
+#            - Host=seckill.glmall.com
+#        - id: cart_route
+#          uri: lb://mall-cart
+#          predicates:
+#            - Host=cart.glmall.com
+#        - id: member_route
+#          uri: lb://mall-member
+#          predicates:
+#            - Host=member.glmall.com
+
+#        # 任何以mall.com结尾的域名转发到mall-product
+#        - id: mall_route
+#          uri: lb://mall-product
+#          predicates:
+#            - Host=**.glmall.com,glmall.com,item.glmall.com
+server:
+  port: 88

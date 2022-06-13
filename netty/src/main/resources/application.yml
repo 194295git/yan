@@ -1,0 +1,40 @@
+# 应用名称
+spring:
+  application:
+    name: chatServe
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.56.10:8848
+  rabbitmq:
+    host: 192.168.56.10
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-confirms: true
+    publisher-returns: true
+    template:
+      mandatory: true
+    listener:
+      simple:
+        acknowledge-mode: manual
+# 应用服务 WEB 访问端口
+server:
+  port: 8083
+
+
+#rocketmq:
+#  name-server: 192.168.56.10:9876
+#  producer:
+#    group: Netty-group
+#    sendMessageTimeout: 300000
+myRabbitmq:
+  queue: yan-queue
+  exchange: yan-exchange
+  routeKey: yan
+  MQConfig:
+    # 订单队列
+    queues: yan.netty.queue
+    routingKey: netty
+    exchange: yan-exchange

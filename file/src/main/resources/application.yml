@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: yan-file
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+server:
+  port: 9000
+  tomcat:
+    uri-encoding: utf-8
+  servlet:
+    context-path: /
+
+aliyun:
+  oss:
+    file:
+      endpoint: oss-cn-beijing.aliyuncs.com
+      keyid: LTAI4G2yzJPeHa3oZmzW733p
+      keysecret: QdR7IcpAy8x69gD92aqaf1RG0FMmWn
+      bucketname: edu-renyun
+
+
