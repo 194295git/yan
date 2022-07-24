@@ -11,33 +11,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.renren.modules.generator.entity.YanProductEntity;
-import io.renren.modules.generator.service.YanProductService;
+import io.renren.modules.generator.entity.YanCategoryEntity;
+import io.renren.modules.generator.service.YanCategoryService;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.R;
 
 
 
 /**
- * 
+ *
  *
  * @author chenshun
  * @email sunlightcs@gmail.com
- * @date 2022-05-23 13:13:58
+ * @date 2022-05-23 12:48:39
  */
 @RestController
-@RequestMapping("generator/yanproduct")
-public class YanProductController {
+@RequestMapping("generator/yancategory")
+public class YanCategory2Controller {
     @Autowired
-    private YanProductService yanProductService;
+    private YanCategoryService yanCategoryService;
 
     /**
      * 列表
      */
     @RequestMapping("/list")
-//    @RequiresPermissions("generator:yanproduct:list")
+//    @RequiresPermissions("generator:yancategory:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = yanProductService.queryPage(params);
+        PageUtils page = yanCategoryService.queryPage(params);
 
         return R.ok().put("page", page);
     }
@@ -47,20 +47,20 @@ public class YanProductController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-//    @RequiresPermissions("generator:yanproduct:info")
+    @RequiresPermissions("generator:yancategory:info")
     public R info(@PathVariable("id") Integer id){
-		YanProductEntity yanProduct = yanProductService.getById(id);
+		YanCategoryEntity yanCategory = yanCategoryService.getById(id);
 
-        return R.ok().put("yanProduct", yanProduct);
+        return R.ok().put("yanCategory", yanCategory);
     }
 
     /**
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("generator:yanproduct:save")
-    public R save(@RequestBody YanProductEntity yanProduct){
-		yanProductService.save(yanProduct);
+//    @RequiresPermissions("generator:yancategory:save")
+    public R save(@RequestBody YanCategoryEntity yanCategory){
+		yanCategoryService.save(yanCategory);
 
         return R.ok();
     }
@@ -69,9 +69,9 @@ public class YanProductController {
      * 修改
      */
     @RequestMapping("/update")
-//    @RequiresPermissions("generator:yanproduct:update")
-    public R update(@RequestBody YanProductEntity yanProduct){
-		yanProductService.updateById(yanProduct);
+//    @RequiresPermissions("generator:yancategory:update")
+    public R update(@RequestBody YanCategoryEntity yanCategory){
+		yanCategoryService.updateById(yanCategory);
 
         return R.ok();
     }
@@ -80,9 +80,9 @@ public class YanProductController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("generator:yanproduct:delete")
+//    @RequiresPermissions("generator:yancategory:delete")
     public R delete(@RequestBody Integer[] ids){
-		yanProductService.removeByIds(Arrays.asList(ids));
+		yanCategoryService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

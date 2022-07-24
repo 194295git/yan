@@ -96,8 +96,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.11.3" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-all:5.0.0.Alpha1" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-websocket:2.2.5.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-websocket:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.boot:spring-boot-devtools:2.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.2.5.RELEASE" level="project" />
@@ -231,6 +229,7 @@
     <orderEntry type="library" name="Maven: com.github.virtuald:curvesapi:1.04" level="project" />
     <orderEntry type="library" name="Maven: org.apache.poi:poi-ooxml-schemas:3.17" level="project" />
     <orderEntry type="library" name="Maven: org.apache.xmlbeans:xmlbeans:2.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter-ribbon:unknown" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter-openfeign:2.2.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter:2.2.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-context:2.2.2.RELEASE" level="project" />

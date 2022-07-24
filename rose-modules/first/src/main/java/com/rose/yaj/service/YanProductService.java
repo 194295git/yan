@@ -1,16 +1,17 @@
 package com.rose.yaj.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.rose.yaj.dto.ProductDto;
-import com.rose.yaj.entity.YanGroup;
+import com.rose.yaj.entity.YanCategory;
 import com.rose.yaj.entity.YanProduct;
-
-import java.util.List;
+import com.rose.yaj.util.PageQueryUtil;
+import com.rose.yaj.util.PageResult;
 
 /**
  * @author rose
- * @create 2022/6/9
+ * @create 2022/6/18
  */
-public interface  YanProductService extends IService<YanProduct> {
-    List<ProductDto> list();
+public interface YanProductService extends IService<YanProduct> {
+    YanProduct getProductById(Long goodsId);
+
+    PageResult searchProducts(PageQueryUtil pageUtil);
 }

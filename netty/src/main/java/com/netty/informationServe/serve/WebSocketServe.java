@@ -19,7 +19,9 @@ import org.springframework.stereotype.Component;
 @ChannelHandler.Sharable
 @Component
 public class WebSocketServe {
+    // 创建mainReactor
     EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+    // 创建工作线程组
     EventLoopGroup workGroup = new NioEventLoopGroup();
 
     @Autowired

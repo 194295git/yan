@@ -15,7 +15,7 @@
         <!-- 指定打印日志的 appender， 这里通过"STDOUT"引用了前面配置的 appender -->
         <appender-ref ref="STDOUT" />
     </root>
-    <!-- 根据特殊需求指定局部日志级别 -->
-<!--    <logger name="com.rose.yaj.mapper" level="DEBUG"/>-->
+     根据特殊需求指定局部日志级别
+    <logger name="com.rose.yaj.mapper" level="DEBUG"/>
 </configuration>
 

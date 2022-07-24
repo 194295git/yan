@@ -9,4 +9,80 @@
 <!--        SELECT que_title ,que_content, u.`avatar_url`,u.`growth` FROM `yan_question` q-->
 <!--        LEFT JOIN yan_user u ON u.openid =q.openid-->
 <!--    </select>-->
+    <sql id="Base_Column_List">
+        id,category_id,`name`,image,price,detail,stock,status,create_time,update_time
+
+  </sql>
+    <select id="findYanGoodsListBySearch" parameterType="Map" resultType="com.rose.yaj.entity.YanProduct">
+        select
+        <include refid="Base_Column_List"/>
+        from yan_product
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and (`name` like CONCAT('%',#{keyword},'%') or detail like CONCAT('%',#{keyword},'%'))
+            </if>
+            <if test="goodsCategoryId!=null and goodsCategoryId!=''">
+                and category_id = #{goodsCategoryId}
+            </if>
+            <if test="goodsSellStatus!=null">
+                and status = #{goodsSellStatus}
+            </if>
+        </where>
+        <if test="orderBy!=null and orderBy!=''">
+            <choose>
+                <when test="orderBy == 'new'">
+                    <!-- 按照发布时间倒序排列 -->
+                    order by id desc
+                </when>
+                <when test="orderBy == 'price'">
+                    <!-- 按照售价从小到大排列 -->
+                    order by price asc
+                </when>
+                <otherwise>
+                    <!-- 默认按照库存数量从大到小排列 -->
+                    order by stock desc
+                </otherwise>
+            </choose>
+        </if>
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+    <select id="getTotalYanMallGoods" parameterType="Map" resultType="int">
+        select count(*) from yan_product
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and (`name` like CONCAT('%',#{keyword},'%') or detail like CONCAT('%',#{keyword},'%'))
+            </if>
+            <if test="goodsCategoryId!=null and goodsCategoryId!=''">
+                and category_id = #{goodsCategoryId}
+            </if>
+            <if test="goodsSellStatus!=null">
+                and status = #{goodsSellStatus}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectByPrimaryKeys"  resultType="com.rose.yaj.entity.YanProduct">
+        select
+        <include refid="Base_Column_List"/>
+        from yan_product
+        where id in
+        <foreach item="goodId" collection="list" open="(" separator="," close=")">
+            #{goodId}
+        </foreach>
+        order by field(id,
+        <foreach item="id" collection="list" separator=",">
+            #{goodId}
+        </foreach>
+        );
+    </select>
+
+    <update id="updateStockNum">
+        <foreach collection="stockNumDTOS" item="stockNumDTO">
+            update yan_product set stock = stock-#{stockNumDTO.goodsCount}
+            where id = #{stockNumDTO.goodsId} and stock>=#{stockNumDTO.goodsCount} and status = 1;
+        </foreach>
+    </update>
 </mapper>

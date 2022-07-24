@@ -1,18 +1,11 @@
-package com.rose.yaj;
+package com.rose;
 
 import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.EasyExcelFactory;
-import com.alibaba.excel.ExcelReader;
-import com.alibaba.excel.metadata.Sheet;
 
 
-import com.alibaba.excel.read.metadata.ReadSheet;
-import com.rose.yaj.config.DemoDataListener;
-import com.rose.yaj.config.UserExcelListener;
-import com.rose.yaj.dto.DemoData;
-import com.rose.yaj.dto.YanMajor1;
-
-
+import com.rose.dao.YanMajor1;
+import com.rose.handler.DemoDataListener;
+import com.rose.handler.UserExcelListener;
 import org.junit.Test;
 
 

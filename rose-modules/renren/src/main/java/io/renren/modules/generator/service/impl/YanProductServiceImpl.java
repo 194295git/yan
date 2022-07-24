@@ -8,19 +8,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.Query;
 
-import io.renren.modules.generator.dao.YanProductDao;
-import io.renren.modules.generator.entity.YanProductEntity;
-import io.renren.modules.generator.service.YanProductService;
+import io.renren.modules.generator.dao.YanCategoryDao;
+import io.renren.modules.generator.entity.YanCategoryEntity;
+import io.renren.modules.generator.service.YanCategoryService;
 
 
-@Service("yanProductService")
-public class YanProductServiceImpl extends ServiceImpl<YanProductDao, YanProductEntity> implements YanProductService {
+@Service("YanCategoryService")
+public class YanCategoryServiceImpl extends ServiceImpl<YanCategoryDao, YanCategoryEntity> implements YanCategoryService {
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        IPage<YanProductEntity> page = this.page(
-                new Query<YanProductEntity>().getPage(params),
-                new QueryWrapper<YanProductEntity>()
+        IPage<YanCategoryEntity> page = this.page(
+                new Query<YanCategoryEntity>().getPage(params),
+                new QueryWrapper<YanCategoryEntity>()
         );
 
         return new PageUtils(page);

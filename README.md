@@ -8,20 +8,20 @@
 3. 搭建研究生和在考生服务生沟通的平台(基于netty聊天功能)。
 
 研战到底APP
-1. 基于uniapp和uView
+1. 基于uniapp和uView   vue3版本的使用的vant
 
 研战到底后台
 1. 基于开源项目renren-fast
 
 #### 软件架构
 软件架构说明
-主要技术点：springboot springcloud nacos  netty mybatis-plus rocketmq  
-前端：uniapp uview websocket
+主要技术点：springboot springcloud nacos  netty mybatis-plus rabbitmq  
+前端：vue3 vue2 uniapp uview websocket
 #### 启动说明
 1. 先启动nacos 
 2. 启动gateway服务
-3. 启动node_modules 里面的first服务
-4. 启动UI前端服务 使用hbuilder启动
+3. 启动node_modules 里面的first服务，启动netty服务
+4. 启动UI前端服务 使用hbuilder启动，或者npm run dev 启动vue项目
 5. 也可以简单调试后单独启动node_modules里面的first服务
 
 #### 服务说明
@@ -41,7 +41,7 @@
 7. 异常处理系统
 8. swagger 接口文档地址 localhost:8999/swagger-ui.html
 9. 引入springcloud，使用了gateway网关与nacos注册中心
-10. 将使用的中间件rocket使用docker部署在虚拟机上
+10. 将使用的中间件rabbitmq使用docker部署在虚拟机上
 
 ### 今日发现待完善：
 1.聊天记录的清除功能没有做

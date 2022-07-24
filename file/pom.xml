@@ -85,6 +85,12 @@
             <version>2.10.5</version>
         </dependency>
 
+        <!-- SpringCloud Ailibaba Nacos Config -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>

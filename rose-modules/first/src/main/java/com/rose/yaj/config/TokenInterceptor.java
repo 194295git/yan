@@ -6,19 +6,13 @@ import com.rose.yaj.annotation.LoginToken;
 import com.rose.yaj.annotation.PassToken;
 import com.rose.yaj.entity.YanAnswer;
 import com.rose.yaj.entity.YanUser;
-import com.rose.yaj.exeptionHandler.GlobalExceptionHandler;
-import com.rose.yaj.mapper.YanUserMapper;
 import com.rose.yaj.service.YanUserService;
 import com.rose.yaj.util.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 

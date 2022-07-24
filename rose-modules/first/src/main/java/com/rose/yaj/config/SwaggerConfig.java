@@ -25,6 +25,9 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 
+/**
+ * *http://localhost:8999/swagger-ui.html 登录地址
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {

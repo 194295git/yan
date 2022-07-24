@@ -17,7 +17,7 @@ import lombok.Data;
  */
 @Data
 @TableName("yan_product")
-public class YanProductEntity implements Serializable {
+public class YanCategoryEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**

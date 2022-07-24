@@ -67,8 +67,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.netflix.netflix-commons:netflix-commons-util:0.3.0" level="project" />
     <orderEntry type="library" name="Maven: com.netflix.ribbon:ribbon-loadbalancer:2.3.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.netflix.netflix-commons:netflix-statistics:0.1.1" level="project" />
-    <orderEntry type="library" name="Maven: com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config:2.2.0.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: com.alibaba.cloud:spring-cloud-alibaba-nacos-config:2.2.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: javax.validation:validation-api:2.0.1.Final" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.72" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter-openfeign:2.2.2.RELEASE" level="project" />
@@ -206,5 +204,6 @@
     <orderEntry type="library" name="Maven: com.aliyun:aliyun-java-sdk-sts:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.aliyun:aliyun-java-sdk-ecs:4.2.0" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.10.5" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config:unknown" level="project" />
   </component>
 </module>

@@ -1,13 +1,9 @@
-package com.rose.yaj.dto;
+package com.rose.dao;
 
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.metadata.BaseRowModel;
 import lombok.Data;
 
-import java.io.Serializable;
-
 @Data
-public class YanMajor1  {
+public class YanMajor1 {
 
 //    @ExcelProperty(index = 0)
     private String id;

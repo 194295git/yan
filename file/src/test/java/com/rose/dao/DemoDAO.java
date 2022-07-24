@@ -1,4 +1,4 @@
-package com.rose.yaj.dto;
+package com.rose.dao;
 
 import java.util.List;
 

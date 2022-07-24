@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rose.yaj.mapper.YanShopCartMapper">
+
+
+    <sql id="Base_Column_List">
+        cart_item_id, openid, goods_id, goods_count, is_deleted, create_time, update_time
+    </sql>
+    <select id="selectByOpenidAndProductId" resultType="com.rose.yaj.entity.YanShopCart">
+        select
+        <include refid="Base_Column_List"/>
+        from yan_shop_cart
+        where openid = #{openid} and goods_id=#{goodsId} and is_deleted = 0
+        limit 1
+    </select>
+
+    <select id="selectCountByOpenid" resultType="int">
+    select
+    count(*)
+    from yan_shop_cart
+    where openid = #{openid} and is_deleted = 0
+  </select>
+
+    <insert id="insertSelective" parameterType="com.rose.yaj.entity.YanShopCart">
+        insert into yan_shop_cart
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cartItemId != null">
+                cart_item_id,
+            </if>
+            <if test="openid != null">
+                openid,
+            </if>
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="goodsCount != null">
+                goods_count,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cartItemId != null">
+                #{cartItemId,jdbcType=BIGINT},
+            </if>
+            <if test="openid != null">
+                #{openid},
+            </if>
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=BIGINT},
+            </if>
+            <if test="goodsCount != null">
+                #{goodsCount,jdbcType=INTEGER},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.rose.yaj.entity.YanShopCart">
+        select
+        <include refid="Base_Column_List"/>
+        from yan_shop_cart
+        where cart_item_id = #{cartItemId,jdbcType=BIGINT} and is_deleted = 0
+    </select>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.rose.yaj.entity.YanShopCart">
+        update yan_shop_cart
+        <set>
+            <if test="userId != null">
+                openid = #{openid},
+            </if>
+            <if test="goodsId != null">
+                goods_id = #{goodsId,jdbcType=BIGINT},
+            </if>
+            <if test="goodsCount != null">
+                goods_count = #{goodsCount,jdbcType=INTEGER},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where cart_item_id = #{cartItemId,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    update yan_shop_cart set is_deleted = 1
+    where cart_item_id = #{cartItemId,jdbcType=BIGINT} and is_deleted = 0
+  </update>
+
+    <select id="findCartItems" resultType="com.rose.yaj.entity.YanShopCart">
+        select
+        <include refid="Base_Column_List"/>
+        from yan_shop_cart
+        where openid = #{openid} and is_deleted = 0
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalCartItems" resultType="int">
+        select
+        count(*)
+        from yan_shop_cart
+         where openid = #{openid} and is_deleted = 0
+    </select>
+
+    <select id="selectByUserIdAndCartItemIds" resultType="com.rose.yaj.entity.YanShopCart">
+        select
+        <include refid="Base_Column_List"/>
+        from yan_shop_cart
+        where
+        cart_item_id in
+        <foreach item="id" collection="cartItemIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and openid = #{openid} and is_deleted = 0
+    </select>
+
+    <update id="deleteBatch">
+        update yan_shop_cart
+        set is_deleted=1 where cart_item_id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

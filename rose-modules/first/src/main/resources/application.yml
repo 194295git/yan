@@ -9,13 +9,13 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.56.10:8848
+        server-addr: 192.168.56.20:8848
   redis:
     host: 127.0.0.1
     port: 6379
     password: 123456
   rabbitmq:
-    host: 192.168.56.10
+    host: 192.168.56.20
     port: 5672
     virtual-host: /
     username: guest
@@ -63,11 +63,9 @@ myRabbitmq:
   exchange: yan-exchange
   routeKey: yan
   MQConfig:
-    # 订单队列
     queues: yan.netty.queue
     routingKey: netty
     exchange: yan-exchange
-
 
 
 
