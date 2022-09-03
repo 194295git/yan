@@ -1,0 +1,36 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /sso
+
+spring:
+  application:
+    name: guns-sso-server
+  profiles:
+    active: local
+  mvc:
+    static-path-pattern: /static/**
+    view:
+      prefix: /WEB-INF/view
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/sso_server?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 1942951600
+  aop:
+    auto: true
+    proxy-target-class: true
+mybatis-plus:
+  mapper-locations: classpath*:com/rose/loginUser/server/modular/mapper/mapping/*Mapper.xml
+  configuration:
+    call-setters-on-nulls: true
+  global-config:
+    db-config:
+      # auto设置主键自增
+      id-type: auto
+      # 配置逻辑删除 1代表删除 0代表未删除
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+
+log:
+  path: sso-server
