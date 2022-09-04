@@ -68,4 +68,10 @@ myRabbitmq:
     exchange: yan-exchange
 
 
-
+aliyun:
+  oss:
+    file:
+      endpoint: xxxx.aliyuncs.com
+      keyid: xxxx
+      keysecret: xxxx
+      bucketname: xxx

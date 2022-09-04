@@ -23,7 +23,12 @@ public class OssController {
 
     @Autowired
     private OssService ossService;
-    //上传头像的方法
+
+    /**
+     * 上传头像(图片)的方法.
+     * @param file
+     * @return
+     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public GenericResponse uploadOssFile(MultipartFile file) {
         //获取上传文件  MultipartFile

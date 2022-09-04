@@ -4,7 +4,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.56.10:8848
+        server-addr: 192.168.56.20:8848
 server:
   port: 9000
   tomcat:
@@ -14,4 +14,10 @@ server:
 
 
 
-
+aliyun:
+  oss:
+    file:
+      endpoint: xxxx.aliyuncs.com
+      keyid: xxxx
+      keysecret: xxxx
+      bucketname: xxx

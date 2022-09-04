@@ -26,6 +26,9 @@ public class FileUpload {
     private static String[] FILE_ATTACHMENT = { ".JPG", ".JPEG", ".PNG", ".GIF", ".MP4", ".3GP", ".ZIP", ".RAR", ".TXT",
             ".DOC", ".DOCX", ".XLS", ".XLSX", ".PPT", ".PPTX" };
 
+
+
+
     @PostMapping("/FileUpload")
     public R fileUpload( @RequestParam("files") MultipartFile[] resourceFiles, String path, Boolean timeStamp, byte type) {
         //解析失败会异常跳出

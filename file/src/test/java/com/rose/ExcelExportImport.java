@@ -4,12 +4,17 @@ import com.alibaba.excel.EasyExcel;
 
 
 import com.rose.dao.YanMajor1;
+import com.rose.file.util.ExcelImportUtil;
 import com.rose.handler.DemoDataListener;
 import com.rose.handler.UserExcelListener;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.List;
 
-public class ExcelOptionsServiceTest   extends DemoApplicationTests{
+
+public class ExcelExportImport extends DemoApplicationTests{
 
 //    @Autowired
 //    private ExcelOptionsService excelOptionsService;
@@ -39,6 +44,12 @@ public class ExcelOptionsServiceTest   extends DemoApplicationTests{
         String fileName = "C:\\Users\\samsung\\Desktop\\python转txt为excel\\uuju.xlsx";
 //        EasyExcel.read(fileName, YanMajor1.class, new UserExcelListener()).sheet().doRead();
         EasyExcel.read(fileName, YanMajor1.class, new UserExcelListener()).sheet().doRead();
+
+    }
+
+
+    @Test
+    public void readExcel2() throws Exception {
 
     }
     @Test
