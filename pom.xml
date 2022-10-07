@@ -15,6 +15,7 @@
         <module>common</module>
         <module>file</module>
         <module>netty</module>
+        <module>loginUser</module>
     </modules>
 
 

@@ -29,6 +29,18 @@ spring:
             - Path=/api/file/**
           filters:
             - RewritePath=/api/(?<segment>.*), /$\{segment}
+        - id: yan_first
+          uri: lb://yan-first
+          predicates:
+            - Path=/api/first/**
+          filters:
+            - RewritePath=/api/first/(?<segment>.*), /$\{segment}
+        - id: yan_loginUser
+          uri: lb://yan-loginUser
+          predicates:
+            - Path=/api/loginUser/**
+          filters:
+            - RewritePath=/api/loginUser/(?<segment>.*), /$\{segment}
 #        - id: admin_route
 #          uri: lb://renren-fast
 #          predicates:

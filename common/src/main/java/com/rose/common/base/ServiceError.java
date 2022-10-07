@@ -7,6 +7,8 @@ public enum ServiceError {
     INSERT_ERROR(-100,"代码保存错误"),
     LOGIN_ERROR(-201,"登录出错"),
     Expire_LOGIN_ERROR(-202,"登录过期,请重新登录"),
+    LOGIN_ERROR_USERNAME(-203,"账号或密码不正确"),
+    LOGIN_ERROR_HASLOCKED(-204,"账号已被锁定,请联系管理员"),
 
     OSS_ERROR(-300,"oss错误"),
     UPDATE_ERROR(-400,"代码更新错误"),
