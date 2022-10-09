@@ -7,20 +7,20 @@
  * 版权所有，侵权必究！
  */
 
-import axios from '../utils/axios'
+ import  {apiFirstPost,apiFirstGet,apiLoginUserPost} from '../utils/axios'
 
 
-export function login(params) {
-  return axios.post('/loginByWeb', params);
-}
-
-export function register(params) {
-  return axios.post('/user/register', params);
-}
-
-export function getUserInfo() {
-  return axios.get('/yaj/yan-user/getUserInfo');
-}
-export function getUserInfoMe() {
-  return axios.get('/yaj/yan-user/getUserInfoMe');
-}
+ export function login(params) {
+   return apiLoginUserPost('/sys/login', params);
+ }
+ 
+ export function register(params) {
+   return apiFirstPost('/user/register', params);
+ }
+ 
+ export function getUserInfo() {
+   return apiFirstGet('/yaj/yan-user/getUserInfo');
+ }
+ export function getUserInfoMe() {
+   return apiFirstGet('/yaj/yan-user/getUserInfoMe');
+ }

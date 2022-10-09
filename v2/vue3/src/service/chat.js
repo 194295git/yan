@@ -1,25 +1,25 @@
-import axios from '../utils/axios'
+import  {apiFirstGet} from '../utils/axios'
 
 
 export function queryEyeUser() {
-  return axios.get('/yaj/yan-user/eyeUser');
+  return apiFirstGet('/yaj/yan-user/eyeUser');
 }
 
 export function getChatContent(params) {
-  return axios.get('/yaj/yan-user/getChatContent?toOpenid='+params);
+  return apiFirstGet('/yaj/yan-user/getChatContent?toOpenid='+params);
 }
 
 
 export function getAllGroup() {
-  return axios.get('/yaj/yan-group/getAllGroup');
+  return apiFirstGet('/yaj/yan-group/getAllGroup');
 }
 
 export function getGroupOpenid(params) {
-  return axios.get('/yaj/yan-group/getGroupOpenid?id='+params);
+  return apiFirstGet('/yaj/yan-group/getGroupOpenid?id='+params);
 }
 export function getGroupContent(params) {
-  return axios.get('/yaj/yan-group/getGroupContent?toGroup='+params);
+  return apiFirstGet('/yaj/yan-group/getGroupContent?toGroup='+params);
 }
 export function getAvatarUrlByOpenid(params) {
-  return axios.get('/yaj/yan-user/getAvatarUrlByOpenid?openid='+params);
+  return apiFirstGet('/yaj/yan-user/getAvatarUrlByOpenid?openid='+params);
 }

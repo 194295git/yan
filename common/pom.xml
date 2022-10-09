@@ -6,6 +6,7 @@
         <artifactId>yan</artifactId>
         <groupId>com.rose.yan</groupId>
         <version>1.0-SNAPSHOT</version>
+
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,9 +16,11 @@
         <commons.lang.version>2.6</commons.lang.version>
         <mysql.version>8.0.17</mysql.version>
         <javax.servlet.version>2.5</javax.servlet.version>
+        <jjwt.version>0.9.0</jjwt.version>
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -27,6 +30,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
+        </dependency>
+        <!--JWT-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.apache.httpcomponents</groupId>-->

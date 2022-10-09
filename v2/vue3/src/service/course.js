@@ -1,4 +1,4 @@
-import axios from '../utils/axios'
+import  {apiFirstGet} from '../utils/axios'
 export function getCategory() {
-  return axios.get('/yaj/yan-product/getCategory');
+  return apiFirstGet('/yaj/yan-product/getCategory');
 }

@@ -11,7 +11,7 @@ package com.rose.common.exception;
 /**
  * 自定义异常
  *
- * @author Mark sunlightcs@gmail.com
+ * @author Mark 1942951600@qq.com
  */
 public class RRException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
@@ -56,5 +56,6 @@ public class RRException extends RuntimeException {
 	public void setCode(int code) {
 		this.code = code;
 	}
+	
 	
 }
