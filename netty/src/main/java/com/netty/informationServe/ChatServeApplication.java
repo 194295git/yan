@@ -2,7 +2,6 @@ package com.netty.informationServe;
 
 import com.netty.informationServe.serve.WebSocketServe;
 
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

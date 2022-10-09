@@ -13,9 +13,9 @@
         <module>rose-modules/first</module>
         <module>gateway</module>
         <module>common</module>
-        <module>file</module>
+        <module>rose-modules/file</module>
         <module>netty</module>
-        <module>loginUser</module>
+        <module>rose-modules/loginUser</module>
     </modules>
 
 

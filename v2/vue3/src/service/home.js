@@ -7,13 +7,14 @@
  * 版权所有，侵权必究！
  */
 
-import axios from '../utils/axios'
+ import  {apiFirstGet} from '../utils/axios'
 
-export function getHome() {
-  return axios.get('/index-infos');
-}
-export function getData(page) {
-  return axios.get('/yaj/yan-question/getDataDiscoveryPage?pageNo=' + page);
-}
-
-
+ 
+ export function getHome() {
+   return apiFirstGet('/index-infos');
+ }
+ export function getData(page) {
+   return apiFirstGet('/yaj/yan-question/getDataDiscoveryPage?pageNo=' + page);
+ }
+ 
+ 

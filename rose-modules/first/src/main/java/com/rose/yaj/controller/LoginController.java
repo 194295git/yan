@@ -49,37 +49,5 @@ public class LoginController {
     }
 
 
-    /**
-     * 权限测试
-     */
-    @LoginToken
-    @GetMapping("/test")
-
-    public GenericResponse test() {
-        return GenericResponse.response(ServiceError.NORMAL, "test");
-    }
-
-    @LoginToken
-    @PostMapping("/test")
-    public GenericResponse testPost() {
-        return GenericResponse.response(ServiceError.NORMAL, "testPOST");
-    }
-    @LoginToken
-    @GetMapping("/test/a")
-    public GenericResponse testA() {
-        return GenericResponse.response(ServiceError.NORMAL, "testManage");
-    }
-
-    @LoginToken
-    @GetMapping("/hello")
-    public GenericResponse hello() {
-        return GenericResponse.response(ServiceError.NORMAL, "hello security");
-    }
-
-
-    @GetMapping("info")
-    public GenericResponse info() {
-        return GenericResponse.response(ServiceError.NORMAL, "info");
-    }
 
 }

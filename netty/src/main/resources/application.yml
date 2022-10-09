@@ -5,9 +5,9 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.56.10:8848
+        server-addr: 192.168.56.20:8848
   rabbitmq:
-    host: 192.168.56.10
+    host: 192.168.56.20
     port: 5672
     virtual-host: /
     username: guest

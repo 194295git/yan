@@ -100,7 +100,7 @@ export default {
    
       if (state.type == 'login') {
         const  data  = await login({
-          "email": values.username,
+          "username": values.username,
           "password": values.password
         })
         console.log("token",data)
