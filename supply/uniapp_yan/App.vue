@@ -1,5 +1,5 @@
 <script>
-	import http from 'common/http.js'
+	import http from 'supply/uniapp_yan/common/http.js'
 	
 	export default {
 		
@@ -18,7 +18,7 @@
 <style lang="scss">
 	@import "uview-ui/index.scss";
 	
-	@import "./common/vuetify.scss";
+	@import "common/vuetify";
 	/*每个页面公共css */
 	
 	/**app.wxss**/
