@@ -18,11 +18,10 @@
 主要技术点：springboot springcloud nacos  netty mybatis-plus rabbitmq  
 前端：vue3 vue2 uniapp uview websocket vant
 #### 启动说明
-1. 先启动nacos 
+1. 先启动 nacos  rabbitmq
 2. 启动gateway服务
-3. 启动node_modules 里面的first服务，启动netty服务
-4. 启动UI前端服务 使用hbuilder启动，或者npm run dev 启动vue项目
-5. 也可以简单调试后单独启动node_modules里面的first服务
+3. 启动node_modules 里面的first服务，启动netty服务 loginUser 这样就ok了
+4. 启动  v2/vue3文件夹下面的vue3 项目 npm install  npm run serve
 
 #### 服务说明
 1. gateway服务 提供统一网关
@@ -30,17 +29,17 @@
 3. first服务   提供app基础功能
 4. netty服务   聊天功能服务
 5. renren      基于renren-fast的研战到底后台
-6. UIManager   后台管理的前端
-7. UI2         研战到底前端项目
-8. v2          vue重构的前端项目
-9. todo_login  登录模块，用户中心
-10. todo_shiro 权限框架
+6. loginUser  登录模块，用户中心
+7. UIManager   后台管理的前端
+8. v2/vue3     vue3重构的前端项目(目前主要写的)
+
+
 ### 已完成的功能：
 1. 用户登录注册token
 2. 提出问题，回答，在回答下面评论，点赞
 3. oss功能，上传到阿里云，并通过网关代理
 4. 考研面临的专业以及专业下的细分学科
-5. 基于netty,websocket 以及rocketmq的聊天功能
+5. 基于netty,websocket 以及rabbitmq的聊天功能
 6. 将python开发的智能择校模块集成进去
 7. 异常处理系统
 8. swagger 接口文档地址 localhost:8999/swagger-ui.html
@@ -54,13 +53,9 @@
 3. 增加买卖商品的功能，在该场景下使用rabbitmq
 4. 引入refreshToken机制，让鉴权做的更加放心
 5. 引入自定义权限处理；对于不同的人开启不同的功能
-6. 将文件上传抽取出一个微服务的功能，不仅仅限于上传图片。添加Word，PDF等支持。
-7. 后台管理系统；添加后台的管理模块；可以管理用户上传的内容，管理学科分类，管理热榜等功能、陆续完善页面。
-
-8. 将权限管理系统改造成一个微服务，将后台的权限那块抽离出来
-9. 完善导入导出，上传附件到文件服务
-10.登录专门使用一个服务，专门使用一个数据库存储 后续陆续完善 单点登录、oauth2  将后台的登录也集成进去；
-11. 后续后台管理项目使用vue3 ts来做
+6. 后台管理系统；添加后台的管理模块；可以管理用户上传的内容，管理学科分类，管理热榜等功能、陆续完善页面。
+7.登录专门使用一个服务，专门使用一个数据库存储 后续陆续完善 单点登录、oauth2  将后台的登录也集成进去；
+8. 后续后台管理项目使用vue3 ts来做
 ### netty后续计划
 1. 搭建一套消息推送机制
 2. 完善netty的心跳服务机制
