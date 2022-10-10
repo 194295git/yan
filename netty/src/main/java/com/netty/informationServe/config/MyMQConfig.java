@@ -28,14 +28,40 @@ public class MyMQConfig {
     @Value("${myRabbitmq.MQConfig.routingKey}")
     private String routingKey;
 
+    @Value("${myRabbitmq.MQConfig.queues}")
+    private String pushQueues;
 
+    @Value("${myRabbitmq.MQConfig.exchange}")
+    private String pushEventExchange;
 
+    @Value("${myRabbitmq.PushConfig.routingKey}")
+    private String pushRoutingKey;
     //创建一个队列
+    @Bean
+    public Queue pushQueue(){
+        Queue queue = new Queue(pushQueues, true, false, false);
+        return queue;
+    }
+    //创建一个交换机
+    @Bean
+    public Exchange pushExchange(){
+        return new TopicExchange(pushEventExchange, true, false);
+    }
+    //创建一个队列
+
+    // 绑定队列 交换机 和 key
+    @Bean
+    public Binding pushBinding(){
+        return new Binding(pushQueues, Binding.DestinationType.QUEUE, pushEventExchange, pushRoutingKey, null);
+    }
+
+
     @Bean
     public Queue orderReleaseOrderQueue(){
         Queue queue = new Queue(queues, true, false, false);
         return queue;
     }
+
     //创建一个交换机
     @Bean
     public Exchange orderEventExchange(){

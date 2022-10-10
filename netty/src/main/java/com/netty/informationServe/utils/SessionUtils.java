@@ -7,6 +7,9 @@ import io.netty.channel.group.ChannelGroup;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ *
+ */
 public class SessionUtils {
 	/**
 	 * userID 映射 连接channel
@@ -57,5 +60,9 @@ public class SessionUtils {
 
 	public static ChannelGroup getChannelGroup(Integer groupId) {
 		return groupIdChannelGroupMap.get(groupId);
+	}
+
+	public static Map<String, Channel>  getAllOnlineChannel() {
+		return userOpenidChannelMap;
 	}
 }

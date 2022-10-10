@@ -41,6 +41,13 @@ spring:
             - Path=/api/loginUser/**
           filters:
             - RewritePath=/api/loginUser/(?<segment>.*), /$\{segment}
+        # 给netty服务器配送相应的功能
+        - id: yan_chatServe
+          uri: lb://chatServe
+          predicates:
+            - Path=/api/chatServe/**
+          filters:
+            - RewritePath=/api/chatServe/(?<segment>.*), /$\{segment}
 #        - id: admin_route
 #          uri: lb://renren-fast
 #          predicates:

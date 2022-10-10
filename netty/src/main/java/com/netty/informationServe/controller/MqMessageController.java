@@ -18,7 +18,7 @@ public class MqMessageController {
 
     @Autowired
     RabbitTemplate rabbitTemplate;
-    @RequestMapping("/msg")
+       @RequestMapping("/msg")
     public void testSendMessage(){
         for (int i = 0; i < 10 ; i++) {
             rabbitTemplate.convertAndSend("yan-exchange",
