@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: yan-file
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.56.20:8848
+server:
+  port: 9001
+  tomcat:
+    uri-encoding: utf-8
+  servlet:
+    context-path: /
+
+
+
+aliyun:
+  oss:
+    file:
+      endpoint: xxxx.aliyuncs.com
+      keyid: xxxx
+      keysecret: xxxx
+      bucketname: xxx
