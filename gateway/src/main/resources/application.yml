@@ -6,9 +6,9 @@ spring:
       discovery:
         server-addr: 192.168.56.20:8848
         # \u8BF7\u6C42\u53C2\u6570\u4E2D\u5E26\u4E86 baidu \u5C31\u53BB\u8F6C\u53D1\u5230 http://www.baidu.com
-#    sentinel:
-#      transport:
-#        dashboard: localhost:8333
+    sentinel:
+      transport:
+        dashboard: localhost:8333
     gateway:
       routes:
 ## lb: 所有mall-product的请求都会被截取掉 /api/
@@ -48,39 +48,6 @@ spring:
             - Path=/api/chatServe/**
           filters:
             - RewritePath=/api/chatServe/(?<segment>.*), /$\{segment}
-#        - id: admin_route
-#          uri: lb://renren-fast
-#          predicates:
-#            - Path=/api/**
-#          filters:
-#            - RewritePath=/api/(?<segment>.*), /renren-fast/$\{segment}
-
-#        - id: coupon_route
-#          uri: lb://mall-coupon
-#          predicates:
-#            - Path=/api/coupon/**
-#          filters:
-#            - RewritePath=/api/(?<segment>.*), /$\{segment}
-#
-#        - id: ware_route
-#          uri: lb://mall-ware
-#          predicates:
-#            - Path=/api/ware/**
-#          filters:
-#            - RewritePath=/api/(?<segment>.*), /$\{segment}
-#        #  OSS签名的转发
-#        - id: third_party_route
-#          uri: lb://mall-third-party
-#          predicates:
-#            - Path=/api/third/party/**
-#          filters:
-#            - RewritePath=/api/(?<segment>.*), /$\{segment}
-#        - id: admin_route
-#          uri: lb://renren-fast
-#          predicates:
-#            - Path=/api/**
-#          filters:
-#            - RewritePath=/api/(?<segment>.*), /renren-fast/$\{segment}
 #        - id: search_route
 #          uri: lb://mall-search
 #          predicates:

@@ -14,6 +14,7 @@
         <module>gateway</module>
         <module>common</module>
         <module>rose-modules/file</module>
+
         <module>netty</module>
         <module>rose-modules/loginUser</module>
     </modules>
