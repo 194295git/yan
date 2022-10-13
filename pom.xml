@@ -17,6 +17,7 @@
 
         <module>netty</module>
         <module>rose-modules/loginUser</module>
+        <module>rose-modules/fileTest</module>
     </modules>
 
 
