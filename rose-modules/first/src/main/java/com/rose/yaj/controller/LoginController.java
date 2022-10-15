@@ -36,8 +36,8 @@ public class LoginController {
     @ApiOperation("使用邮箱和密码注册")
     @PassToken
     @PostMapping("/registByWeb")
-    public GenericResponse registByWeb(String email, String password) throws Exception {
-        return weChatService.registByWeb(email,password);
+    public GenericResponse registByWeb(@RequestBody UserDto.Login dto) throws Exception {
+        return weChatService.registByWeb(dto.getEmail(),dto.getPassword());
     }
 
     @ApiOperation("使用邮箱和密码登录")

@@ -15,7 +15,7 @@
  }
  
  export function register(params) {
-   return apiFirstPost('/user/register', params);
+   return apiFirstPost('/registByWeb', params);
  }
  
  export function getUserInfo() {

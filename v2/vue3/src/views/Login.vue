@@ -111,7 +111,7 @@ export default {
         
       } else {
         await register({
-          "username": values.username1,
+          // "username": values.username1,
           "password": values.password1,
           "email":values.email1
         })

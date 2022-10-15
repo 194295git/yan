@@ -85,9 +85,10 @@ public class WeChatServiceImpl implements WeChatService {
 
         }else {
             YanUser user = new YanUser();
+            //明明已经设置了oenid了 这是为什么保存不成功呢；简直离谱
             String newOpenid = uuid();
 
-            user.setOpenid(newOpenid);
+//            user.setOpenid(newOpenid);
             user.setUsername("test"+new Random().nextInt());
             user.setEmail(email);
             user.setPassword(password);
