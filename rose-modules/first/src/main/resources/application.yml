@@ -14,9 +14,9 @@ spring:
       transport:
         dashboard: localhost:8333
   redis:
-    host: 127.0.0.1
+    host: 192.168.56.20
     port: 6379
-    password: 123456
+
   rabbitmq:
     host: 192.168.56.20
     port: 5672

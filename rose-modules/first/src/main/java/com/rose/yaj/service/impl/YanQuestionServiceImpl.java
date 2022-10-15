@@ -1,5 +1,8 @@
 package com.rose.yaj.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.rose.yaj.dto.QuestionAndAnswerList;
@@ -13,7 +16,11 @@ import com.rose.yaj.util.PageUtils;
 import org.jsoup.Jsoup;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -39,8 +46,32 @@ public class YanQuestionServiceImpl extends ServiceImpl<YanQuestionMapper, YanQu
     @Autowired
     YanUserService yanUserService;
 
+    @Autowired
+    StringRedisTemplate redisTemplate;
+
     @Override
     public List<YanDataDiscovery> getIndexData() {
+        /**
+         * 加入缓存逻辑
+         */
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        if( StringUtils.isEmpty(ops.get("indexContentJson"))){
+            //缓存中没有数据 应该从数据库查询出来
+            List<YanDataDiscovery> indexDataFromDB = getIndexDataFromDB();
+            ops.set("indexContentJson", JSON.toJSONString(indexDataFromDB));
+            return indexDataFromDB;
+        }
+        String indexContentJson = ops.get("indexContentJson");
+        //TypeReference这个构造器是受保护的，还需要使用匿名内部类的形式来搞定
+        List<YanDataDiscovery> jsonObject = JSON.parseObject(indexContentJson, new TypeReference<List<YanDataDiscovery>>(){});
+        return jsonObject;
+    }
+
+    /**
+     * 从数据库查询并且封装整个分类数据
+     * @return
+     */
+    public List<YanDataDiscovery> getIndexDataFromDB() {
         /**
          * select question_id, que_content  ,que_title from yan_question order by que_collect desc
          */
