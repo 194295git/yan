@@ -25,7 +25,6 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/user")
-@CrossOrigin
 public class ExcelExportImport {
 
 

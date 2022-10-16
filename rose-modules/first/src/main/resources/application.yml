@@ -51,7 +51,8 @@ spring:
             type: Static
             props:
               write-data-source-name: yan
-              read-data-source-names: slave1,slave2
+#              read-data-source-names: slave1,slave2
+              read-data-source-names: yan
 #            primary-data-source-name: yan
 #            replica-data-source-names: slave1,slave2
             load-balancer-name: alg_round

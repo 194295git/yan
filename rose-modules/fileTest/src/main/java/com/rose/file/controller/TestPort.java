@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class TestPort {
-
+    //localhost:88/api/file/getPort
     @Value("${server.port}")
     private String serverPort;
     @GetMapping("/getPort")
