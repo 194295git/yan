@@ -7,7 +7,7 @@
  * 版权所有，侵权必究！
  */
 
- import  {apiFirstPost,apiFirstGet,apiLoginUserPost} from '../utils/axios'
+ import  {apiFirstGet,apiLoginUserPost} from '../utils/axios'
 
 
  export function login(params) {
@@ -15,7 +15,7 @@
  }
  
  export function register(params) {
-   return apiFirstPost('/user/register', params);
+   return apiLoginUserPost('/sys/registByWeb', params);
  }
  
  export function getUserInfo() {

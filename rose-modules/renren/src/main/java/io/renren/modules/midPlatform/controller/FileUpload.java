@@ -20,7 +20,6 @@ import java.util.UUID;
  * @create 2022/6/1
  */
 @RestController
-@CrossOrigin(origins={"http://localhost:8001/","null"})
 @RequestMapping("platform/upload")
 public class FileUpload {
     @PostMapping("/uploadfile")

@@ -1,19 +1,71 @@
 spring:
-  datasource:
-    username: root
-    password: 1942951600
-    url: jdbc:mysql://localhost:3306/yan?characterEncoding=utf-8&useSSL=false&useUnicode=true&serverTimezone=UTC
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#  datasource:
+#    username: root
+#    password: 1942951600
+#    url: jdbc:mysql://localhost:3306/yan?characterEncoding=utf-8&useSSL=false&useUnicode=true&serverTimezone=UTC
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: yan-first
   cloud:
     nacos:
       discovery:
         server-addr: 192.168.56.20:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8333
+  shardingsphere:
+    props:
+      sql-show: true
+    mode:
+      type: Memory
+    datasource:    # 配置数据源
+      names: yan,slave1,slave2    # 分库的逻辑库名,可配置多个
+      yan:    # 逻辑库名
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/yan?characterEncoding=utf-8&useSSL=false&useUnicode=true&serverTimezone=UTC
+        username: root
+        password: 1942951600
+      slave1:    # 逻辑库名
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/yan_slave?characterEncoding=utf-8&useSSL=false&useUnicode=true&serverTimezone=UTC
+        username: root
+        password: 1942951600
+      slave2:    # 逻辑库名
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/yan_slave?characterEncoding=utf-8&useSSL=false&useUnicode=true&serverTimezone=UTC
+        username: root
+        password: 1942951600
+    master-slave-rules:
+      myds:
+        master-data-source-name: yan
+        slave-data-source-names: slave1,slave2
+    rules:
+      readwrite-splitting:
+#      replica-query:
+        data-sources:
+          # myds 定义的是上层的数据源
+          myds:
+            type: Static
+            props:
+              write-data-source-name: yan
+#              read-data-source-names: slave1,slave2
+              read-data-source-names: yan
+#            primary-data-source-name: yan
+#            replica-data-source-names: slave1,slave2
+            load-balancer-name: alg_round
+        load-balancers:
+          alg_round:
+            type: ROUND_ROBIN
+
+
+
   redis:
-    host: 127.0.0.1
+    host: 192.168.56.20
     port: 6379
-    password: 123456
+
   rabbitmq:
     host: 192.168.56.20
     port: 5672

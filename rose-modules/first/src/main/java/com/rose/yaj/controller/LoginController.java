@@ -6,6 +6,7 @@ import com.rose.yaj.annotation.PassToken;
 import com.rose.yaj.common.GenericResponse;
 import com.rose.yaj.common.ServiceError;
 import com.rose.yaj.dto.UserDto;
+import com.rose.yaj.feign.dto.RegisterFeign;
 import com.rose.yaj.service.WeChatService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,16 +29,21 @@ public class LoginController {
 
     /**
      * 使用邮箱和密码登录
-     * @param email
-     * @param password
      * @return
      * @throws Exception
      */
     @ApiOperation("使用邮箱和密码注册")
     @PassToken
     @PostMapping("/registByWeb")
-    public GenericResponse registByWeb(String email, String password) throws Exception {
-        return weChatService.registByWeb(email,password);
+    public GenericResponse registByWeb(@RequestBody UserDto.Login dto) throws Exception {
+        return weChatService.registByWeb(dto.getEmail(),dto.getPassword());
+    }
+
+    @ApiOperation("注册使用openid")
+    @PassToken
+    @PostMapping("/registByOpenid")
+    public GenericResponse registByOpenid(@RequestBody RegisterFeign dto) throws Exception {
+        return weChatService.registByOpenid(dto);
     }
 
     @ApiOperation("使用邮箱和密码登录")

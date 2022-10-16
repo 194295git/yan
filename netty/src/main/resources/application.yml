@@ -34,7 +34,12 @@ myRabbitmq:
   exchange: yan-exchange
   routeKey: yan
   MQConfig:
-    # 订单队列
+    # 聊天发送消息队列
     queues: yan.netty.queue
     routingKey: netty
     exchange: yan-exchange
+  PushConfig:
+    # 推送消息队列
+    queues: yan.push.queue
+    routingKey: push
+    exchange: yan-push
