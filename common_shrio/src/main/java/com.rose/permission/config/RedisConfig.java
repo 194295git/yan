@@ -6,7 +6,7 @@
  * 版权所有，侵权必究！
  */
 
-package com.rose.loginUser.sys.config;
+package com.rose.permission.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

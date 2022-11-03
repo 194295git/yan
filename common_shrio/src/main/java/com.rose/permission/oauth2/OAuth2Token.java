@@ -6,7 +6,7 @@
  * 版权所有，侵权必究！
  */
 
-package com.rose.shrio.oauth2;
+package com.rose.permission.oauth2;
 
 
 import org.apache.shiro.authc.AuthenticationToken;

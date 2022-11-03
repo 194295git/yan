@@ -1,4 +1,4 @@
-package com.rose.shrio.entity;
+package com.rose.permission.entity;
 
 
 

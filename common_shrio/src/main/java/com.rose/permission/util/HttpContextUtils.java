@@ -6,7 +6,7 @@
  * 版权所有，侵权必究！
  */
 
-package com.rose.shrio.util;
+package com.rose.permission.util;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;

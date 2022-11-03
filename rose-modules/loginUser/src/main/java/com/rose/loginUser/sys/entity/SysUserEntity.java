@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
-import com.rose.common.utils.CommonUser;
 import com.rose.common.valid.AddGroup;
 import com.rose.common.valid.UpdateGroup;
 import lombok.Data;
@@ -22,6 +21,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 系统用户
@@ -90,5 +90,8 @@ public class SysUserEntity  implements Serializable {
 	 * 创建时间
 	 */
 	private Date createTime;
+
+	@TableField(exist = false)
+	private Set<String> permissions;
 
 }

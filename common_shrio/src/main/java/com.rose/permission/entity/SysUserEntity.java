@@ -6,7 +6,7 @@
  * 版权所有，侵权必究！
  */
 
-package com.rose.shrio.entity;
+package com.rose.permission.entity;
 
 
 import java.io.Serializable;

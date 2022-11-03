@@ -8,6 +8,10 @@ spring:
     sentinel:
       transport:
         dashboard: localhost:8080
+  redis:
+    #    open: false  # 是否开启redis缓存  true开启   false关闭
+    host: 192.168.56.20
+    port: 6379
 server:
   port: 9000
   tomcat:

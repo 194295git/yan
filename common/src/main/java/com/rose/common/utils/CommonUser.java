@@ -25,4 +25,6 @@ public class CommonUser implements Serializable {
 
     private String openid;
 
+    private Long userId;
+
 }

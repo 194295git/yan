@@ -6,10 +6,12 @@
  * 版权所有，侵权必究！
  */
 
-package com.rose.shrio.oauth2;
+package com.rose.permission.oauth2;
 
 import com.google.gson.Gson;
 
+import com.rose.permission.util.HttpContextUtils;
+import com.rose.permission.util.R;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.shiro.authc.AuthenticationException;

@@ -6,11 +6,13 @@
  * 版权所有，侵权必究！
  */
 
-package com.rose.shrio.config;
+package com.rose.permission.config;
 
 
 
 
+import com.rose.permission.oauth2.OAuth2Filter;
+import com.rose.permission.oauth2.OAuth2Realm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;

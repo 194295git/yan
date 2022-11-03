@@ -45,10 +45,10 @@ public class OAuth2Realm extends AuthorizingRealm {
         Long userId = user.getUserId();
 
         //用户权限列表
-        Set<String> permsSet = shiroService.getUserPermissions(userId);
+//        Set<String> permsSet = shiroService.getUserPermissions(userId);
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.setStringPermissions(permsSet);
+        info.setStringPermissions(user.getPermissions());
         return info;
     }
 
@@ -66,8 +66,10 @@ public class OAuth2Realm extends AuthorizingRealm {
             throw new IncorrectCredentialsException("token失效，请重新登录");
         }
 
+        Set<String> permsSet = shiroService.getUserPermissions(tokenEntity.getUserId());
         //查询用户信息
         SysUserEntity user = shiroService.queryUser(tokenEntity.getUserId());
+        user.setPermissions(permsSet);
         //账号锁定
         if(user.getStatus() == 0){
             throw new LockedAccountException("账号已被锁定,请联系管理员");

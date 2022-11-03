@@ -4,6 +4,7 @@ package com.rose.common.utils;
 
 
 
+import com.rose.common.constant.JwtConstant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -122,6 +123,7 @@ public class JwtTokenUtil {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         Map<String, Object> claims = new HashMap<>();
         claims.put("openid", user.getOpenid());
+        claims.put("userid", user.getUserId());
 
         // 生成JWT的时间
         long nowMillis = System.currentTimeMillis();
@@ -141,7 +143,7 @@ public class JwtTokenUtil {
 
         // 设置过期时间
 
-            long expMillis = nowMillis + 6000000l;
+            long expMillis = nowMillis + JwtConstant.EXPIRE_TIME;
             builder.setExpiration(new Date(expMillis));
         return builder.compact();
     }

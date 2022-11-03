@@ -6,16 +6,15 @@
  * 版权所有，侵权必究！
  */
 
-package com.rose.shrio.oauth2;
+package com.rose.permission.oauth2;
 
 
 import com.google.gson.Gson;
 
+import com.rose.permission.entity.SysUserEntity;
+import com.rose.permission.util.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -59,10 +58,7 @@ public class OAuth2Realm extends AuthorizingRealm {
         return info;
     }
 
-//    @Override
-//    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-//        return null;
-//    }
+
 
     /**
      * 认证(登录时调用)
@@ -87,7 +83,11 @@ public class OAuth2Realm extends AuthorizingRealm {
             return info;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            /**
+             * 应该抛出异常 而不是return return有点问题
+             */
+            throw new IncorrectCredentialsException("token失效，请重新登录");
+//            return null;
         }
     }
 }

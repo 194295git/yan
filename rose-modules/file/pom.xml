@@ -30,6 +30,13 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.rose.yan</groupId>
+            <artifactId>common_shrio</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -85,11 +92,6 @@
             <version>2.10.5</version>
         </dependency>
 
-        <!-- SpringCloud Ailibaba Nacos Config -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
 
     </dependencies>
 

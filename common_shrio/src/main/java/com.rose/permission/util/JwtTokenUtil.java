@@ -1,6 +1,7 @@
-package com.rose.shrio.util;
+package com.rose.permission.util;
 
 
+import com.rose.permission.entity.CommonUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -138,7 +139,7 @@ public class JwtTokenUtil {
 
         // 设置过期时间
 
-            long expMillis = nowMillis + 6000000l;
+            long expMillis = nowMillis + 6000000L;
             builder.setExpiration(new Date(expMillis));
         return builder.compact();
     }

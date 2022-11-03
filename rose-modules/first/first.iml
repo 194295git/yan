@@ -25,6 +25,27 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="common_shrio" />
+    <orderEntry type="module" module-name="common_core" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-pool2:2.7.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-core:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-lang:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-cache:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-crypto-hash:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-crypto-core:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-crypto-cipher:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-config-core:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-config-ogdl:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-event:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-spring:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-web:1.4.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.6" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:5.2.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.2.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.13" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.31" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-annotations-api:9.0.31" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shardingsphere:shardingsphere-jdbc-core-spring-boot-starter:5.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shardingsphere:shardingsphere-sharding-spring-boot-starter:5.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shardingsphere:shardingsphere-sharding-core:5.1.1" level="project" />
@@ -64,7 +85,6 @@
     <orderEntry type="library" name="Maven: org.apache.shardingsphere:shardingsphere-db-discovery-api:5.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shardingsphere:shardingsphere-db-discovery-distsql-handler:5.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shardingsphere:shardingsphere-db-discovery-distsql-statement:5.1.1" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shardingsphere:shardingsphere-db-discovery-distsql-parser:5.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shardingsphere:shardingsphere-db-discovery-mysql:5.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shardingsphere:shardingsphere-db-discovery-opengauss:5.1.1" level="project" />
@@ -152,7 +172,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.yahoo.datasketches:memory:0.9.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: net.hydromatic:aggdesigner-algorithm:6.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.commons:commons-dbcp2:2.7.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.commons:commons-pool2:2.7.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.codehaus.janino:commons-compiler:3.1.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.codehaus.janino:janino:3.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.shardingsphere:shardingsphere-memory-mode-core:5.1.1" level="project" />
@@ -184,7 +203,6 @@
     <orderEntry type="library" name="Maven: org.javassist:javassist:3.21.0-GA" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml:classmate:1.5.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.plugin:spring-plugin-metadata:1.2.0.RELEASE" level="project" />
@@ -229,7 +247,6 @@
     <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:6.0.18.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.4.1.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-web:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.11.3" level="project" />
@@ -278,7 +295,6 @@
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.11" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.7" level="project" />
-    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.13" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk15:1.46" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.xfire:xfire-all:1.2.6" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.xfire:xfire-aegis:1.2.6" level="project" />
@@ -409,7 +425,6 @@
     <orderEntry type="library" name="Maven: com.alibaba.csp:sentinel-cluster-common-default:1.7.1" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.csp:sentinel-cluster-client-default:1.7.1" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.cloud:spring-cloud-alibaba-sentinel-datasource:2.2.0.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery:2.2.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.cloud:spring-cloud-alibaba-nacos-discovery:2.2.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.nacos:nacos-client:1.1.4" level="project" />
@@ -439,7 +454,6 @@
     <orderEntry type="library" name="Maven: javax.validation:validation-api:2.0.1.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.boot:spring-boot-starter-tomcat:2.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: jakarta.annotation:jakarta.annotation-api:1.3.5" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.31" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.31" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.31" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus-extension:3.0.5" level="project" />
