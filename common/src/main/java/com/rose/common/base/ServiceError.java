@@ -22,6 +22,10 @@ public enum ServiceError {
     GLOBAL_ERR_NO_CODE(-10002, "code错误/error code"),
     GLOBAL_ERR_NO_AUTHORITY(-10003, "没有操作权限/No operating rights"),
 
+    /**
+     * 运维
+     */
+    DevopsError(-20000,"运维方面错误"),
 
     ;
 

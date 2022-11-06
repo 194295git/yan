@@ -20,6 +20,7 @@
         <module>rose-modules/fileTest</module>
         <module>common_shrio</module>
         <module>common_core</module>
+        <module>rose-modules/devops</module>
     </modules>
 
 
