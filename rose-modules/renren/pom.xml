@@ -51,6 +51,19 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.rose.yan</groupId>
+			<artifactId>common</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.validation</groupId>
+					<artifactId>validation-api</artifactId>
+				</exclusion>
+			</exclusions>
+
+		</dependency>
 		<!--wx方面接口-->
 		<dependency>
 			<groupId>net.sf.ezmorph</groupId>
@@ -98,11 +111,7 @@
 			<version>4.5.5</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.2.47</version>
-		</dependency>
+
 		<!--解析csv-->
 		<dependency>
 			<groupId>com.opencsv</groupId>
@@ -206,17 +215,17 @@
 			<!--<artifactId>spring-boot-devtools</artifactId>-->
 			<!--<optional>true</optional>-->
 		<!--</dependency>-->
-		<dependency>
-			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus-boot-starter</artifactId>
-			<version>${mybatisplus.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.baomidou</groupId>
-					<artifactId>mybatis-plus-generator</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.baomidou</groupId>-->
+<!--			<artifactId>mybatis-plus-boot-starter</artifactId>-->
+<!--			<version>${mybatisplus.version}</version>-->
+<!--			<exclusions>-->
+<!--				<exclusion>-->
+<!--					<groupId>com.baomidou</groupId>-->
+<!--					<artifactId>mybatis-plus-generator</artifactId>-->
+<!--				</exclusion>-->
+<!--			</exclusions>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>

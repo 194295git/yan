@@ -14,6 +14,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 *.iml
+**/*.iml
+*/*.iml
+**/**/*.iml
+*/*/*.iml
 *.iml/
 # Editor directories and files
 .idea

@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: yan-devops
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.56.20:8848
+    sentinel:
+      transport:
+        dashboard: 192.168.56.20:8333
+server:
+  port: 19856
+  tomcat:
+    uri-encoding: utf-8
+  servlet:
+    context-path: /
+
+
