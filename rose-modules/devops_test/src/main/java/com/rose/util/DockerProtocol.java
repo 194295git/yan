@@ -1,5 +1,6 @@
 package com.rose.util;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.PullImageCmd;
@@ -76,9 +77,9 @@ public class DockerProtocol{
         DockerProtocol docker = new DockerProtocol();
 
         DockerClient dockerClient = docker.connectDocker();
-        docker.startContainer(dockerClient,"21e7d7460196");
+//        docker.startContainer(dockerClient,"21e7d7460196");
 //        docker.startContainer(dockerClient,"38dc3681aa87");
-//        docker.stopContainer(dockerClient,"38dc3681aa87");
+        docker.stopContainer(dockerClient,"21e7d7460196");
 
 
     }

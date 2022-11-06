@@ -22,18 +22,23 @@ import java.util.List;
 @RequestMapping("/dev")
 public class DockerController {
 
-    @Autowired
-    private DockerProtocol dockerProtocol;
+
 
     /**
      * 启动容器.
      * @return
      */
     @GetMapping("/containerStart")
-    public GenericResponse containerStart() {
+    public GenericResponse containerStart(@RequestParam("type") String file) {
         try {
+            DockerProtocol dockerProtocol = new DockerProtocol();
             DockerClient dockerClient = dockerProtocol.connectDocker();
-            dockerProtocol.startContainer(dockerClient, ContainerId.RABBIT_ID);
+            if(ContainerId.RABBITMQ.equals(file)){
+                dockerProtocol.startContainer(dockerClient, ContainerId.RABBIT_ID);
+            }
+            if(ContainerId.REDIS.equals(file)){
+                dockerProtocol.startContainer(dockerClient, ContainerId.REDIS_ID);
+            }
             return GenericResponse.response(ServiceError.NORMAL);
         }catch(Exception e){
             return GenericResponse.response(ServiceError.DevopsError);
@@ -41,13 +46,17 @@ public class DockerController {
 
 
     }
-
-
-    @GetMapping("/containerStartRedis")
-    public GenericResponse containerStartRedis() {
+    @GetMapping("/containerStop")
+    public GenericResponse containerStop(@RequestParam("type") String file) {
         try {
+            DockerProtocol dockerProtocol = new DockerProtocol();
             DockerClient dockerClient = dockerProtocol.connectDocker();
-            dockerProtocol.startContainer(dockerClient, ContainerId.REDIS_ID);
+            if(ContainerId.RABBITMQ.equals(file)){
+                dockerProtocol.stopContainer(dockerClient, ContainerId.RABBIT_ID);
+            }
+            if(ContainerId.REDIS.equals(file)){
+                dockerProtocol.stopContainer(dockerClient, ContainerId.REDIS_ID);
+            }
             return GenericResponse.response(ServiceError.NORMAL);
         }catch(Exception e){
             return GenericResponse.response(ServiceError.DevopsError);

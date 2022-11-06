@@ -35,6 +35,12 @@ spring:
             - Path=/api/devops/**
           filters:
             - RewritePath=/api/devops/(?<segment>.*), /$\{segment}
+        - id: yan_manage
+          uri: lb://yan-manage
+          predicates:
+            - Path=/api/manage/**
+          filters:
+            - RewritePath=/api/manage/(?<segment>.*), /$\{segment}
         - id: yan_first
           uri: lb://yan-first
           predicates:
