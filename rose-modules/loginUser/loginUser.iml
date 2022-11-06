@@ -104,6 +104,7 @@
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:3.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.4" level="project" />
+    <orderEntry type="module" module-name="common_core" />
     <orderEntry type="library" name="Maven: com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery:2.2.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.cloud:spring-cloud-alibaba-nacos-discovery:2.2.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.nacos:nacos-client:1.1.4" level="project" />

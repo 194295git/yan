@@ -8,6 +8,8 @@ import com.rose.file.util.ExcelImportUtil;
 import com.rose.handler.DemoDataListener;
 import com.rose.handler.UserExcelListener;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +20,8 @@ public class ExcelExportImport extends DemoApplicationTests{
 
 //    @Autowired
 //    private ExcelOptionsService excelOptionsService;
-
+    @Autowired
+    private RedisTemplate redisTemplate;
     /**
      * 测试读取excel
      **/
@@ -50,7 +53,7 @@ public class ExcelExportImport extends DemoApplicationTests{
 
     @Test
     public void readExcel2() throws Exception {
-
+        String  permsSetString = ( String )redisTemplate.opsForValue().get("1");
     }
     @Test
     public void read() throws Exception{

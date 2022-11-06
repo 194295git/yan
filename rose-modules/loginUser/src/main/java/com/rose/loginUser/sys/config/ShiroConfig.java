@@ -32,6 +32,26 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
+//    @Bean("securityManager")
+//    public SecurityManager securityManager(OAuth2Realm oAuth2Realm) {
+//        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+//        securityManager.setRealm(oAuth2Realm);
+
+//        securityManager.setRememberMeManager(null);
+//        return securityManager;
+//    }
+    // DefaultWebSecurityManager
+    // @Qualifier中可以直接是bean的方法名，也可以给bean设置一个name，比如@Bean(name="myRealm")，在@Qulifier中就可以通过name来获取这个bean
+//    @Bean(name = "securityManager")
+//    public DefaultWebSecurityManager getDefaultWebSecurityManager(OAuth2Realm oAuth2Realm,
+//                                                                  @Qualifier("myCacheManager") MyCacheManager myCacheManager) {
+//        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+//        // 关联UserRealm
+//        securityManager.setRealm(oAuth2Realm);
+//        securityManager.setCacheManager(myCacheManager);
+//        securityManager.setRememberMeManager(null);
+//        return securityManager;
+//    }
     @Bean("securityManager")
     public SecurityManager securityManager(OAuth2Realm oAuth2Realm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
@@ -39,6 +59,10 @@ public class ShiroConfig {
         securityManager.setRememberMeManager(null);
         return securityManager;
     }
+
+
+
+    //============================到目前为止是新加入的东西，具体还需要看效果
 
     @Bean("shiroFilter")
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
@@ -52,7 +76,7 @@ public class ShiroConfig {
 
         Map<String, String> filterMap = new LinkedHashMap<>();
         //这里放置自己通行的静态资源
-        filterMap.put("/", "anon");
+//        filterMap.put("/", "anon");
         filterMap.put("/downloadFile","anon");
         filterMap.put("/parseByName","anon");
 
@@ -65,6 +89,7 @@ public class ShiroConfig {
         filterMap.put("/webjars/**", "anon");
         filterMap.put("/druid/**", "anon");
         filterMap.put("/app/**", "anon");
+        filterMap.put("/shrio/login", "anon");
         filterMap.put("/sys/login", "anon");
         filterMap.put("/sys/registByWeb", "anon");
         filterMap.put("/swagger/**", "anon");

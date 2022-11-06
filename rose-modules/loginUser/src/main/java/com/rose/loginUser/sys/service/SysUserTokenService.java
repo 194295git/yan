@@ -11,7 +11,6 @@ package com.rose.loginUser.sys.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.rose.common.base.GenericResponse;
-import com.rose.loginUser.common.utils.R;
 import com.rose.loginUser.sys.entity.SysUserTokenEntity;
 
 /**

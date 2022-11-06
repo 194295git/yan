@@ -9,6 +9,7 @@
 package com.rose.loginUser.sys.controller;
 
 
+import com.google.gson.Gson;
 import com.rose.common.base.GenericResponse;
 import com.rose.common.base.ServiceError;
 import com.rose.common.utils.CommonUser;
@@ -19,27 +20,28 @@ import com.rose.loginUser.sys.feign.FirstLoginFeign;
 import com.rose.loginUser.sys.feign.dto.RegisterFeign;
 import com.rose.loginUser.sys.form.SysLoginForm;
 import com.rose.loginUser.sys.form.SysRegisterForm;
+import com.rose.loginUser.sys.service.ShiroService;
 import com.rose.loginUser.sys.service.SysCaptchaService;
 import com.rose.loginUser.sys.service.SysUserService;
 import com.rose.loginUser.sys.service.SysUserTokenService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.springframework.beans.BeanUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -62,6 +64,26 @@ public class SysLoginController extends AbstractController {
 
 	@Autowired
 	private FirstLoginFeign firstLoginFeign;
+
+	@Autowired
+	private RedisTemplate redisTemplate;
+
+	@Autowired
+	private ShiroService shiroService;
+
+	@RequestMapping(value = "/shrio/login", method = RequestMethod.POST)
+	public GenericResponse login(@RequestBody SysRegisterForm user) {
+		UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+		Subject subject = SecurityUtils.getSubject();
+		try {
+			subject.login(token);
+			return GenericResponse.response(ServiceError.NORMAL);
+		} catch (Exception e) {
+//			e.printStackTrace();
+			return GenericResponse.response(ServiceError.LOGIN_ERROR);
+		}
+	}
+
 
 	/**
 	 * 很明显这块设计到事务了；要么就写成保存sys_user失败了然后就不调用后面的方法这样子；
@@ -118,6 +140,7 @@ public class SysLoginController extends AbstractController {
 		SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
 		CommonUser commonUser = new CommonUser();
 		commonUser.setOpenid(user.getOpenid());
+		commonUser.setUserId(user.getUserId());
 		//账号不存在、密码错误
 		if(user == null || !user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex())) {
 			return GenericResponse.response(ServiceError.LOGIN_ERROR_USERNAME);
@@ -129,10 +152,13 @@ public class SysLoginController extends AbstractController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//账号锁定
-		if(user.getStatus() == 0){
-			return GenericResponse.response(ServiceError.LOGIN_ERROR_HASLOCKED);
-		}
+//		//账号锁定
+//		if(user.getStatus() == 0){
+//			return GenericResponse.response(ServiceError.LOGIN_ERROR_HASLOCKED);
+//		}
+		Set<String> permsSet = shiroService.getUserPermissions(user.getUserId());
+		Gson gson = new Gson();
+		redisTemplate.opsForValue().set(user.getUserId().toString(), gson.toJson(permsSet));
 		return GenericResponse.response(ServiceError.NORMAL, token);
 		//生成token，并保存到数据库
 //		R r = sysUserTokenService.createToken(user.getUserId());

@@ -9,15 +9,19 @@
 package com.rose.loginUser.sys.oauth2;
 
 
+import com.google.gson.Gson;
+import com.rose.common.utils.JwtTokenUtil;
 import com.rose.loginUser.sys.entity.SysUserEntity;
-import com.rose.loginUser.sys.entity.SysUserTokenEntity;
 import com.rose.loginUser.sys.service.ShiroService;
+
+import io.jsonwebtoken.Claims;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -32,6 +36,9 @@ public class OAuth2Realm extends AuthorizingRealm {
     @Autowired
     private ShiroService shiroService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Override
     public boolean supports(AuthenticationToken token) {
         return token instanceof OAuth2Token;
@@ -43,15 +50,20 @@ public class OAuth2Realm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         SysUserEntity user = (SysUserEntity)principals.getPrimaryPrincipal();
-        Long userId = user.getUserId();
-
+        Set<String> permsSet = user.getPermissions();
         //用户权限列表
-        Set<String> permsSet = shiroService.getUserPermissions(userId);
+        //将这块改成从redis里面获得，是不是就轻松多了。然后需要做的是存储。在登录的时候存储进去。
+        // 然后就可以完成鉴权了
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.setStringPermissions(permsSet);
         return info;
     }
+
+//    @Override
+//    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+//        return null;
+//    }
 
     /**
      * 认证(登录时调用)
@@ -59,22 +71,24 @@ public class OAuth2Realm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String accessToken = (String) token.getPrincipal();
+        Long userId;
+        try {
+            Claims claims = JwtTokenUtil.parseJWT(accessToken);
 
-        //根据accessToken，查询用户信息
-        SysUserTokenEntity tokenEntity = shiroService.queryByToken(accessToken);
-        //token失效
-        if(tokenEntity == null || tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()){
-            throw new IncorrectCredentialsException("token失效，请重新登录");
+            userId =  Long.valueOf(claims.get("userid").toString());
+            Gson gson = new Gson();
+//            Set<String> permsSet = shiroService.getUserPermissions(userId);
+//            SysUserEntity user = shiroService.queryUser(userId);
+            String  permsSetString = ( String )redisTemplate.opsForValue().get(userId.toString());
+            Set<String> permsSet=  gson.fromJson(permsSetString,Set.class);
+            SysUserEntity user = new SysUserEntity();
+            user.setUserId(userId);
+            user.setPermissions(permsSet);
+            SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, accessToken, getName());
+            return info;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-
-        //查询用户信息
-        SysUserEntity user = shiroService.queryUser(tokenEntity.getUserId());
-        //账号锁定
-        if(user.getStatus() == 0){
-            throw new LockedAccountException("账号已被锁定,请联系管理员");
-        }
-
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, accessToken, getName());
-        return info;
     }
 }
