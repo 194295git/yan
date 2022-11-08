@@ -12,7 +12,7 @@
      
       </div>
       
-      <div class="list">启动rabbitmq</div>
+      <div class="list" @click="startRbbit()">启动rabbitmq</div>
       <div class="list-auto">
         <div>微服务占用端口管理</div>
         <div>GatewayApplication  88</div>
@@ -42,6 +42,15 @@ export default {
         url: this.$http.adornDevUrl(`/dev/containerStart`),
         method: 'get',
         params: this.$http.adornParams({'type': 'redis'})
+      }).then(({data}) => {
+        console.log(data)
+      })
+    },
+    startRbbit () {
+      this.$http({
+        url: this.$http.adornDevUrl(`/dev/containerStart`),
+        method: 'get',
+        params: this.$http.adornParams({'type': 'rabbitmq'})
       }).then(({data}) => {
         console.log(data)
       })

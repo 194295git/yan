@@ -3,7 +3,7 @@
     <div class="title">nacos</div>
     <div>
       <iframe class="rabbit" 
-      src=""></iframe>
+      src="http://192.168.56.20:9001/"></iframe>
     </div>
   </div>
 </template>

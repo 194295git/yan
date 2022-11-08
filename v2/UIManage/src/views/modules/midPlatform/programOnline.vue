@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="title">在线编程</div>
     <div>
-      <div>不用配置环境在线编程</div>
+      <iframe class="rabbit" 
+      src="http://localhost:8999/swagger-ui.html"></iframe>
     
     </div>
   </div>
@@ -25,5 +25,13 @@ export default {
 .title {
   padding: 10px 2px;
   font-size: 20px;
+}
+.title {
+  padding: 10px 2px;
+  font-size: 20px;
+}
+.rabbit{
+  width: 80vw;
+  height: 80vh;
 }
 </style>

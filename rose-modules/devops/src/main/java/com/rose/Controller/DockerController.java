@@ -46,6 +46,10 @@ public class DockerController {
 
 
     }
+    /**
+     * 关闭容器.
+     * @return
+     */
     @GetMapping("/containerStop")
     public GenericResponse containerStop(@RequestParam("type") String file) {
         try {
