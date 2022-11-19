@@ -1,15 +1,31 @@
 server:
-  port: 8099
+  port: 14000
 
 # mysql
 spring:
+  application:
+    name: yan-database
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.56.20:8848
+    sentinel:
+      transport:
+        dashboard: 192.168.56.20:8333
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    #MySQL配置
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yan?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: 1942951600
+    master:
+      #MySQL配置
+      driverClassName: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/yan?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+      username: root
+      password: 1942951600
+    slave:
+      #MySQL配置
+      driverClassName: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/yan_login?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+      username: root
+      password: 1942951600
     #oracle配置
     #    driverClassName: oracle.jdbc.OracleDriver
     #    url: jdbc:oracle:thin:@47.100.206.162:1521:xe

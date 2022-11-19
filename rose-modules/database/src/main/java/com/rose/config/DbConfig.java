@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Primary;
  */
 @Configuration
 public class DbConfig {
+
     @Value("${renren.database: mysql}")
     private String database;
     @Autowired

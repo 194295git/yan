@@ -9,6 +9,7 @@
 package com.rose.controller;
 
 
+import com.rose.config.DynamicDataSource;
 import com.rose.service.SysGeneratorService;
 import com.rose.utils.PageUtils;
 import com.rose.utils.Query;
@@ -42,16 +43,31 @@ public class SysGeneratorController {
 	@ResponseBody
 	@RequestMapping("/list")
 	public R list(@RequestParam Map<String, Object> params){
+		DynamicDataSource.name.set("r");
 		PageUtils pageUtil = sysGeneratorService.queryList(new Query(params));
 		
 		return R.ok().put("page", pageUtil);
 	}
-	
+
+	/**
+	 * 列表
+	 */
+	@ResponseBody
+	@RequestMapping("/list2")
+	public R list2(@RequestParam Map<String, Object> params){
+		DynamicDataSource.name.set("w");
+		PageUtils pageUtil = sysGeneratorService.queryList(new Query(params));
+
+		return R.ok().put("page", pageUtil);
+	}
+
 	/**
 	 * 生成代码
 	 */
 	@RequestMapping("/code")
 	public void code(String tables, HttpServletResponse response) throws IOException{
+		//这个也是需要动态的设置一下的
+		DynamicDataSource.name.set("r");
 		byte[] data = sysGeneratorService.generatorCode(tables.split(","));
 		
 		response.reset();  

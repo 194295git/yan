@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="title">nacos</div>
     <div>
       <iframe class="nacos" 
       src="http://192.168.56.20:8848/nacos/#/configurationManagement?dataId=&group=&appName=&namespace=&pageSize=&pageNo="></iframe>

@@ -2,28 +2,40 @@
   <div>
     <div class="title">运维管理主界面</div>
     <div>
-      <div class="list">启动sentinel</div>
+      <div class="list">
+        <el-button size="small" type="primary">启动sentinel</el-button>
+      </div>
       <div class="list-auto">
         <div>Redis</div>
         <div class="d-flex">
-          <div class="list-half"  @click="startRedis()">启动redis</div>
-          <div class="list-half" @click="stopRedis()">停止redis</div>
+          <el-button size="small" type="primary" @click="startRedis()"
+            >启动redis</el-button
+          >
+          <el-button size="small" type="primary" @click="stopRedis()"
+            >停止redis</el-button
+          >
         </div>
-     
       </div>
-      
-      <div class="list" @click="startRbbit()">启动rabbitmq</div>
-      <div class="list-auto">
-        <div>微服务占用端口管理</div>
-        <div>GatewayApplication  88</div>
-        <div>FileApplication 9000</div>
-        <div>RenrenApplication 8080</div>
-        <div>DevApplication </div>
 
+      <div class="list">
+        <el-button size="small" type="primary" @click="startRbbit()"
+          >启动rabbitmq</el-button
+        >
       </div>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>微服务占用端口管理</span>
+          <el-button style="float: right; padding: 3px 0" type="text"
+            >操作按钮</el-button
+          >
+        </div>
+        <div v-for="(item ,index) in microService" :key="index" class="text item">
+          {{item }}
+        </div>
+      </el-card>
+
       <div class="list">
         <div>git 合并分支</div>
-
       </div>
     </div>
   </div>
@@ -33,7 +45,12 @@
 export default {
   data () {
     return {
-
+      microService: [
+        'GatewayApplication 88',
+        'FileApplication 9000',
+        'RenrenApplication 8080',
+        'DevApplication'
+      ]
     }
   },
   methods: {
@@ -41,8 +58,8 @@ export default {
       this.$http({
         url: this.$http.adornDevUrl(`/dev/containerStart`),
         method: 'get',
-        params: this.$http.adornParams({'type': 'redis'})
-      }).then(({data}) => {
+        params: this.$http.adornParams({ type: 'redis' })
+      }).then(({ data }) => {
         console.log(data)
       })
     },
@@ -50,8 +67,8 @@ export default {
       this.$http({
         url: this.$http.adornDevUrl(`/dev/containerStart`),
         method: 'get',
-        params: this.$http.adornParams({'type': 'rabbitmq'})
-      }).then(({data}) => {
+        params: this.$http.adornParams({ type: 'rabbitmq' })
+      }).then(({ data }) => {
         console.log(data)
       })
     },
@@ -59,12 +76,11 @@ export default {
       this.$http({
         url: this.$http.adornDevUrl(`/dev/containerStop`),
         method: 'get',
-        params: this.$http.adornParams({'type': 'redis'})
-      }).then(({data}) => {
+        params: this.$http.adornParams({ type: 'redis' })
+      }).then(({ data }) => {
         console.log(data)
       })
     }
-
   }
 }
 </script>
@@ -74,90 +90,108 @@ export default {
   padding: 10px 2px;
   font-size: 20px;
 }
-.nacos{
+.nacos {
   width: 80vw;
   height: 80vh;
 }
-.list{
-  line-height:65px;
+.list {
+  line-height: 65px;
   width: 600px;
   height: 65px;
   border: 3px solid aqua;
   margin-bottom: 3px;
   padding-left: 15px;
 }
-.list-half{
-  line-height:35px;
+.list-half {
+  line-height: 35px;
   width: 300px;
   height: 35px;
   border: 3px solid blueviolet;
   margin-bottom: 3px;
   padding-left: 15px;
 }
-.list-auto{
-  line-height:25px;
+.list-auto {
+  line-height: 25px;
   width: 600px;
- 
+
   border: 3px solid aqua;
   margin-bottom: 3px;
   padding-left: 15px;
 }
 
-.d-flex{
+.d-flex {
   display: flex;
 }
 
-.flex-wrap{
+.flex-wrap {
   flex-wrap: wrap;
 }
 
-.flex-nowrap{
+.flex-nowrap {
   flex-wrap: nowrap;
 }
 
-.flex-column{
+.flex-column {
   flex-direction: column;
 }
 
-.flex-column-reverse{
+.flex-column-reverse {
   flex-direction: column-reverse;
 }
 
-.flex-row{
+.flex-row {
   flex-direction: row;
 }
 
-.flex-row-reverse{
+.flex-row-reverse {
   flex-direction: row-reverse;
 }
 
-.justify-center{
+.justify-center {
   justify-content: center;
 }
 
-.justify-end{
+.justify-end {
   justify-content: flex-end;
 }
-.justify-space-between{
+.justify-space-between {
   justify-content: space-between;
 }
 
-.align-center{
+.align-center {
   align-items: center;
 }
 
-.align-top{
+.align-top {
   align-items: start;
 }
 
-.align-left{
+.align-left {
   align-items: start;
 }
 
-.flex-1{
+.flex-1 {
   display: flex;
   flex: 1;
 }
+.text {
+    font-size: 14px;
+  }
 
+  .item {
+    margin-bottom: 18px;
+  }
 
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+
+  .box-card {
+    width: 480px;
+  }
 </style>
