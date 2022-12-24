@@ -27,8 +27,14 @@ public class FileUpload {
             ".DOC", ".DOCX", ".XLS", ".XLSX", ".PPT", ".PPTX" };
 
 
-
-
+    /**
+     * 上传文件接口.
+     * @param resourceFiles
+     * @param path
+     * @param timeStamp
+     * @param type
+     * @return
+     */
     @PostMapping("/FileUpload")
     public R fileUpload( @RequestParam("files") MultipartFile[] resourceFiles, String path, Boolean timeStamp, byte type) {
         //解析失败会异常跳出

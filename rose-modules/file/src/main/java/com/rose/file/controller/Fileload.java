@@ -18,6 +18,12 @@ import java.net.URLEncoder;
 @RestController
 public class Fileload {
 
+    /**
+     * 下载文件的接口.
+     * @param path 下载文件的路径.
+     * @param response
+     * @throws IOException
+     */
     @RequestMapping("/downloadLocal")
     public void downloadLocal(String path, HttpServletResponse response) throws IOException {
 // 读到流中
