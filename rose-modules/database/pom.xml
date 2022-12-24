@@ -28,6 +28,17 @@
     </properties>
 
     <dependencies>
+        <!--java执行sql 脚本-->
+        <dependency>
+            <groupId>com.jfinal</groupId>
+            <artifactId>jfinal</artifactId>
+            <version>4.9.03</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5.2</version>
+        </dependency>
         <dependency>
             <groupId>com.rose.yan</groupId>
             <artifactId>common</artifactId>

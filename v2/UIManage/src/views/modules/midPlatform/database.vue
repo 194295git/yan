@@ -1,17 +1,36 @@
 <template>
   <div>
     <div class="title">数据库管理</div>
+   
     <div>
-      <el-button size="small" type="primary" @click="loadData()" >展示数据(yan_login)</el-button>
-       <el-button size="small" type="primary" @click="loadData2()" >展示数据(yan)</el-button>
-        <el-button size="small" type="primary" @click="gencode()" >生成代码</el-button>
-        <el-button size="small" type="primary" @click="downloadSql()" >下载sql脚本</el-button>
+        <el-button size="small" type="primary"  @click="switchDataSource('1')"
+        >yan_login</el-button
+      >
+      <el-button size="small" type="primary"  @click="switchDataSource('0')">yan</el-button>
+      <el-button size="small" type="primary" @click="loadData()"
+        >展示数据(yan_login)</el-button
+      >
+      <el-button size="small" type="primary" @click="loadData2()"
+        >展示数据(yan)</el-button
+      >
+      <el-button size="small" type="primary" @click="gencode()"
+        >生成代码</el-button
+      >
+      <el-button size="small" type="primary" @click="downloadSql()"
+        >下载sql脚本</el-button
+      >
+      <el-button size="small" type="primary" @click="execSql()"
+        >执行sql脚本</el-button
+      >
     </div>
 
     <div>
-      <el-table :data="dataList" border 
+      <el-table
+        :data="dataList"
+        border
         @selection-change="selectionChangeHandle"
-        style="width: 100%;">
+        style="width: 100%;"
+      >
         <el-table-column
           type="selection"
           header-align="center"
@@ -47,8 +66,6 @@
           label="创建时间"
         >
         </el-table-column>
-      
-      
       </el-table>
     </div>
   </div>
@@ -62,18 +79,20 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       totalPage: 0,
-      dataListSelections: []
-
+      dataListSelections: [],
+      dataSource: 0
     }
   },
   methods: {
-        // 多选
+    // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
       console.log(72, this.dataListSelections)
     },
-    downloadSql () {
-
+    downloadSql () {},
+    switchDataSource (param) {
+      this.dataSource = param
+      console.log(95, this.dataSource)
     },
     loadData () {
       var that = this
@@ -93,7 +112,17 @@ export default {
         table = table + element.tableName + ','
       })
       console.log(90, table)
-      location.href = 'http://localhost:88/api/database/sys/generator/code?tables=' + table
+      location.href =
+        'http://localhost:88/api/database/sys/generator/code?tables=' + table + '&dataSource=' + this.dataSource
+    },
+    execSql () {
+      // var that = this
+      this.$http({
+        url: this.$http.adornDataUrl(`/database/execSql`),
+        method: 'get'
+      }).then(({ data }) => {
+        console.log(106, data)
+      })
     },
     loadData2 () {
       var that = this

@@ -65,9 +65,14 @@ public class SysGeneratorController {
 	 * 生成代码
 	 */
 	@RequestMapping("/code")
-	public void code(String tables, HttpServletResponse response) throws IOException{
+	public void code(String tables,String dataSource, HttpServletResponse response) throws IOException{
 		//这个也是需要动态的设置一下的
-		DynamicDataSource.name.set("r");
+		if(dataSource.equals("0")){
+			DynamicDataSource.name.set("r");
+		}
+		if(dataSource.equals("1")){
+			DynamicDataSource.name.set("w");
+		}
 		byte[] data = sysGeneratorService.generatorCode(tables.split(","));
 		
 		response.reset();  
