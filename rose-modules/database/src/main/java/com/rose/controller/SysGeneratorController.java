@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,10 +56,59 @@ public class SysGeneratorController {
 	@ResponseBody
 	@RequestMapping("/list2")
 	public R list2(@RequestParam Map<String, Object> params){
-		DynamicDataSource.name.set("w");
+		selectDynamicDatasource(params);
+
 		PageUtils pageUtil = sysGeneratorService.queryList(new Query(params));
 
 		return R.ok().put("page", pageUtil);
+	}
+
+	private void selectDynamicDatasource(@RequestParam Map<String, Object> params) {
+		String dataSource = (String) params.get("dataSource");
+		//这个也是需要动态的设置一下的
+		if(dataSource.equals("0")){
+			DynamicDataSource.name.set("r");
+		}
+		if(dataSource.equals("1")){
+			DynamicDataSource.name.set("w");
+		}
+	}
+
+
+	/**
+	 * 查询列表所有数据.
+	 * @param params  {"tableName":""}
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/listTableData")
+	public R listTableData(@RequestParam Map<String, Object> params){
+		selectDynamicDatasource(params);
+		List pageUtil = sysGeneratorService.queryTableList(new Query(params));
+
+		return R.ok().put("page", pageUtil);
+	}
+	/**
+	 * 展示所有列.
+	 * 原来之前都错在没有加ResponseBody了，失误了，报错一直404给我弄反方向了
+	 */
+	@ResponseBody
+	@RequestMapping("/showColumn")
+	public R showColumn(@RequestParam Map<String, Object> params) throws IOException{
+		String dataSource = (String) params.get("dataSource");
+		String tables = (String) params.get("tables");
+
+		//这个也是需要动态的设置一下的
+		if(dataSource.equals("0")){
+			DynamicDataSource.name.set("r");
+		}
+		if(dataSource.equals("1")){
+			DynamicDataSource.name.set("w");
+		}
+		//查询出所有的列名
+		List<Map<String, String>> maps = sysGeneratorService.queryColumns(tables);
+		//查询出所有的数据
+		return R.ok().put("page", maps);
 	}
 
 	/**
@@ -74,12 +124,12 @@ public class SysGeneratorController {
 			DynamicDataSource.name.set("w");
 		}
 		byte[] data = sysGeneratorService.generatorCode(tables.split(","));
-		
-		response.reset();  
-        response.setHeader("Content-Disposition", "attachment; filename=\"renren.zip\"");  
-        response.addHeader("Content-Length", "" + data.length);  
-        response.setContentType("application/octet-stream; charset=UTF-8");  
-  
-        IOUtils.write(data, response.getOutputStream());
+
+		response.reset();
+		response.setHeader("Content-Disposition", "attachment; filename=\"renren.zip\"");
+		response.addHeader("Content-Length", "" + data.length);
+		response.setContentType("application/octet-stream; charset=UTF-8");
+
+		IOUtils.write(data, response.getOutputStream());
 	}
 }

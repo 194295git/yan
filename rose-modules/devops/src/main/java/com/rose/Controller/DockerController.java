@@ -69,5 +69,59 @@ public class DockerController {
 
     }
 
+    /**
+     * 例举所有正在运行的容器.
+     * @return
+     */
+    @GetMapping("/containerList")
+    public GenericResponse containerList() {
+        try {
+            DockerProtocol dockerProtocol = new DockerProtocol();
+            DockerClient dockerClient = dockerProtocol.connectDocker();
+            List containers = dockerClient.listContainersCmd().exec();
+            return GenericResponse.response(ServiceError.NORMAL,containers);
+        }catch(Exception e){
+            return GenericResponse.response(ServiceError.DevopsError);
+        }
+
+
+    }
+
+    /**
+     * 例举所有停止运行的容器.
+     * @return
+     */
+//    @GetMapping("/containerStopList")
+//    public GenericResponse containerStopList() {
+//        try {
+//            DockerProtocol dockerProtocol = new DockerProtocol();
+//            DockerClient dockerClient = dockerProtocol.connectDocker();
+//            List containers = dockerClient.listContainersCmd().withStatusFilter("exited").exec();
+//            return GenericResponse.response(ServiceError.NORMAL,containers);
+//        }catch(Exception e){
+//            return GenericResponse.response(ServiceError.DevopsError);
+//        }
+//
+//
+//    }
+
+    /**
+     * 例举镜像.
+     * @return
+     */
+    @GetMapping("/imageList")
+    public GenericResponse imageList() {
+        try {
+            DockerProtocol dockerProtocol = new DockerProtocol();
+            DockerClient dockerClient = dockerProtocol.connectDocker();
+            List images = dockerClient.listImagesCmd().exec();
+            return GenericResponse.response(ServiceError.NORMAL,images);
+        }catch(Exception e){
+            return GenericResponse.response(ServiceError.DevopsError);
+        }
+
+
+    }
+
 
 }

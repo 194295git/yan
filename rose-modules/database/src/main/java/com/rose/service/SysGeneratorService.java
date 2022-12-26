@@ -47,6 +47,11 @@ public class SysGeneratorService {
         }
         return new PageUtils(list, total, query.getLimit(), query.getPage());
     }
+    public List queryTableList(Query query) {
+        List<Map<String, Object>> list = generatorDao.queryTableList(query);
+
+        return list;
+    }
 
     public Map<String, String> queryTable(String tableName) {
         return generatorDao.queryTable(tableName);

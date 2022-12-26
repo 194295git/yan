@@ -3,10 +3,10 @@
     <div class="title">数据库管理</div>
    
     <div>
-        <el-button size="small" type="primary"  @click="switchDataSource('1')"
+        <!-- <el-button size="small" type="primary"  @click="switchDataSource('1')"
         >yan_login</el-button
       >
-      <el-button size="small" type="primary"  @click="switchDataSource('0')">yan</el-button>
+      <el-button size="small" type="primary"  @click="switchDataSource('0')">yan</el-button> -->
       <el-button size="small" type="primary" @click="loadData()"
         >展示数据(yan_login)</el-button
       >
@@ -21,6 +21,9 @@
       >
       <el-button size="small" type="primary" @click="execSql()"
         >执行sql脚本</el-button
+      >
+      <el-button size="small" type="primary" @click="showColumn()"
+        >查看表数据</el-button
       >
     </div>
 
@@ -80,14 +83,22 @@ export default {
       pageSize: 10,
       totalPage: 0,
       dataListSelections: [],
-      dataSource: 0
+      dataSource: 0,
+      tableName: ''
     }
   },
   methods: {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
+      this.tableName = this.dataListSelections[0].tableName
       console.log(72, this.dataListSelections)
+    },
+    showColumn () {
+      // this.dataListSelections = val
+      // console.log(72, this.dataListSelections)
+      const that = this
+      this.$router.push({path: '/midPlatform-dbColumn', query: {tableName: that.tableName, dataSource: that.dataSource}})
     },
     downloadSql () {},
     switchDataSource (param) {
@@ -95,6 +106,7 @@ export default {
       console.log(95, this.dataSource)
     },
     loadData () {
+      this.switchDataSource(0)
       var that = this
       this.$http({
         url: this.$http.adornDataUrl(`/sys/generator/list`),
@@ -125,11 +137,12 @@ export default {
       })
     },
     loadData2 () {
+      this.switchDataSource(1)
       var that = this
       this.$http({
         url: this.$http.adornDataUrl(`/sys/generator/list2`),
         method: 'get',
-        params: this.$http.adornParams({ limit: '15', page: '1' })
+        params: this.$http.adornParams({ limit: '15', page: '1', dataSource: that.dataSource })
       }).then(({ data }) => {
         that.dataList = data.page.list
         console.log(data)

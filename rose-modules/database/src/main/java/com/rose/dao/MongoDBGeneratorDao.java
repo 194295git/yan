@@ -32,6 +32,11 @@ public class MongoDBGeneratorDao implements GeneratorDao {
     }
 
     @Override
+    public List<Map<String, Object>> queryTableList(Map<String, Object> map) {
+        return null;
+    }
+
+    @Override
     public Map<String, String> queryTable(String tableName) {
         Map<String, String> result = new HashMap<>(4 * 4 / 3 + 1);
         result.put("engine", "");

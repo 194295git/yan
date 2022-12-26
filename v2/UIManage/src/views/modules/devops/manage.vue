@@ -8,6 +8,14 @@
       <div class="list-auto">
         <div>Redis</div>
         <div class="d-flex">
+          <el-button v-if="redisStatus == 0" size="small" type="primary"
+            >redis启动了</el-button
+          >
+
+          <el-button v-if="redisStatus == 1" size="small" type="primary"
+            >redis未启动</el-button
+          >
+
           <el-button size="small" type="primary" @click="startRedis()"
             >启动redis</el-button
           >
@@ -18,9 +26,19 @@
       </div>
 
       <div class="list">
+          <el-button v-if="rabbitmqStatus == 0" size="small" type="primary"
+            >rabbitmq启动了</el-button
+          >
+
+          <el-button v-if="rabbitmqStatus == 1" size="small" type="primary"
+            >rabbitmq未启动</el-button
+          >
         <el-button size="small" type="primary" @click="startRbbit()"
           >启动rabbitmq</el-button
         >
+        <el-button size="small" type="primary" @click="stopRbbit()"
+            >停止rabbitmq</el-button
+          >
       </div>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -29,8 +47,54 @@
             >操作按钮</el-button
           >
         </div>
-        <div v-for="(item ,index) in microService" :key="index" class="text item">
-          {{item }}
+        <div
+          v-for="(item, index) in microService"
+          :key="index"
+          class="text item"
+        >
+          {{ item }}
+        </div>
+      </el-card>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>docker容器管理</span>
+          <el-button style="float: right; padding: 3px 10px" type="text"
+          @click="getAllContainer()"
+            >获取所有容器</el-button
+          >
+          
+             <el-button style="float: right; padding: 3px 10px" type="text"
+          @click="folder('container')"
+            >折叠</el-button
+          >
+        </div>
+        <div
+          v-for="(item, index) in container"
+          :key="index"
+          class="text item"
+        >
+          {{ item.Names }}
+        </div>
+      </el-card>
+
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>docker镜像管理</span>
+          <el-button style="float: right; padding: 3px 10px" type="text"
+          @click="getAllImages()"
+            >获取所有镜像</el-button
+          >
+            <el-button style="float: right; padding: 3px 10px" type="text"
+          @click="folder('image')"
+            >折叠</el-button
+          >
+        </div>
+        <div
+          v-for="(item, index) in image"
+          :key="index"
+          class="text item"
+        >
+          {{ item.RepoTags }}
         </div>
       </el-card>
 
@@ -50,36 +114,88 @@ export default {
         'FileApplication 9000',
         'RenrenApplication 8080',
         'DevApplication'
-      ]
+      ],
+      redisStatus: 1,
+      rabbitmqStatus: 1,
+      container: [],
+      image: []
     }
   },
   methods: {
     startRedis () {
+      var that = this
       this.$http({
         url: this.$http.adornDevUrl(`/dev/containerStart`),
         method: 'get',
         params: this.$http.adornParams({ type: 'redis' })
       }).then(({ data }) => {
         console.log(data)
+        that.redisStatus = 0
       })
     },
     startRbbit () {
+      var that = this
       this.$http({
         url: this.$http.adornDevUrl(`/dev/containerStart`),
         method: 'get',
         params: this.$http.adornParams({ type: 'rabbitmq' })
       }).then(({ data }) => {
         console.log(data)
+        that.rabbitmqStatus = 0
       })
     },
     stopRedis () {
+      var that = this
       this.$http({
         url: this.$http.adornDevUrl(`/dev/containerStop`),
         method: 'get',
         params: this.$http.adornParams({ type: 'redis' })
       }).then(({ data }) => {
         console.log(data)
+        that.redisStatus = 1
       })
+    },
+    stopRbbit () {
+      var that = this
+      this.$http({
+        url: this.$http.adornDevUrl(`/dev/containerStop`),
+        method: 'get',
+        params: this.$http.adornParams({ type: 'rabbitmq' })
+      }).then(({ data }) => {
+        console.log(data)
+        that.rabbitmqStatus = 0
+      })
+    },
+    getAllContainer () {
+      var that = this
+      this.$http({
+        url: this.$http.adornDevUrl(`/dev/containerList`),
+        method: 'get'
+
+      }).then(({ data }) => {
+        console.log(data.content)
+        that.container = data.content
+      })
+    },
+    getAllImages () {
+      var that = this
+      this.$http({
+        url: this.$http.adornDevUrl(`/dev/imageList`),
+        method: 'get'
+
+      }).then(({ data }) => {
+        console.log(data.content)
+        that.image = data.content
+      })
+    },
+    folder (param) {
+      console.log(param)
+      if (param === 'container') {
+        this.container = []
+      }
+      if (param === 'image') {
+        this.image = []
+      }
     }
   }
 }
@@ -175,23 +291,23 @@ export default {
   flex: 1;
 }
 .text {
-    font-size: 14px;
-  }
+  font-size: 14px;
+}
 
-  .item {
-    margin-bottom: 18px;
-  }
+.item {
+  margin-bottom: 18px;
+}
 
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-  .clearfix:after {
-    clear: both
-  }
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
+}
 
-  .box-card {
-    width: 480px;
-  }
+.box-card {
+  width: 480px;
+}
 </style>
