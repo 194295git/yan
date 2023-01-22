@@ -105,7 +105,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/sys/menu/list'),
+          url: this.$http.adornUserUrl('/sys/menu/list'),
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
@@ -128,7 +128,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl(`/sys/menu/delete/${id}`),
+            url: this.$http.adornUserUrl(`/sys/menu/delete/${id}`),
             method: 'post',
             data: this.$http.adornData()
           }).then(({data}) => {

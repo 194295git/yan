@@ -70,7 +70,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl('/sys/login'),
+              url: this.$http.adornUserUrl('/sys/login'),
               method: 'post',
               data: this.$http.adornData({
                 'username': this.dataForm.userName,
@@ -79,8 +79,8 @@
                 'captcha': this.dataForm.captcha
               })
             }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.$cookie.set('token', data.token)
+              if (data && data.statusCode === 200) {
+                this.$cookie.set('token', data.content)
                 this.$router.replace({ name: 'home' })
               } else {
                 this.getCaptcha()
@@ -93,7 +93,7 @@
       // 获取验证码
       getCaptcha () {
         this.dataForm.uuid = getUUID()
-        this.captchaPath = this.$http.adornUrl(`/captcha.jpg?uuid=${this.dataForm.uuid}`)
+        this.captchaPath = this.$http.adornUserUrl(`/captcha.jpg?uuid=${this.dataForm.uuid}`)
       }
     }
   }

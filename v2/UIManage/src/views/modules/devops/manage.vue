@@ -2,6 +2,7 @@
   <div>
     <div class="title">运维管理主界面</div>
     <div>
+ 
       <div class="list">
         <el-button size="small" type="primary">启动sentinel</el-button>
       </div>
@@ -26,19 +27,19 @@
       </div>
 
       <div class="list">
-          <el-button v-if="rabbitmqStatus == 0" size="small" type="primary"
-            >rabbitmq启动了</el-button
-          >
+        <el-button v-if="rabbitmqStatus == 0" size="small" type="primary"
+          >rabbitmq启动了</el-button
+        >
 
-          <el-button v-if="rabbitmqStatus == 1" size="small" type="primary"
-            >rabbitmq未启动</el-button
-          >
+        <el-button v-if="rabbitmqStatus == 1" size="small" type="primary"
+          >rabbitmq未启动</el-button
+        >
         <el-button size="small" type="primary" @click="startRbbit()"
           >启动rabbitmq</el-button
         >
         <el-button size="small" type="primary" @click="stopRbbit()"
-            >停止rabbitmq</el-button
-          >
+          >停止rabbitmq</el-button
+        >
       </div>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -58,21 +59,21 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>docker容器管理</span>
-          <el-button style="float: right; padding: 3px 10px" type="text"
-          @click="getAllContainer()"
+          <el-button
+            style="float: right; padding: 3px 10px"
+            type="text"
+            @click="getAllContainer()"
             >获取所有容器</el-button
           >
-          
-             <el-button style="float: right; padding: 3px 10px" type="text"
-          @click="folder('container')"
+
+          <el-button
+            style="float: right; padding: 3px 10px"
+            type="text"
+            @click="folder('container')"
             >折叠</el-button
           >
         </div>
-        <div
-          v-for="(item, index) in container"
-          :key="index"
-          class="text item"
-        >
+        <div v-for="(item, index) in container" :key="index" class="text item">
           {{ item.Names }}
         </div>
       </el-card>
@@ -80,20 +81,20 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>docker镜像管理</span>
-          <el-button style="float: right; padding: 3px 10px" type="text"
-          @click="getAllImages()"
+          <el-button
+            style="float: right; padding: 3px 10px"
+            type="text"
+            @click="getAllImages()"
             >获取所有镜像</el-button
           >
-            <el-button style="float: right; padding: 3px 10px" type="text"
-          @click="folder('image')"
+          <el-button
+            style="float: right; padding: 3px 10px"
+            type="text"
+            @click="folder('image')"
             >折叠</el-button
           >
         </div>
-        <div
-          v-for="(item, index) in image"
-          :key="index"
-          class="text item"
-        >
+        <div v-for="(item, index) in image" :key="index" class="text item">
           {{ item.RepoTags }}
         </div>
       </el-card>
@@ -129,7 +130,23 @@ export default {
         method: 'get',
         params: this.$http.adornParams({ type: 'redis' })
       }).then(({ data }) => {
-        console.log(data)
+        console.log(data, 132)
+        if (data.status !== undefined && data.status === 503) {
+          that.$message.error('请检查是否所需服务是否启动')
+        }
+        if (data.statusCode === 200) {
+          that.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              console.log('操作成功')
+              // this.visible = false
+              // this.$emit('refreshDataList')
+            }
+          })
+        }
+
         that.redisStatus = 0
       })
     },
@@ -140,6 +157,18 @@ export default {
         method: 'get',
         params: this.$http.adornParams({ type: 'rabbitmq' })
       }).then(({ data }) => {
+        if (data.statusCode === 200) {
+          that.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              console.log('操作成功')
+              // this.visible = false
+              // this.$emit('refreshDataList')
+            }
+          })
+        }
         console.log(data)
         that.rabbitmqStatus = 0
       })
@@ -152,6 +181,18 @@ export default {
         params: this.$http.adornParams({ type: 'redis' })
       }).then(({ data }) => {
         console.log(data)
+        if (data.statusCode === 200) {
+          that.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              console.log('操作成功')
+              // this.visible = false
+              // this.$emit('refreshDataList')
+            }
+          })
+        }
         that.redisStatus = 1
       })
     },
@@ -171,7 +212,6 @@ export default {
       this.$http({
         url: this.$http.adornDevUrl(`/dev/containerList`),
         method: 'get'
-
       }).then(({ data }) => {
         console.log(data.content)
         that.container = data.content
@@ -182,7 +222,6 @@ export default {
       this.$http({
         url: this.$http.adornDevUrl(`/dev/imageList`),
         method: 'get'
-
       }).then(({ data }) => {
         console.log(data.content)
         that.image = data.content
@@ -214,23 +253,25 @@ export default {
   line-height: 65px;
   width: 600px;
   height: 65px;
-  border: 3px solid aqua;
+  border: 2px solid aqua;
   margin-bottom: 3px;
   padding-left: 15px;
+  border-radius: 5px;
 }
 .list-half {
+  border-radius: 5px;
   line-height: 35px;
   width: 300px;
   height: 35px;
-  border: 3px solid blueviolet;
+  border: 2px solid blueviolet;
   margin-bottom: 3px;
   padding-left: 15px;
 }
 .list-auto {
   line-height: 25px;
   width: 600px;
-
-  border: 3px solid aqua;
+border-radius: 5px;
+  border: 2px solid aqua;
   margin-bottom: 3px;
   padding-left: 15px;
 }
