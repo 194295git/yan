@@ -281,16 +281,15 @@
 			<artifactId>commons-configuration</artifactId>
 			<version>${commons.configuration.version}</version>
 		</dependency>
+		<!--更换系统自带的shiro为通用shiro  里面有着各种需要的配置 ,希望可以好用-->
 		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-core</artifactId>
-			<version>${shiro.version}</version>
+			<groupId>com.rose.yan</groupId>
+			<artifactId>common_shrio</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-spring</artifactId>
-			<version>${shiro.version}</version>
-		</dependency>
+
+
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>

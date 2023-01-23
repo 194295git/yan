@@ -103,6 +103,8 @@ public class SysLoginController extends AbstractController {
 		sysUserEntity.setOpenid(uuid);
 		sysUserService.saveUser(sysUserEntity);
 		//还需要调用first服务，给器存入一个openid来唯一关联；目前感觉这样设计合适。可以说兼容两套系统
+		//2023-1-22得出结论这块是需要待优化的。先更新一下数据库吧。然后区分角色和功能。
+		//最起码这些角色隶属于普通基本模块的角色。
 		RegisterFeign registerFeign = new RegisterFeign();
 		registerFeign.setOpenid(uuid);
 		registerFeign.setUsername(dto.getUsername());

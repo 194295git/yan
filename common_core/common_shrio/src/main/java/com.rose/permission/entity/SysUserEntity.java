@@ -20,6 +20,7 @@ import java.util.Set;
  * @author Mark 1942951600@qq.com
  */
 
+
 public class SysUserEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
