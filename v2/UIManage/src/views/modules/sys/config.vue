@@ -29,6 +29,13 @@
         width="80"
         label="ID">
       </el-table-column>
+       <el-table-column
+        prop="pid"
+        header-align="center"
+        align="center"
+        width="80"
+        label="父ID">
+      </el-table-column>
       <el-table-column
         prop="paramKey"
         header-align="center"
@@ -101,7 +108,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/sys/config/list'),
+          url: this.$http.adornUserUrl('/sys/config/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -152,7 +159,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/sys/config/delete'),
+            url: this.$http.adornUserUrl('/sys/config/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
