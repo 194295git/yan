@@ -71,10 +71,11 @@ public class OAuth2Realm extends AuthorizingRealm {
             Claims claims = JwtTokenUtil.parseJWT(accessToken);
 
             userId =  Long.valueOf(claims.get("userid").toString());
+            String openid = claims.get("openid").toString();
             Gson gson = new Gson();
 //            Set<String> permsSet = shiroService.getUserPermissions(userId);
 //            SysUserEntity user = shiroService.queryUser(userId);
-            String  permsSetString = ( String )redisTemplate.opsForValue().get(userId.toString());
+            String  permsSetString = ( String )redisTemplate.opsForValue().get(openid);
             Set<String> permsSet=  gson.fromJson(permsSetString,Set.class);
             SysUserEntity user = new SysUserEntity();
             user.setUserId(userId);
