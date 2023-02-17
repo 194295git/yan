@@ -22,7 +22,7 @@ public class RegisterHandler extends SimpleChannelInboundHandler<RegisterPacket>
         User loginUser = registerPacket.getUser();
         SessionUtils.bindChannel(loginUser, channelHandlerContext.channel());
         if (SessionUtils.hasLogin(channelHandlerContext.channel())) {
-            System.out.println("该用户已登录");
+            System.out.println("RegisterHandler"+loginUser.getUserName()+"该用户已登录");
         }
     }
 }

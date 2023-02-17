@@ -21,7 +21,7 @@
               class="placeholder"
               v-model="desc"
               label="请输入"
-              placeholder="对目标院校进行描述补充"
+              placeholder="对目标院校进行描述"
             />
           </van-cell-group>
 
@@ -125,6 +125,7 @@ export default {
 .placeholder {
   text-indent: 15px;
   width: 275px;
+  height: 50vh;
 }
 
 .submit {
@@ -154,6 +155,7 @@ export default {
 .province_list {
   width: 330px;
   display: flex;
+  border-radius: 10px;
   flex-direction: column;
   margin: 0 auto;
 }

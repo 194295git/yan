@@ -28,12 +28,13 @@
           </div>
 
           <div class="follow">
-            <div>+ 关注</div>
+            <div style="font-size: 18rpx;">+ 关注</div>
           </div>
         </div>
       </div>
+       <list-scroll  class="scroll" :scroll-data="scrollEmpty" >
       <!-- 正文 -->
-      <div  class="scroll">
+      <div  >
         <div>
           <div class="answerer-wrp box">
             <div class="bg-half">
@@ -59,7 +60,7 @@
         </div>
       </div>
       <!-- 评论 -->
-      <div class="box-comment">
+      <div class="box-comment" v-if="isShowComment">
         <div v-for="(item, index) in commentList" :key="index">
           <div class="box2 d-flex commentBox">
             <van-image
@@ -107,6 +108,7 @@
           </van-cell-group>
         </div>
       </div>
+       </list-scroll >
       <!-- 底部 -->
       <div class="answer-footer flex-wrp">
         <div class="operation-wrp flex-item">
@@ -119,7 +121,7 @@
               <img src="../static/images/star2.png"/>
               <div>收藏</div>
             </div>
-            <div class="operation-btn d-flex" @click="commment()">
+            <div class="operation-btn d-flex" @click="commment">
               <img src="../static/images/comment.png"/>
               <div>评论</div>
             </div>
@@ -139,11 +141,12 @@ import sHeader from "@/components/SimpleHeader";
 import { getAnswer, getComment } from "@/service/answer";
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
-
+import listScroll from "@/components/ListScroll";
 export default {
   components: {
     navBar,
     sHeader,
+    listScroll,
 
   },
   setup() {
@@ -151,6 +154,8 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const state = reactive({
+      isShowComment :false,
+      scrollEmpty:[],
       userInfo: {},
       answer: {},
       option_id: "",
@@ -181,6 +186,11 @@ export default {
       state.answer = data.content;
       
     };
+    const commment =  () => {
+      console.log("comment")
+      state.isShowComment = !state.isShowComment;
+      
+    };
     const getCommentData = async () => {
       const data2 = await getComment(state.option_id);
       state.commentList = data2.content;
@@ -198,6 +208,7 @@ export default {
       ...toRefs(state),
       goBack,
       goTo,
+      commment,
     };
   },
 };
@@ -250,6 +261,8 @@ export default {
 .answerer-wrp .bg-half {
   background: white;
   border-radius: 12px;
+  padding-bottom: 10vh;
+
 }
 
 .answerer {
@@ -303,11 +316,11 @@ export default {
 }
 
 .question .follow {
-  text-align: right;
+  // text-align: right;
   border-radius: 10%;
   padding: 5rpx 8rpx;
-  font-size: 22rpx;
-  height: 30px;
+  font-size: 18rpx;
+  height: 25px;
   background: rgb(162, 114, 206);
 }
 
@@ -409,12 +422,11 @@ export default {
 }
 
 .scroll {
-  height: 45vh;
+  height: 62vh;
 }
 .box-comment{
-  position: fixed;
   padding: 20px;
-  bottom: 55px;
+  // bottom: 55px;
   margin: 0 auto;
 }
 

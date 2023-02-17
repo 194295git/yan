@@ -59,6 +59,10 @@
         <span>修改个人信息</span>
         <van-icon name="arrow" />
       </li>
+      <li @click="logout()">
+        <span>退出登录</span>
+        <van-icon name="arrow" />
+      </li>
     </ul>
     <nav-bar></nav-bar>
   </div>
@@ -68,8 +72,9 @@
 import { reactive, onMounted, toRefs } from "vue";
 import navBar from "@/components/NavBar";
 import sHeader from "@/components/SimpleHeader";
-import { getUserInfo } from "@/service/user";
+import { getUserInfo,getUserInfoMe } from "@/service/user";
 import { useRouter } from "vue-router";
+import { setLocal } from '@/common/js/utils'
 export default {
   components: {
     navBar,
@@ -84,6 +89,8 @@ export default {
 
     onMounted(async () => {
       const data = await getUserInfo();
+      const data2 = await getUserInfoMe();
+      console.log(data2)
       state.user = data.content;
       state.loading = false;
     });
@@ -95,11 +102,16 @@ export default {
     const goTo = (r, query) => {
       router.push({ path: r, query: query || {} });
     };
+    const logout = ()=>{
+      setLocal('token', '')
+      router.push({ path: './login'});
+    }
 
     return {
       ...toRefs(state),
       goBack,
       goTo,
+      logout,
     };
   },
 };

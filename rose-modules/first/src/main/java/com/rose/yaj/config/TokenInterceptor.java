@@ -32,10 +32,10 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //将token放到http请求里，用户携带token访问请求
-        System.out.println("进入拦截器");
+
         String token = request.getHeader("token");
 
-        log.info(token);
+        log.info("进入拦截器 TokenInterceptor====>",token);
         // 如果不是url映射的方法直接通过
         if (!(handler instanceof HandlerMethod)) {
             return true;

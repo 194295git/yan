@@ -49,7 +49,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         } else {
             message = singleMessagePacket.getMessage();
             sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OffLine,true);
-            System.out.println("该用户不存在或者未登录");
+            System.out.println("SingleMessageHandler ======> 该用户不存在或者未登录");
 //            System.err.println(message);
             return;
         }

@@ -160,7 +160,8 @@ public class SysLoginController extends AbstractController {
 //		}
 		Set<String> permsSet = shiroService.getUserPermissions(user.getUserId());
 		Gson gson = new Gson();
-		redisTemplate.opsForValue().set(user.getUserId().toString(), gson.toJson(permsSet));
+//		redisTemplate.opsForValue().set(user.getUserId().toString(), gson.toJson(permsSet));
+		redisTemplate.opsForValue().set(user.getOpenid(), gson.toJson(permsSet));
 		return GenericResponse.response(ServiceError.NORMAL, token);
 		//生成token，并保存到数据库
 //		R r = sysUserTokenService.createToken(user.getUserId());
@@ -170,6 +171,8 @@ public class SysLoginController extends AbstractController {
 
 	/**
 	 * 退出
+	 * 1.需要将redis 里面的信息给清空了。
+	 * 2.
 	 */
 	@PostMapping("/sys/logout")
 	public R logout() {
