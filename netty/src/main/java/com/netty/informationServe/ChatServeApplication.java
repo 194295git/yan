@@ -12,6 +12,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 /**
 
  *@描述 CommandLineRunner、ApplicationRunner 接口是在容器启动成功后的最后一步回调（类似开机自启动）。
+ *
+ * 1.先添加个退出功能，要不然确实不退出不太好，占用着资源
 
  */
 @EnableDiscoveryClient

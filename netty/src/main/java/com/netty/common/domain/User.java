@@ -19,6 +19,9 @@ public class User {
     // 头像路径
     private String image;
 
+    private String loginStatus;
+
+
 
     public String getOpenid() {
         return openid;
@@ -66,5 +69,13 @@ public class User {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getLoginStatus() {
+        return loginStatus;
+    }
+
+    public void setLoginStatus(String loginStatus) {
+        this.loginStatus = loginStatus;
     }
 }

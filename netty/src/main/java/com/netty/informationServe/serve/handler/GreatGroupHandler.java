@@ -39,16 +39,16 @@ public class GreatGroupHandler extends SimpleChannelInboundHandler<CreateGroupPa
 //        nameList.add(SessionUtils.getUser(channelHandlerContext.channel()).getUserName());
         //根据id获得绑定的channel，并将channel放入channelGroup中
         for (String userId : userIdList) {
-            log.info("User " + userId );
+            log.info("遍历群组中所有的用户User=========> " + userId );
 //            Integer it = Integer.valueOf(userId);
             Channel channel = SessionUtils.getChannel(userId);
-            log.info("channel  "+channel);
+            log.info("     判断当前用户的channel是否存在===============>"+channel);
             if (channel != null) {
                 User user = SessionUtils.getUser(channel);
                 channelGroup.add(channel);
                 nameList.add(user.getOpenid());
-                log.info("这里是处理类哦 channel"+channel);
-                log.info("这里是处理类哦 nameList"+nameList);
+                log.info("    当前用户channel不存在时channel====>"+channel);
+                log.info("    当前用户channel不存在时这里是处理类哦 nameList"+nameList);
             }
         }
 

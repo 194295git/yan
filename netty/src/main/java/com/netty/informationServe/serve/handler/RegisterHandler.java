@@ -20,9 +20,18 @@ public class RegisterHandler extends SimpleChannelInboundHandler<RegisterPacket>
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RegisterPacket registerPacket) throws Exception {
         User loginUser = registerPacket.getUser();
-        SessionUtils.bindChannel(loginUser, channelHandlerContext.channel());
-        if (SessionUtils.hasLogin(channelHandlerContext.channel())) {
-            System.out.println("RegisterHandler"+loginUser.getUserName()+"该用户已登录");
+        //如果登录状态是1先绑定用户
+        if(("1").equals(loginUser.getLoginStatus())){
+            SessionUtils.bindChannel(loginUser, channelHandlerContext.channel());
+            if (SessionUtils.hasLogin(channelHandlerContext.channel())) {
+                System.out.println("RegisterHandler=======>"+loginUser.getUserName()+"该用户已登录");
+            }
         }
+        //如果是0清楚缓存
+        if(("0").equals(loginUser.getLoginStatus())){
+            SessionUtils.clearChannel(loginUser, channelHandlerContext.channel());
+
+        }
+
     }
 }

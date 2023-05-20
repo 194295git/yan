@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.rose.yaj.dto.GroupDto;
 import com.rose.yaj.entity.YanAnswer;
 import com.rose.yaj.entity.YanGroup;
+import com.rose.yaj.entity.YanUser;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface YanGroupService extends IService<YanGroup> {
     Boolean addGroupMember(GroupDto.GroupMember groupMember);
 
     List<String> getGroupOpenid(Integer id);
+
+    List<YanUser> getGroupMemberDetail(Integer id);
 }
