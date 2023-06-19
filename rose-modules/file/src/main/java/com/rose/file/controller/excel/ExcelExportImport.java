@@ -1,4 +1,4 @@
-package com.rose.file.controller;
+package com.rose.file.controller.excel;
 
 
 import com.alibaba.excel.EasyExcel;
@@ -78,8 +78,11 @@ public class ExcelExportImport {
     }
 
 
-
-
+    /**
+     * easyExcel的读取excel的方式  读取的实体类为UserExcelModel
+     * @param file
+     * @return
+     */
     @PostMapping("/readExcel")
     public List<UserExcelModel> readExcel(@RequestParam("file") MultipartFile file){
         List<UserExcelModel> list = new ArrayList<>();

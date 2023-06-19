@@ -1,4 +1,4 @@
-package com.rose.file.controller;
+package com.rose.file.controller.file;
 
 
 import com.rose.file.util.FileUtils;
@@ -14,11 +14,11 @@ import java.util.*;
 
 
 /**
- * 文件
+ * 文件  文件上传功能 上传到服务器的某个位置
  */
 @RestController
 public class FileUpload {
-
+    private static String[] FILE_SQL = { ".SQL", ".SQL" };
     private static String[] FILE_WORD = { ".DOC", ".DOCX" };
     private static String[] FILE_APK = { ".APK" };
     private static String[] FILE_EXCEL = { ".XLS", ".XLSX" };
@@ -29,10 +29,10 @@ public class FileUpload {
 
     /**
      * 上传文件接口.
-     * @param resourceFiles
-     * @param path
-     * @param timeStamp
-     * @param type
+     * @param resourceFiles 前端传递过来的文件
+     * @param path   指定的路径
+     * @param timeStamp  是否有时间戳
+     * @param type  文件类型
      * @return
      */
     @PostMapping("/FileUpload")
@@ -103,6 +103,10 @@ public class FileUpload {
             case 5:
                 checkFile = FILE_ATTACHMENT;
                 break;
+            case 6:
+                checkFile = FILE_SQL;
+                break;
+
             default:
                 checkFile = new String[0];
         }

@@ -13,8 +13,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import javax.ws.rs.core.Application;
-
 
 //2.让启动类继承SpringBootServletInitializer并重写方法
 @EnableRabbit
@@ -23,16 +21,17 @@ import javax.ws.rs.core.Application;
 @EnableDiscoveryClient
 @MapperScan("com.rose.yaj.mapper")
 @ComponentScan(basePackages = {"com.rose"})
-public class DemoApplication  extends SpringBootServletInitializer {
+public class DemoApplication extends SpringBootServletInitializer {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(Application.class);
-    }
-
+    //    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        return builder.sources(Application.class);
+//    }
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }
+
+
     /**
      * it's for set http url auto change to https
      */

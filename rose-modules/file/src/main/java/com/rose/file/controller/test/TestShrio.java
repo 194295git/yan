@@ -1,4 +1,4 @@
-package com.rose.file.controller;
+package com.rose.file.controller.test;
 
 import com.rose.file.util.R;
 //import org.apache.shiro.authz.annotation.RequiresPermissions;

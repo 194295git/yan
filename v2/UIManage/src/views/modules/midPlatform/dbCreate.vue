@@ -18,85 +18,37 @@
       </el-form-item>
     </el-form>
 
-    <div>
-      <el-table
-        :data="dataList"
-        border
-        @selection-change="selectionChangeHandle"
-        style="width: 100%;"
+    <div style="width: 600px">
+      <vue-table-dynamic
+        :params="params"
+        @cell-change="onCellChange"
+        ref="table"
       >
-        <el-table-column
-          type="selection"
-          header-align="center"
-          align="center"
-          width="50"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="fieldName"
-          header-align="center"
-          align="center"
-          label="名"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="type"
-          header-align="center"
-          align="center"
-          label="类型"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="length"
-          header-align="center"
-          align="center"
-          label="长度"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="decimalPoint"
-          header-align="center"
-          align="center"
-          label="小数点"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="isNull"
-          header-align="center"
-          align="center"
-          label="是否NUll"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="key"
-          header-align="center"
-          align="center"
-          label="键"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="fieldComment"
-          header-align="center"
-          align="center"
-          label="注释"
-        >
-        </el-table-column>
-      </el-table>
+      </vue-table-dynamic>
     </div>
-    <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update
-    style="magrin-left:250px"
-      v-if="addOrUpdateVisible"
-      ref="addOrUpdate"
-      @refreshDataList="getDataList"
-    ></add-or-update>
+
   </div>
 </template>
 <script>
-import AddOrUpdate from './dbCreateUpdate.vue'
+
+import VueTableDynamic from 'vue-table-dynamic'
 export default {
   data () {
     return {
+      params: {
+        data: [
+          ['Index', 'Data1', 'Data2', 'Data3'],
+          [1, 'b3ba90', '7c95f7', '9a3853'],
+          [2, 'ec0b78', 'ba045d', 'ecf03c'],
+          [3, '63788d', 'a8c325', 'aab418']
+        ],
+        header: 'row',
+        edit: {
+          row: [1],
+          column: [1],
+          cell: [[-1, -1]]
+        }
+      },
       form: {
         dbname: '',
         tbname: '',
@@ -110,18 +62,19 @@ export default {
     }
   },
   components: {
-    AddOrUpdate
+    VueTableDynamic
   },
   methods: {
+    onCellChange (rowIndex, columnIndex, data) {
+      console.log('onCellChange: ', rowIndex, columnIndex, data)
+      console.log('table data: ', this.$refs.table.getData())
+    },
     onSubmit () {
       console.log('submit!')
     },
     // 新增 / 修改
     addOrUpdateHandle (id) {
-      this.addOrUpdateVisible = true
-      this.$nextTick(() => {
-        this.$refs.addOrUpdate.init(id)
-      })
+
     },
     getDataList () {
 

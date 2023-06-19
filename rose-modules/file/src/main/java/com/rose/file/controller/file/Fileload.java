@@ -1,4 +1,4 @@
-package com.rose.file.controller;
+package com.rose.file.controller.file;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
