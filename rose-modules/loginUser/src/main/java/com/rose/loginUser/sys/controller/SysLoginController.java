@@ -71,6 +71,7 @@ public class SysLoginController extends AbstractController {
 	@Autowired
 	private ShiroService shiroService;
 
+	@ApiOperation("shiro的登录方法【废弃】")
 	@RequestMapping(value = "/shrio/login", method = RequestMethod.POST)
 	public GenericResponse login(@RequestBody SysRegisterForm user) {
 		UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
@@ -115,6 +116,7 @@ public class SysLoginController extends AbstractController {
 	/**
 	 * 验证码
 	 */
+	@ApiOperation("获取验证码")
 	@GetMapping("captcha.jpg")
 	public void captcha(HttpServletResponse response, String uuid)throws IOException {
 		response.setHeader("Cache-Control", "no-store, no-cache");
@@ -131,6 +133,7 @@ public class SysLoginController extends AbstractController {
 	/**
 	 * 登录
 	 */
+	@ApiOperation("shiro的登录方法【启用】")
 	@PostMapping("/sys/login")
 	public GenericResponse login(@RequestBody SysLoginForm form)throws IOException {
 //		boolean captcha = sysCaptchaService.validate(form.getUuid(), form.getCaptcha());
@@ -174,6 +177,7 @@ public class SysLoginController extends AbstractController {
 	 * 1.需要将redis 里面的信息给清空了。
 	 * 2.
 	 */
+	@ApiOperation("shiro的登出")
 	@PostMapping("/sys/logout")
 	public R logout() {
 		sysUserTokenService.logout(getUserId());

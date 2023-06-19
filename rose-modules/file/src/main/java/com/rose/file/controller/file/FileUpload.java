@@ -4,6 +4,8 @@ package com.rose.file.controller.file;
 import com.rose.file.util.FileUtils;
 import com.rose.file.util.R;
 import com.rose.file.util.TimeUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,7 @@ import java.util.*;
 /**
  * 文件  文件上传功能 上传到服务器的某个位置
  */
+@Api(tags = "文件上传相关接口" , description = "FileUpload | 文件上传模块")
 @RestController
 public class FileUpload {
     private static String[] FILE_SQL = { ".SQL", ".SQL" };
@@ -35,6 +38,7 @@ public class FileUpload {
      * @param type  文件类型
      * @return
      */
+    @ApiOperation("上传文件接口")
     @PostMapping("/FileUpload")
     public R fileUpload( @RequestParam("files") MultipartFile[] resourceFiles, String path, Boolean timeStamp, byte type) {
         //解析失败会异常跳出

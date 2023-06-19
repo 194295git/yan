@@ -1,5 +1,7 @@
 package com.rose.file.controller.file;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +18,7 @@ import java.net.URLEncoder;
  * @create 2022/2/24
  */
 @RestController
+@Api(tags = "文件下载相关接口" , description = "Fileload | 文件下载模块")
 public class Fileload {
 
     /**
@@ -24,6 +27,7 @@ public class Fileload {
      * @param response
      * @throws IOException
      */
+    @ApiOperation("下载文件的接口")
     @RequestMapping("/downloadLocal")
     public void downloadLocal(String path, HttpServletResponse response) throws IOException {
 // 读到流中

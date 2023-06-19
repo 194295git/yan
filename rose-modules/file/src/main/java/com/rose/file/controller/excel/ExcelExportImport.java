@@ -9,6 +9,8 @@ import com.rose.file.model.UserExcelModel;
 
 import com.rose.file.util.EasyExcelUtil;
 import com.rose.file.util.ExcelImportUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -25,14 +27,16 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/user")
+@Api(tags = "Excel导出导入相关接口" , description = "ExcelExportImport | 评论模块")
 public class ExcelExportImport {
 
 
     /**
-     * poi 导出excel.
+     * 导出excel.
      * @param response
      * @throws Exception
      */
+    @ApiOperation("EasyExcel导出数据")
     @GetMapping("/exportData")
     public void exportData(HttpServletResponse response) throws Exception {
         String []columnNames = {"用户名","年龄","手机号","性别"};
@@ -54,6 +58,7 @@ public class ExcelExportImport {
      * @return
      * @throws Exception
      */
+    @ApiOperation("poi读取本地数据")
     @GetMapping("/readExcelByPOI")
     public List<List<Object>> readExcel2() throws Exception {
         String filepath = "C:\\Users\\renyun\\Downloads\\easyexcel (3).xlsx";
@@ -70,6 +75,7 @@ public class ExcelExportImport {
      * @return
      * @throws Exception
      */
+    @ApiOperation("poi读取数据接口")
     @PostMapping("/readExcel3")
     public List<List<Object>> readExcel3(@RequestParam("file") MultipartFile file)  throws Exception{
         InputStream inputStream = file.getInputStream();
@@ -83,6 +89,7 @@ public class ExcelExportImport {
      * @param file
      * @return
      */
+    @ApiOperation("easyexcel读取数据接口")
     @PostMapping("/readExcel")
     public List<UserExcelModel> readExcel(@RequestParam("file") MultipartFile file){
         List<UserExcelModel> list = new ArrayList<>();
@@ -93,6 +100,7 @@ public class ExcelExportImport {
         }
         return list;
     }
+
     @PostMapping("/readFromExcel")
     public List<FormExcelModel> readFromExcel(@RequestParam("file") MultipartFile file){
         List<FormExcelModel> list = new ArrayList<>();
@@ -127,6 +135,7 @@ public class ExcelExportImport {
     /**
      * 下载模板 可以正常使用
      */
+    @ApiOperation("下载模板【例子】")
     @GetMapping("/downloadTemplate")
     public void downloadTemplate(HttpServletResponse response) throws Exception {
         ClassPathResource classPathResource = new ClassPathResource("/excelTemplate/easyexcel.xlsx");
