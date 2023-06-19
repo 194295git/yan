@@ -8,7 +8,6 @@ import com.rose.yaj.exeptionHandler.RRException;
 import com.rose.yaj.service.YanProductService;
 import com.rose.yaj.util.PageQueryUtil;
 import com.rose.yaj.util.PageResult;
-import com.rose.yaj.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 

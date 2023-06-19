@@ -1,7 +1,6 @@
 package com.rose.yaj.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rose.yaj.common.GenericResponse;
 import com.rose.yaj.common.ServiceError;

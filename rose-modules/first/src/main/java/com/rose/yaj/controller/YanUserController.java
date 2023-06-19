@@ -1,21 +1,13 @@
 package com.rose.yaj.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.rose.yaj.common.GenericResponse;
 import com.rose.yaj.common.ServiceError;
 import com.rose.yaj.dto.ChatDto;
 import com.rose.yaj.dto.UserDto;
-import com.rose.yaj.entity.YanDataDiscovery;
-import com.rose.yaj.entity.YanUser;
-import com.rose.yaj.entity.YanUserChat;
 import com.rose.yaj.service.YanUserChatService;
 import com.rose.yaj.service.YanUserService;
-import com.rose.yaj.util.JwtTokenUtil;
 import com.rose.yaj.util.Util;
-import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

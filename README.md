@@ -41,21 +41,23 @@ APP提供服务。
 5. 也可以简单调试后单独启动node_modules里面的first服务
 
 
-### 已完成的功能：
+### 模块功能：
+1. (netty)基于netty,websocket 以及rocketmq的聊天功能
+2. (first) 关于研战到底模块很多api在这个里面，使用了shardingsphere读写分离
+3. (renren)后台管理模块 将运维，数据库管理等在前端页面展示
+4. (common_shiro)权限管理系统改造成一个微服务(jwt+redis实现分布式权限)
+5. (file)文件模块导入、导出 oss ,上传图片、Excel操作等
+6. (fileTest) 测试nacos负载均衡
+7. (devops) 运维模块。
+8. (loginUser) 用户中心模块。统一完成用户授权
+9. (database)展示不同数据源的表结构，生成项目所需要的代码，执行sql文件
+#### 完成的功能
 1. 一个后台管理系统 一个前台应用
 2. 问题，回答，评论，点赞增删改查
 4. 考研面临的专业以及专业下的细分学科
-5.. 引入springcloud，使用了gateway网关与nacos注册中心
-7. 将使用的中间件rabbitmq使用docker部署在虚拟机上
-8. (netty)基于netty,websocket 以及rocketmq的聊天功能
-9. (first) 关于研战到底模块很多api在这个里面
-10. (renren)后台管理模块 将运维，数据库管理等在前端页面展示
-11. (common_shiro)权限管理系统改造成一个微服务(jwt+redis实现分布式权限)
-12. (file)文件模块导入、导出 oss ,上传图片、Excel操作等
-13. (fileTest) 测试nacos负载均衡
-13. (devops) 运维模块。包括swagger
-14. (loginUser) 用户中心模块。统一完成用户授权
-15. (database)展示不同数据源的表结构，生成项目所需要的代码，执行sql文件
+5. 引入springcloud，使用了gateway网关与nacos注册中心
+6. 将使用的中间件rabbitmq使用docker部署在虚拟机上
+7. 给common模块添加了日志，完善了日志模块，清理了一些不需要的依赖
 
 ### 补充：
 1. swagger 接口文档地址 localhost:8999/swagger-ui.html
@@ -63,7 +65,7 @@ APP提供服务。
 ### todo:
 1. 提供导出pdf，并且自定义表格模板( file模块)
 2. 提供java执行sql层面的工作 (database模块)
-3. 前端学习西拖拽式编程，可以完成相应的建模的等工作 (database以及flowable)
+3. 前端学习拖拽式编程，可以完成相应的建模的等工作 (database以及flowable)
 4. 导入工作流模块(flowable)
 5. 写文档 (类似于爱组搭，写清楚每个模块的作用)
 6. jmeter测试集成(devops)

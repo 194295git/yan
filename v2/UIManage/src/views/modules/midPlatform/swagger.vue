@@ -1,6 +1,7 @@
 <template>
   <div>
     <div>
+      <!--日志这块目前是写死的 需要慢慢的提升-->
       <iframe class="rabbit" 
       src="http://localhost:8999/swagger-ui.html"></iframe>
     

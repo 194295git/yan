@@ -1,18 +1,14 @@
 package com.rose.yaj.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rose.yaj.common.GenericResponse;
 import com.rose.yaj.common.ServiceError;
 import com.rose.yaj.dto.ProductDto;
-import com.rose.yaj.entity.YanMajor;
-import com.rose.yaj.service.YanMajorService;
 import com.rose.yaj.service.YanCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;

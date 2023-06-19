@@ -1,26 +1,21 @@
 package com.rose.yaj.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rose.yaj.common.GenericResponse;
 import com.rose.yaj.common.ServiceError;
 import com.rose.yaj.dto.QuestionAndAnswerList;
 import com.rose.yaj.dto.QuestionFormSubmit;
-import com.rose.yaj.entity.YanAnswer;
 import com.rose.yaj.entity.YanDataDiscovery;
 import com.rose.yaj.entity.YanQuestion;
 import com.rose.yaj.entity.YanQuestionTag;
 import com.rose.yaj.service.YanAnswerService;
 import com.rose.yaj.service.YanQuestionService;
 import com.rose.yaj.service.YanQuestionTagService;
-import com.rose.yaj.util.JwtTokenUtil;
 import com.rose.yaj.util.Util;
-import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
