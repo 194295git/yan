@@ -14,13 +14,14 @@ import com.rose.service.SysGeneratorService;
 import com.rose.utils.PageUtils;
 import com.rose.utils.Query;
 import com.rose.utils.R;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,6 +35,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/sys/generator")
+@Api(tags = "数据库相关接口" , description = "SysGeneratorController | 数据库模块")
 public class SysGeneratorController {
 	@Autowired
 	private SysGeneratorService sysGeneratorService;
@@ -43,6 +45,7 @@ public class SysGeneratorController {
 	 */
 	@ResponseBody
 	@RequestMapping("/list")
+	@ApiOperation(value = "获取r数据源数据")
 	public R list(@RequestParam Map<String, Object> params){
 		DynamicDataSource.name.set("r");
 		PageUtils pageUtil = sysGeneratorService.queryList(new Query(params));
@@ -55,6 +58,7 @@ public class SysGeneratorController {
 	 */
 	@ResponseBody
 	@RequestMapping("/list2")
+	@ApiOperation(value = "通过参数动态的选择哪个数据源")
 	public R list2(@RequestParam Map<String, Object> params){
 		selectDynamicDatasource(params);
 

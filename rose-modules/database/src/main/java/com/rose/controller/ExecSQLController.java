@@ -1,19 +1,13 @@
 package com.rose.controller;
 
-import com.jfinal.plugin.activerecord.Db;
-import com.rose.config.DynamicDataSource;
 import com.rose.config.SystemConfig;
-import com.rose.utils.PageUtils;
-import com.rose.utils.Query;
 import com.rose.utils.R;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.sql.Connection;
-import java.util.Map;
 
 /**
  * @author rose
@@ -21,6 +15,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/database")
+@Api(tags = "数据库执行脚本" , description = "ExecSQLController | 数据库Exec模块")
 public class ExecSQLController {
 
     @Autowired
@@ -31,6 +26,7 @@ public class ExecSQLController {
      */
     @ResponseBody
     @RequestMapping("/execSql")
+    @ApiOperation("执行指定的sql【改进：将可执行sql脚本作为参数】")
     public R list(){
         try {
             systemConfig.initMysqlDruid();
