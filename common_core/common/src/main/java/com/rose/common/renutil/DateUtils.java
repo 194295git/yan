@@ -1,4 +1,4 @@
-package com.rose.utils;
+package com.rose.common.renutil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

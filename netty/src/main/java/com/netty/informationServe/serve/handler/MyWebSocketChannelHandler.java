@@ -34,6 +34,11 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
     @Autowired
     GreatGroupHandler creatGroupHandler;
 
+    @Autowired
+    NettyWebSocketParamHandler nettyWebSocketParamHandler;
+    @Autowired
+    NettyWebSocketHandler nettyWebSocketHandler;
+
     @Override
     protected void initChannel(SocketChannel e) throws Exception {
         e.pipeline().addLast("http-codec", new HttpServerCodec()) //http编解码
@@ -51,7 +56,9 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
                  * 浏览器请求时，ws://localhost:7000/XXX 表示请求的资源
                  * 核心功能是 将http协议升级为ws协议，保持长连接
                  */
+//                    .addLast("nettyWebSocketParamHandler",nettyWebSocketParamHandler)
                     .addLast("protocolHandler",new WebSocketServerProtocolHandler("/websocket"))
+//                    .addLast("nettyWebSocketHandler",nettyWebSocketHandler)
                     .addLast("base_handler",myWebSocketHandler)
                     .addLast("register_handler",registerHandler)
                     .addLast("single_message",singleMessageHandler)

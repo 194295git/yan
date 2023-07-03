@@ -3,7 +3,7 @@ package com.netty.informationServe.serve.handler;
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
-import com.netty.common.constants.Topic;
+import com.rose.common.mqutil.Topic;
 import com.netty.common.domain.Message;
 import com.netty.common.domain.User;
 import com.netty.informationServe.protocol.packet.SingleMessagePacket;

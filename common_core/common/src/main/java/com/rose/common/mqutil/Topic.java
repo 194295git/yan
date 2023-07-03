@@ -1,4 +1,4 @@
-package com.netty.common.constants;
+package com.rose.common.mqutil;
 
 /**
  * @创建人 rose

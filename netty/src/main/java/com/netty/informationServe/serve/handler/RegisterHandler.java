@@ -6,6 +6,7 @@ import com.netty.informationServe.utils.SessionUtils;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,9 +14,12 @@ import org.springframework.stereotype.Service;
  * @创建时间 2021/12/2
  * @描述 注册处理器
  */
+@Slf4j
 @Service
 @ChannelHandler.Sharable
 public class RegisterHandler extends SimpleChannelInboundHandler<RegisterPacket> {
+
+
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RegisterPacket registerPacket) throws Exception {
