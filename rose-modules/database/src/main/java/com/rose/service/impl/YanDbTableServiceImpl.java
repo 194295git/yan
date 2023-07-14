@@ -4,15 +4,11 @@ package com.rose.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
-
-import com.rose.adaptor.PageUtils;
-import com.rose.adaptor.Query;
+import com.rose.common.utils.PageUtils;
+import com.rose.common.utils.Query;
 import com.rose.dao.YanDbTableDao;
 import com.rose.entity.YanDbTableEntity;
 import com.rose.service.YanDbTableService;
-
-
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

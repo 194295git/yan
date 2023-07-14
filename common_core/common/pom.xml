@@ -15,6 +15,7 @@
     <properties>
         <mysql.version>8.0.17</mysql.version>
         <swagger.version>2.7.0</swagger.version>
+        <joda.time.version>2.9.9</joda.time.version>
     </properties>
 
     <dependencies>
@@ -84,7 +85,18 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.72</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.15</version>
+            <scope>compile</scope>
+        </dependency>
 
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda.time.version}</version>
+        </dependency>
         <!-- 链路追踪  -->
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.cloud</groupId>-->

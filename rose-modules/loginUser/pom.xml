@@ -35,8 +35,7 @@
         <qiniu.version>7.2.23</qiniu.version>
         <aliyun.oss.version>2.8.3</aliyun.oss.version>
         <qcloud.cos.version>4.4</qcloud.cos.version>
-        <swagger.version>2.7.0</swagger.version>
-        <joda.time.version>2.9.9</joda.time.version>
+
         <gson.version>2.8.5</gson.version>
         <fastjson.version>1.2.72</fastjson.version>
         <hutool.version>4.1.1</hutool.version>
@@ -51,22 +50,17 @@
 
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.rose.yan</groupId>
+            <artifactId>common_shrio</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.rose.yan</groupId>
@@ -106,11 +100,7 @@
             <version>${gson.version}</version>
         </dependency>
         <!--    验证码      -->
-        <!-- 日期工具栏依赖 -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.github.axet</groupId>
             <artifactId>kaptcha</artifactId>

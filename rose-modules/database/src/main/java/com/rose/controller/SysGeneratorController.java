@@ -9,11 +9,11 @@
 package com.rose.controller;
 
 
+import com.rose.common.base.R;
+import com.rose.common.renutil.Query;
+import com.rose.common.utils.PageUtils;
 import com.rose.config.DynamicDataSource;
 import com.rose.service.SysGeneratorService;
-import com.rose.common.renutil.PageUtils;
-import com.rose.common.renutil.Query;
-import com.rose.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;

@@ -1,9 +1,8 @@
 package com.rose.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.rose.adaptor.PageUtils;
+import com.rose.common.utils.PageUtils;
 import com.rose.entity.YanDbTableEntity;
-
 
 import java.util.Map;
 

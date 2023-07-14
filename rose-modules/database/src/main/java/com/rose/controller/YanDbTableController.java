@@ -1,10 +1,10 @@
 package com.rose.controller;
 
-import com.rose.adaptor.PageUtils;
+import com.rose.common.base.R;
+import com.rose.common.utils.PageUtils;
 import com.rose.config.DynamicDataSource;
 import com.rose.entity.YanDbTableEntity;
 import com.rose.service.YanDbTableService;
-import com.rose.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

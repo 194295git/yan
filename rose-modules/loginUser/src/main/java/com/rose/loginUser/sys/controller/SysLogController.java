@@ -9,8 +9,8 @@
 package com.rose.loginUser.sys.controller;
 
 
+import com.rose.common.base.R;
 import com.rose.common.utils.PageUtils;
-import com.rose.loginUser.common.utils.R;
 import com.rose.loginUser.sys.service.SysLogService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;

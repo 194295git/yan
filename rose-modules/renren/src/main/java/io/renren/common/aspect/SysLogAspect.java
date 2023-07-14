@@ -13,13 +13,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
-import java.util.Date;
 
 
 /**
@@ -83,7 +77,7 @@ public class SysLogAspect {
 //		sysLog.setIp(IPUtils.getIpAddr(request));
 //
 //		//用户名
-////		String username = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getUsername();
+////		String username = ((SysUserPermission) SecurityUtils.getSubject().getPrincipal()).getUsername();
 ////		sysLog.setUsername(username);
 //
 //		sysLog.setTime(time);

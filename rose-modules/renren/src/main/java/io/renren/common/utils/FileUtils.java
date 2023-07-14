@@ -6,12 +6,11 @@ package io.renren.common.utils;
  */
 
 
+import com.rose.common.exception.RRException;
+import org.springframework.util.ResourceUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-
-
-import io.renren.common.exception.RRException;
-import org.springframework.util.ResourceUtils;
 
 /**
  * 文件工具类

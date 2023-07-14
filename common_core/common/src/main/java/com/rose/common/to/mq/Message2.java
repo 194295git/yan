@@ -1,5 +1,6 @@
 package com.rose.common.to.mq;
 
+
 /**
  * @创建人 rose
  * @创建时间 2021/12/10

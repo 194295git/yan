@@ -11,7 +11,7 @@ package com.rose.permission.oauth2;
 
 import com.google.gson.Gson;
 
-import com.rose.permission.entity.SysUserEntity;
+import com.rose.permission.entity.SysUserPermission;
 import com.rose.permission.util.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import org.apache.shiro.authc.*;
@@ -47,7 +47,7 @@ public class OAuth2Realm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        SysUserEntity user = (SysUserEntity)principals.getPrimaryPrincipal();
+        SysUserPermission user = (SysUserPermission)principals.getPrimaryPrincipal();
         Set<String> permsSet = user.getPermissions();
         //用户权限列表
         //将这块改成从redis里面获得，是不是就轻松多了。然后需要做的是存储。在登录的时候存储进去。
@@ -74,10 +74,10 @@ public class OAuth2Realm extends AuthorizingRealm {
             String openid = claims.get("openid").toString();
             Gson gson = new Gson();
 //            Set<String> permsSet = shiroService.getUserPermissions(userId);
-//            SysUserEntity user = shiroService.queryUser(userId);
+//            SysUserPermission user = shiroService.queryUser(userId);
             String  permsSetString = ( String )redisTemplate.opsForValue().get(openid);
             Set<String> permsSet=  gson.fromJson(permsSetString,Set.class);
-            SysUserEntity user = new SysUserEntity();
+            SysUserPermission user = new SysUserPermission();
             user.setUserId(userId);
             user.setPermissions(permsSet);
             SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, accessToken, getName());

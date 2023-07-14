@@ -10,7 +10,7 @@ package com.rose.loginUser.sys.redis;
 
 
 
-import com.rose.loginUser.common.utils.RedisKeys;
+import com.rose.common.redisutil.RedisKeys;
 import com.rose.loginUser.common.utils.RedisUtils;
 import com.rose.loginUser.sys.entity.SysConfigEntity;
 import org.springframework.beans.factory.annotation.Autowired;

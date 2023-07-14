@@ -9,8 +9,8 @@
 package com.rose.config;
 
 
+import com.rose.common.exception.RRException;
 import com.rose.dao.*;
-import com.rose.utils.RRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

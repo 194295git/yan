@@ -9,7 +9,7 @@
 package com.rose.loginUser.sys.controller;
 
 
-import com.rose.loginUser.sys.entity.SysUserEntity;
+import com.rose.permission.entity.SysUserPermission;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractController {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	
-	protected SysUserEntity getUser() {
-		return (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+	protected SysUserPermission getUser() {
+		return (SysUserPermission) SecurityUtils.getSubject().getPrincipal();
 	}
 
 	protected Long getUserId() {

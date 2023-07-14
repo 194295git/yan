@@ -1,7 +1,7 @@
 package com.rose.controller;
 
+import com.rose.common.base.R;
 import com.rose.config.SystemConfig;
-import com.rose.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

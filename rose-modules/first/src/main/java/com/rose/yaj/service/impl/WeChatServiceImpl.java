@@ -1,7 +1,5 @@
 package com.rose.yaj.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rose.yaj.common.GenericResponse;
 import com.rose.yaj.common.ServiceError;
@@ -9,7 +7,6 @@ import com.rose.yaj.entity.YanUser;
 import com.rose.yaj.feign.dto.RegisterFeign;
 import com.rose.yaj.service.WeChatService;
 import com.rose.yaj.service.YanUserService;
-import com.rose.yaj.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,14 +60,7 @@ public class WeChatServiceImpl implements WeChatService {
 
         YanUser user = yanUserService.getOne(new QueryWrapper<YanUser>().eq("email", email).eq("password", password));
 
-        if (user != null){
-
-            String token = JwtTokenUtil.generateToken(user);
-
-            return GenericResponse.response(ServiceError.NORMAL, token);
-        }else{
-            return GenericResponse.response(ServiceError.LOGIN_ERROR);
-        }
+        return null;
 
         // 检验当前是否用户是否存在
 

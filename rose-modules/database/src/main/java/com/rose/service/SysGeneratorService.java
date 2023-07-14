@@ -10,14 +10,13 @@ package com.rose.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-
+import com.rose.common.renutil.Query;
+import com.rose.common.utils.PageUtils;
 import com.rose.config.MongoManager;
 import com.rose.dao.GeneratorDao;
 import com.rose.dao.MongoDBGeneratorDao;
 import com.rose.factory.MongoDBCollectionFactory;
 import com.rose.utils.GenUtils;
-import com.rose.common.renutil.PageUtils;
-import com.rose.common.renutil.Query;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,11 @@ public class SysGeneratorService {
     @Autowired
     private GeneratorDao generatorDao;
 
-
+    /**
+     *
+     * @param query 使用的是pageHelper来进行的分页
+     * @return
+     */
     public PageUtils queryList(Query query) {
         Page<?> page = PageHelper.startPage(query.getPage(), query.getLimit());
         List<Map<String, Object>> list = generatorDao.queryList(query);

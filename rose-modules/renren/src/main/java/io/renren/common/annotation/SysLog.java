@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
  * @author Mark 1942951600@qq.com
  */
 @Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.RUNTIME )
 @Documented
 public @interface SysLog {
 

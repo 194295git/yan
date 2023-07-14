@@ -10,11 +10,11 @@ package com.rose.loginUser.sys.controller;
 
 
 import com.rose.common.annotation.SysLog;
+import com.rose.common.base.R;
 import com.rose.common.utils.Constant;
 import com.rose.common.utils.PageUtils;
 import com.rose.common.valid.AddGroup;
 import com.rose.common.valid.UpdateGroup;
-import com.rose.loginUser.common.utils.R;
 import com.rose.loginUser.common.validator.Assert;
 import com.rose.loginUser.common.validator.ValidatorUtils;
 import com.rose.loginUser.sys.entity.SysUserEntity;

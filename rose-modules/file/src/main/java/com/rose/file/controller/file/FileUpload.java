@@ -1,9 +1,9 @@
 package com.rose.file.controller.file;
 
 
+import com.rose.common.base.R;
+import com.rose.common.utils.TimeUtils;
 import com.rose.file.util.FileUtils;
-import com.rose.file.util.R;
-import com.rose.file.util.TimeUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +40,7 @@ public class FileUpload {
      */
     @ApiOperation("上传文件接口")
     @PostMapping("/FileUpload")
-    public R fileUpload( @RequestParam("files") MultipartFile[] resourceFiles, String path, Boolean timeStamp, byte type) {
+    public R fileUpload(@RequestParam("files") MultipartFile[] resourceFiles, String path, Boolean timeStamp, byte type) {
         //解析失败会异常跳出
 
         List<Map<String, Object>> listResult = new ArrayList<>();

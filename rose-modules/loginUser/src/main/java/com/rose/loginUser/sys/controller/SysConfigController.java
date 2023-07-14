@@ -9,10 +9,9 @@
 package com.rose.loginUser.sys.controller;
 
 
-
 import com.rose.common.annotation.SysLog;
+import com.rose.common.base.R;
 import com.rose.common.utils.PageUtils;
-import com.rose.loginUser.common.utils.R;
 import com.rose.loginUser.common.validator.ValidatorUtils;
 import com.rose.loginUser.sys.entity.SysConfigEntity;
 import com.rose.loginUser.sys.service.SysConfigService;
