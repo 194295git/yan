@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- *
+ * 这个里面添加退出的功能
  */
 public class SessionUtils {
 	/**
@@ -27,6 +27,14 @@ public class SessionUtils {
 		System.out.println(user.getOpenid() + "已经登陆...");
 		System.out.println(userOpenidChannelMap);
 		channel.attr(Attributes.SESSION).set(user);
+	}
+	public static void clearChannel(User user, Channel channel) {
+		userOpenidChannelMap.remove(user.getOpenid());
+		System.out.println(user.getOpenid() + "已经退出...");
+		//先暂且这样子做一个退出
+		//检测登录会测试这个属性，但是现在不会了
+		channel.attr(Attributes.SESSION).remove();
+//		channel.attr(Attributes.SESSION).set(user);
 	}
 	
 //	public static void unbind(Channel channel) {

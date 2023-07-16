@@ -104,7 +104,7 @@ paths:
                 type: integer
                 format: int32
               user:
-                $ref: '#/definitions/SysUserEntity'
+                $ref: '#/definitions/SysUserPermission'
   /sys/user/info/{userId}:
     get:
       tags:
@@ -129,7 +129,7 @@ paths:
                 type: integer
                 format: int32
               user:
-                $ref: '#/definitions/SysUserEntity'
+                $ref: '#/definitions/SysUserPermission'
   /sys/user/password:
     post:
       tags:
@@ -1131,7 +1131,7 @@ definitions:
           list:
             type: array
             items:
-              $ref: '#/definitions/SysUserEntity'
+              $ref: '#/definitions/SysUserPermission'
   SysUserEntityEdit:
       type: object
       properties:

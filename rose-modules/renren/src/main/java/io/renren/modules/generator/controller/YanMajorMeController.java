@@ -1,21 +1,14 @@
 package io.renren.modules.generator.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.rose.common.base.R;
+import com.rose.common.utils.PageUtils;
 import io.renren.modules.generator.entity.YanMajorMeEntity;
 import io.renren.modules.generator.service.YanMajorMeService;
-import io.renren.common.utils.PageUtils;
-import io.renren.common.utils.R;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.Map;
 
 
 /**
@@ -35,7 +28,7 @@ public class YanMajorMeController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("generator:yanmajorme:list")
+//    @RequiresPermissions("generator:yanmajorme:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = yanMajorMeService.queryPage(params);
 
@@ -47,7 +40,7 @@ public class YanMajorMeController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("generator:yanmajorme:info")
+//    @RequiresPermissions("generator:yanmajorme:info")
     public R info(@PathVariable("id") Integer id){
 		YanMajorMeEntity yanMajorMe = yanMajorMeService.getById(id);
 
@@ -58,7 +51,7 @@ public class YanMajorMeController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("generator:yanmajorme:save")
+//    @RequiresPermissions("generator:yanmajorme:save")
     public R save(@RequestBody YanMajorMeEntity yanMajorMe){
 		yanMajorMeService.save(yanMajorMe);
 
@@ -69,7 +62,7 @@ public class YanMajorMeController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("generator:yanmajorme:update")
+//    @RequiresPermissions("generator:yanmajorme:update")
     public R update(@RequestBody YanMajorMeEntity yanMajorMe){
 		yanMajorMeService.updateById(yanMajorMe);
 
@@ -80,7 +73,7 @@ public class YanMajorMeController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("generator:yanmajorme:delete")
+//    @RequiresPermissions("generator:yanmajorme:delete")
     public R delete(@RequestBody Integer[] ids){
 		yanMajorMeService.removeByIds(Arrays.asList(ids));
 

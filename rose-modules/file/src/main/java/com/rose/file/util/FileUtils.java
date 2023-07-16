@@ -1,6 +1,7 @@
 package com.rose.file.util;
 
 
+import com.rose.common.exception.RRException;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
@@ -28,7 +29,7 @@ public class FileUtils {
         try {
             return ResourceUtils.getURL("classpath:").getPath() + "static/";
         } catch (FileNotFoundException e) {
-            throw new SRException("获取根目录失败",e);
+            throw new RRException("获取根目录失败",e);
         }
         // return BASE_PATH;
     }

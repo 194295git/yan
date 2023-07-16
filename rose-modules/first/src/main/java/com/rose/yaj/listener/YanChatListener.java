@@ -2,9 +2,8 @@ package com.rose.yaj.listener;
 
 
 import com.rabbitmq.client.Channel;
-
-import com.rose.yaj.dto.ChatDto;
 import com.rose.common.to.mq.Message2;
+import com.rose.yaj.dto.ChatDto;
 import com.rose.yaj.service.YanUserChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;

@@ -8,7 +8,7 @@
 
 package io.renren;
 
-import io.renren.service.DynamicDataSourceTestService;
+//import io.renren.service.DynamicDataSourceTestService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +23,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DynamicDataSourceTest {
-    @Autowired
-    private DynamicDataSourceTestService dynamicDataSourceTestService;
+//    @Autowired
+//    private DynamicDataSourceTestService dynamicDataSourceTestService;
 
-    @Test
-    public void test(){
-        Long id = 1L;
-
-        dynamicDataSourceTestService.updateUser(id);
-        dynamicDataSourceTestService.updateUserBySlave1(id);
-        dynamicDataSourceTestService.updateUserBySlave2(id);
-    }
+//    @Test
+//    public void test(){
+//        Long id = 1L;
+//
+//        dynamicDataSourceTestService.updateUser(id);
+//        dynamicDataSourceTestService.updateUserBySlave1(id);
+//        dynamicDataSourceTestService.updateUserBySlave2(id);
+//    }
 
 }

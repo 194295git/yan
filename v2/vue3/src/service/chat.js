@@ -23,3 +23,7 @@ export function getGroupContent(params) {
 export function getAvatarUrlByOpenid(params) {
   return apiFirstGet('/yaj/yan-user/getAvatarUrlByOpenid?openid='+params);
 }
+export function getGroupMemberDetail(params) {
+  return apiFirstGet('/yaj/yan-group/getGroupMemberDetail?id='+params);
+}
+

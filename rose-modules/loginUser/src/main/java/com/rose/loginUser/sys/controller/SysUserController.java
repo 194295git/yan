@@ -10,17 +10,18 @@ package com.rose.loginUser.sys.controller;
 
 
 import com.rose.common.annotation.SysLog;
+import com.rose.common.base.R;
 import com.rose.common.utils.Constant;
 import com.rose.common.utils.PageUtils;
 import com.rose.common.valid.AddGroup;
 import com.rose.common.valid.UpdateGroup;
-import com.rose.loginUser.common.utils.R;
 import com.rose.loginUser.common.validator.Assert;
 import com.rose.loginUser.common.validator.ValidatorUtils;
 import com.rose.loginUser.sys.entity.SysUserEntity;
 import com.rose.loginUser.sys.form.PasswordForm;
 import com.rose.loginUser.sys.service.SysUserRoleService;
 import com.rose.loginUser.sys.service.SysUserService;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Sha256Hash;
@@ -36,6 +37,7 @@ import java.util.Map;
  * @author Mark 1942951600@qq.com
  */
 @RestController
+@Api(tags = "后台管理登录相关接口" , description = "SysUserController | 后台管理登录")
 @RequestMapping("/sys/user")
 public class SysUserController extends AbstractController {
 	@Autowired
@@ -109,7 +111,6 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("保存用户")
 	@PostMapping("/save")
-	@RequiresPermissions("sys:user:save")
 	public R save(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, AddGroup.class);
 		
@@ -124,7 +125,6 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("修改用户")
 	@PostMapping("/update")
-	@RequiresPermissions("sys:user:update")
 	public R update(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
 
@@ -139,7 +139,6 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("删除用户")
 	@PostMapping("/delete")
-	@RequiresPermissions("sys:user:delete")
 	public R delete(@RequestBody Long[] userIds){
 		if(ArrayUtils.contains(userIds, 1L)){
 			return R.error("系统管理员不能删除");

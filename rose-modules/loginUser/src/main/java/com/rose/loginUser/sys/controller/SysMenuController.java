@@ -10,9 +10,9 @@ package com.rose.loginUser.sys.controller;
 
 
 import com.rose.common.annotation.SysLog;
+import com.rose.common.base.R;
 import com.rose.common.exception.RRException;
 import com.rose.common.utils.Constant;
-import com.rose.loginUser.common.utils.R;
 import com.rose.loginUser.sys.entity.SysMenuEntity;
 import com.rose.loginUser.sys.service.ShiroService;
 import com.rose.loginUser.sys.service.SysMenuService;

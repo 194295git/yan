@@ -9,14 +9,12 @@
 package com.rose.loginUser.common.aspect;
 
 import com.google.gson.Gson;
-
-
 import com.rose.common.annotation.SysLog;
-import com.rose.loginUser.common.utils.HttpContextUtils;
 import com.rose.loginUser.common.utils.IPUtils;
 import com.rose.loginUser.sys.entity.SysLogEntity;
-import com.rose.loginUser.sys.entity.SysUserEntity;
 import com.rose.loginUser.sys.service.SysLogService;
+import com.rose.permission.entity.SysUserPermission;
+import com.rose.permission.util.HttpContextUtils;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -92,7 +90,7 @@ public class SysLogAspect {
 		sysLog.setIp(IPUtils.getIpAddr(request));
 
 		//用户名
-		String username = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getUsername();
+		String username = ((SysUserPermission) SecurityUtils.getSubject().getPrincipal()).getUsername();
 		sysLog.setUsername(username);
 
 		sysLog.setTime(time);

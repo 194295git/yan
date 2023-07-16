@@ -1,7 +1,7 @@
 package io.renren.modules.generator.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import io.renren.common.utils.PageUtils;
+import com.rose.common.utils.PageUtils;
 import io.renren.modules.generator.entity.YanCollegeEntity;
 
 import java.util.Map;

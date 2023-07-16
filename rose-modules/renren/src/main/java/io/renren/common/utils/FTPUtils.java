@@ -5,7 +5,7 @@ package io.renren.common.utils;
  * @create 2021/8/7
  */
 
-import io.renren.common.exception.RRException;
+import com.rose.common.exception.RRException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.*;

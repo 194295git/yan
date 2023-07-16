@@ -8,7 +8,7 @@
 
 package io.renren.common.validator;
 
-import io.renren.common.exception.RRException;
+import com.rose.common.exception.RRException;
 import org.apache.commons.lang.StringUtils;
 
 /**

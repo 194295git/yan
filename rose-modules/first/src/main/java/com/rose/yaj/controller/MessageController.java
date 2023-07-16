@@ -1,10 +1,8 @@
 package com.rose.yaj.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.rose.yaj.common.GenericResponse;
 import com.rose.yaj.common.ServiceError;
-
 import com.rose.yaj.dto.ChatDto;
 import com.rose.yaj.service.YanUserChatService;
 import com.rose.yaj.service.YanUserService;
@@ -12,10 +10,12 @@ import com.rose.yaj.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
 
 
 @RestController

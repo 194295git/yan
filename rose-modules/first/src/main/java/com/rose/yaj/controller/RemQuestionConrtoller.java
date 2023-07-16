@@ -4,18 +4,16 @@ package com.rose.yaj.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rose.yaj.common.GenericResponse;
 import com.rose.yaj.common.ServiceError;
-import com.rose.yaj.dto.AnswerDto;
-import com.rose.yaj.entity.YanAnswer;
-import com.rose.yaj.entity.YanDataDiscovery;
 import com.rose.yaj.entity.YanMajorMe;
 import com.rose.yaj.entity.YanMajorQuestion;
 import com.rose.yaj.service.YanMajorMeService;
 import com.rose.yaj.service.YanMajorQuestionService;
-import com.rose.yaj.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController

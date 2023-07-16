@@ -9,7 +9,7 @@
 package io.renren.modules.oss.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import io.renren.common.utils.PageUtils;
+import com.rose.common.utils.PageUtils;
 import io.renren.modules.oss.entity.SysOssEntity;
 
 import java.util.Map;

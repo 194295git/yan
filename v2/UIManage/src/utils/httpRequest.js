@@ -31,6 +31,7 @@ http.interceptors.response.use(response => {
     clearLoginInfo()
     router.push({ name: 'login' })
   }
+
   // 这个地方多加一点提示码 等于200 与不等于200给判断完了 然后就不用每次请求都判断了
   return response
 }, error => {
@@ -44,12 +45,20 @@ http.interceptors.response.use(response => {
  */
 http.adornUrl = (actionName) => {
   // 非生产环境 && 开启代理, 接口前缀统一使用[/proxyApi/]前缀做代理拦截!
-  return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxyApi/' : window.SITE_CONFIG.baseUrl + 'manage/') + actionName
+  return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxyApi/' : window.SITE_CONFIG.baseUrl + 'manage') + actionName
 }
 
 http.adornDevUrl = (actionName) => {
-  // 非生产环境 && 开启代理, 接口前缀统一使用[/proxyApi/]前缀做代理拦截!
+  // devops
   return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxyApi/' : window.SITE_CONFIG.baseUrl + 'devops') + actionName
+}
+http.adornUserUrl = (actionName) => {
+  // loginUser
+  return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxyApi/' : window.SITE_CONFIG.baseUrl + 'loginUser') + actionName
+}
+http.adornDataUrl = (actionName) => {
+  // database
+  return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxyApi/' : window.SITE_CONFIG.baseUrl + 'database') + actionName
 }
 
 /**

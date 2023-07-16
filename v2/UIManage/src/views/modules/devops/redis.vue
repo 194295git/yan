@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="title">nacos</div>
     <div>
       <iframe class="rabbit" 
       src=""></iframe>

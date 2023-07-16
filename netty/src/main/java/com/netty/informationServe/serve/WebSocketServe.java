@@ -37,7 +37,7 @@ public class WebSocketServe {
                      .channel(NioServerSocketChannel.class)
                     //添加日志处理器？或者切面
                      .childHandler(myWebSocketChannelHandler);
-            System.out.println("客户端等待连接....");
+            System.out.println("WebSocketServe========>客户端等待连接....");
             Channel ch = bootstrap.bind(8888).sync().channel();
             ch.closeFuture().sync();
 

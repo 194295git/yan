@@ -1,4 +1,4 @@
-import  {apiFirstPost} from '../utils/axios'
+import  {apiFirstGet} from '../utils/axios'
 export function getQuestionData(id) {
-  return apiFirstPost('/yaj/yan-question/getQuestionAnswer?id=' + id);
+  return apiFirstGet('/yaj/yan-question/getQuestionAnswer?id=' + id);
 }

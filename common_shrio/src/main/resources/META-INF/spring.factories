@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.rose.permission.config.ShiroConfig,\
-  com.rose.permission.oauth2.OAuth2Realm,\
-  com.rose.permission.config.RedisConfig

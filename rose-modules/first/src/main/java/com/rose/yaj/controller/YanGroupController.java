@@ -3,11 +3,10 @@ package com.rose.yaj.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rose.yaj.common.GenericResponse;
 import com.rose.yaj.common.ServiceError;
-import com.rose.yaj.dto.AnswerDto;
 import com.rose.yaj.dto.ChatDto;
 import com.rose.yaj.dto.GroupDto;
-import com.rose.yaj.entity.YanAnswer;
 import com.rose.yaj.entity.YanGroup;
+import com.rose.yaj.entity.YanUser;
 import com.rose.yaj.service.YanGroupService;
 import com.rose.yaj.service.YanUserChatService;
 import com.rose.yaj.util.Util;
@@ -46,6 +45,15 @@ public class YanGroupController {
     public GenericResponse getGroupOpenid(@RequestParam("id") Integer id) throws Exception {
         List<String> res = yanGroupService.getGroupOpenid(id);
         return GenericResponse.response(ServiceError.NORMAL, res);
+    }
+
+    @ApiOperation("获取指定id群聊下的所有用户的详细信息")
+    @GetMapping("/getGroupMemberDetail")
+    public GenericResponse getGroupMemberDetail(@RequestParam("id") Integer id) throws Exception {
+        List<YanUser> user = yanGroupService.getGroupMemberDetail(id);
+
+        return GenericResponse.response(ServiceError.NORMAL, user);
+
     }
 
     @ApiOperation("创建群聊")

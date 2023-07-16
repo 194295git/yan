@@ -76,7 +76,7 @@
         <div class="box2">
           <van-icon name="chat-o" @click="changeCur()" />
 
-          <text class="mt-2 ml-2" @click="test">返回</text>
+          <text class="mt-2 ml-2" @click="changeCur()">返回</text>
         </div>
         <div class="scroll">
           <list-scroll :scroll-data="recesiveAllMsg">
@@ -151,7 +151,8 @@
         <div class="box2">
           <van-icon name="chat-o" @click="changeCur()" />
 
-          <text class="mt-2 ml-2" @click="test">返回</text>
+          <text class="mt-2 ml-2" @click="changeCur()">返回</text>
+          <text class="mt-2 ml-2" @click="showAllMember()">查看成员</text>
         </div>
         <div class="scroll">
           <list-scroll :scroll-data="recesiveAllMsg">
@@ -222,6 +223,32 @@
         </div>
       </div>
     </div>
+    <div>
+      <div v-if="current == 3"  class="box2 mt-2">
+        <div @click="changeCurDiy(2)">返回</div>
+                <div
+          class="d-flex mb-1 notify-item"
+
+          v-for="(userBase, index) in memberBaseDetail"
+          :key="index"
+        >
+          <div class="">
+            <van-image
+              width="35px"
+              height="35px"
+              fit="cover"
+              :src="userBase.avatarUrl"
+            />
+          </div>
+          <div class="ml-2" style="width: 10vw;">
+            {{ userBase.email }}
+          </div>
+           <div class="ml-2" style="width: 70vw;">
+            {{ userBase.username }}
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- <div @click="sendData()">发送数据</div> -->
     <nav-bar></nav-bar>
@@ -241,7 +268,8 @@ import {
   getAllGroup,
   getGroupOpenid,
   getGroupContent,
-  getAvatarUrlByOpenid
+  getAvatarUrlByOpenid,
+  getGroupMemberDetail
 } from "@/service/chat";
 import SocketService from "@/common/js/websocket";
 import { useStore } from "vuex";
@@ -256,6 +284,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const state = reactive({
+      memberBaseDetail:[],
       userlist: [],
       socketServe: SocketService.Instance,
       recesiveAllMsg: [],
@@ -366,6 +395,7 @@ export default {
         params: {
           openid: store.state.userInfo.openid,
           userName: store.state.userInfo.email,
+          loginStatus: "1",
         },
       };
       console.log(data);
@@ -413,6 +443,17 @@ export default {
     const changeCur = () => {
       state.current = 0;
     };
+    const changeCurDiy = (param) => {
+      state.current = param;
+    };
+    const showAllMember = async ()=>{
+      state.current = 3;
+      const memberDeatil = await getGroupMemberDetail(state.toGroup.groupId);
+      console.log(429,memberDeatil.content);
+      state.memberBaseDetail = memberDeatil.content;
+
+
+    };
     const sendMsg2 = () => {
       const { content, toUser } = state;
       let data = {
@@ -451,7 +492,9 @@ export default {
       changeToUser,
       changeToGroup,
       changeCur,
+      showAllMember,
       sendMsg2,
+      changeCurDiy,
     };
   },
 };

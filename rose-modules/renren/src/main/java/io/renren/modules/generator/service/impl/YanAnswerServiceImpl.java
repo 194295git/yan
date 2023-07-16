@@ -1,16 +1,16 @@
 package io.renren.modules.generator.service.impl;
 
-import org.springframework.stereotype.Service;
-import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.renren.common.utils.PageUtils;
-import io.renren.common.utils.Query;
-
+import com.rose.common.utils.PageUtils;
+import com.rose.common.utils.Query;
 import io.renren.modules.generator.dao.YanAnswerDao;
 import io.renren.modules.generator.entity.YanAnswerEntity;
 import io.renren.modules.generator.service.YanAnswerService;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 
 @Service("yanAnswerService")

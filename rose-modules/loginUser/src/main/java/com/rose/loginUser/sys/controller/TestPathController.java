@@ -1,6 +1,6 @@
 package com.rose.loginUser.sys.controller;
 
-import com.rose.loginUser.common.utils.R;
+import com.rose.common.base.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
