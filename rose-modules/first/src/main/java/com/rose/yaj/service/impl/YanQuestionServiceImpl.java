@@ -53,13 +53,13 @@ public class YanQuestionServiceImpl extends ServiceImpl<YanQuestionMapper, YanQu
          * 加入缓存逻辑
          */
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        if( StringUtils.isEmpty(ops.get("indexContentJson"))){
+        if( StringUtils.isEmpty(ops.get(RedisPrefix.INDEX_CONTET))){
             //缓存中没有数据 应该从数据库查询出来
             List<YanDataDiscovery> indexDataFromDB = getIndexDataFromDB();
-            ops.set("indexContentJson", JSON.toJSONString(indexDataFromDB), RedisPrefix.YAN_INDEX);
+            ops.set(RedisPrefix.INDEX_CONTET, JSON.toJSONString(indexDataFromDB));
             return indexDataFromDB;
         }
-        String indexContentJson = ops.get("indexContentJson");
+        String indexContentJson = ops.get(RedisPrefix.INDEX_CONTET);
         //TypeReference这个构造器是受保护的，还需要使用匿名内部类的形式来搞定
         List<YanDataDiscovery> jsonObject = JSON.parseObject(indexContentJson, new TypeReference<List<YanDataDiscovery>>(){});
         return jsonObject;

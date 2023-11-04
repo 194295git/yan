@@ -4,6 +4,7 @@ spring:
   cloud:
     nacos:
       discovery:
+        ip: 192.168.56.1
         server-addr: 192.168.56.20:8848
   redis:
 #    open: false  # 是否开启redis缓存  true开启   false关闭

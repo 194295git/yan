@@ -72,7 +72,8 @@ public class ScanClientsNotOnline {
 
     private boolean outOfTime(Channel channel) {
         String activeTime = channel.attr(AttrConstants.activeTime).get();
-        if(System.currentTimeMillis()-Long.parseLong(activeTime)>RedisPrefix.intervalTime*1000){
+        Long temp = System.currentTimeMillis()-Long.parseLong(activeTime);
+        if(temp>RedisPrefix.intervalTime*1000){
             return true;
         }else{
             return false;
