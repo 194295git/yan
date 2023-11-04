@@ -33,7 +33,32 @@ public class DateUtils {
         }
         return null;
     }
+    public static String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    /**
+     * 获取当前日期时间
+     *
+     *
+     * @return
+     *
+     */
+    public static String getCurrentDateTime() {
+        String datestr = null;
+        SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_TIME_FORMAT);
+        datestr = df.format(new Date());
+        return datestr;
+    }
 
+    public static String dateToDateTime(Date date) {
+        SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_TIME_FORMAT);
+        return df.format(date);
+    }
+    public static String DATE_TIME_FORMAT_II = "yyyyMMddHHmmss";
+    public static String getCurrentDateTimeFormat() {
+        String datestr = null;
+        SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_TIME_FORMAT_II);
+        datestr = df.format(new Date());
+        return datestr;
+    }
 
     /**
      * 字符串转换成日期

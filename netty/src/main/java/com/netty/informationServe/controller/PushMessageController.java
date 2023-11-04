@@ -1,23 +1,21 @@
 package com.netty.informationServe.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.netty.common.domain.User;
+import com.netty.common.entity.SendRequest;
+import com.netty.informationServe.message.MessageSendService;
 import com.netty.informationServe.utils.SessionUtils;
-import io.netty.buffer.ByteBuf;
+import com.netty.informationServe.utils.WebsocketMessageGenerateUtils;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.nio.charset.Charset;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author rose
@@ -26,11 +24,18 @@ import java.util.UUID;
 @RestController
 @RequestMapping("chat/mqmessage")
 public class PushMessageController {
-
+    @Autowired
+    MessageSendService messageSendService;
+    /**
+     * 简易的给所有人推送消息
+      * @param msg
+     */
     @RequestMapping("/msg")
     public void pushMessage(@RequestParam String msg){
 
-        //TODO 分为两个部分 1.自动推送给所有在线的用户 2. 推送给不在线的用户 前端页面要做的就是每次进入先从后端获取一下待接收的值
+        //TODO 分为两个部分
+        // 1.自动推送给所有在线的用户
+        // 2. 推送给不在线的用户 前端页面要做的就是每次进入先从后端获取一下待接收的值
         // 前端的消息以弹出框的形式显示出来 往mq里面推送的时候分开保存 ，前端页面查询的时候仅仅只查询未读的；还需要给用户分级；
 
         //1.调接口 查询所有不在线的用户；给他们推送消息；
@@ -44,6 +49,30 @@ public class PushMessageController {
         }
 
     }
+
+
+    @RequestMapping("/message/send")
+    public void sendToAllClient(@RequestBody SendRequest request){
+        Map<String,Channel> map =  SessionUtils.getAllOnlineChannel();
+        if(request.getSendToAll()){
+            //遍历服务上的所有设备进行推送
+            for(String channelId : map.keySet()){
+                messageSendService.sendMessage(channelId, WebsocketMessageGenerateUtils.generateWebsocketMessage(channelId,request.getRequestId(),request.getMsg()));
+            }
+        }else{
+            //根据标识进行推送
+            List<String> list = request.getTo();
+            if(CollectionUtils.isEmpty(list)){
+                return ;
+            }
+            for(String client : list){
+                messageSendService.sendMessage(client,WebsocketMessageGenerateUtils.generateWebsocketMessage(client,request.getRequestId(),request.getMsg()));
+            }
+        }
+    }
+
+
+
 
 //    public ByteBuf getByteBuf(String message
 //                             ) {

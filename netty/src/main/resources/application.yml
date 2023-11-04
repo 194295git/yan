@@ -1,3 +1,5 @@
+hostip: 192.168.56.1
+
 # 应用名称
 spring:
   application:
@@ -6,6 +8,9 @@ spring:
     nacos:
       discovery:
         server-addr: 192.168.56.20:8848
+  redis:
+    host: 192.168.56.20
+    port: 6379
   rabbitmq:
     host: 192.168.56.20
     port: 5672

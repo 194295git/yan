@@ -25,6 +25,7 @@ public class ExceptionHandler extends ChannelDuplexHandler {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
     	// TODO Auto-generated method stub
     	 if (cause instanceof RuntimeException) {
+			 cause.printStackTrace();
              logger.info("pipeline全局异常处理 Handle Business Exception Success.");
 
         	 ByteBuf byteBuf = ctx.alloc().buffer();

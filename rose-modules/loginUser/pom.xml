@@ -137,11 +137,6 @@
             <artifactId>jjwt</artifactId>
             <version>${jwt.version}</version>
         </dependency>
-        <!-- SpringCloud Ailibaba Nacos Config -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>commons-lang</groupId>

@@ -10,6 +10,7 @@ import com.netty.informationServe.protocol.packet.CreateGroupPacket;
 import com.netty.informationServe.protocol.packet.GroupMessagePacket;
 import com.netty.informationServe.protocol.packet.RegisterPacket;
 import com.netty.informationServe.protocol.packet.SingleMessagePacket;
+import com.netty.informationServe.service.ChannelService;
 import com.netty.informationServe.utils.SessionUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -19,6 +20,7 @@ import io.netty.handler.codec.http.websocketx.*;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.Charset;
@@ -36,6 +38,9 @@ import java.util.List;
 @ChannelHandler.Sharable
 public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    ChannelService channelService;
 
 //    服务端处理客户端websocket请求的核心方法
 //    这是模板方法的实现
@@ -138,14 +143,17 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         NettyConfig.group.add(ctx.channel());
-        System.out.println("客户端与服务端连接开启....");
+       log.info("channelActive客户端与服务端连接开启....");
     }
 
     //客户端与服务端断开连接
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        //删除redis里面的数据
+        channelService.remove(SessionUtils.getUser(ctx.channel()).getOpenid());
+        //删除缓存的hashmap
         NettyConfig.group.remove(ctx.channel());
-        System.out.println("客户端与服务端连接关闭....");
+       log.info("channelInactive客户端与服务端连接关闭....");
     }
 
     //接收结束之后 read相对于服务端

@@ -1,29 +1,27 @@
 package com.rose.yaj.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.rose.common.constant.RedisPrefix;
 import com.rose.yaj.dto.QuestionAndAnswerList;
 import com.rose.yaj.dto.QuestionFormSubmit;
-import com.rose.yaj.entity.*;
+import com.rose.yaj.entity.YanAnswer;
+import com.rose.yaj.entity.YanDataDiscovery;
+import com.rose.yaj.entity.YanQuestion;
+import com.rose.yaj.entity.YanQuestionTags;
 import com.rose.yaj.mapper.YanQuestionMapper;
 import com.rose.yaj.service.*;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rose.yaj.util.PageUtils;
-
 import org.jsoup.Jsoup;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -58,7 +56,7 @@ public class YanQuestionServiceImpl extends ServiceImpl<YanQuestionMapper, YanQu
         if( StringUtils.isEmpty(ops.get("indexContentJson"))){
             //缓存中没有数据 应该从数据库查询出来
             List<YanDataDiscovery> indexDataFromDB = getIndexDataFromDB();
-            ops.set("indexContentJson", JSON.toJSONString(indexDataFromDB));
+            ops.set("indexContentJson", JSON.toJSONString(indexDataFromDB), RedisPrefix.YAN_INDEX);
             return indexDataFromDB;
         }
         String indexContentJson = ops.get("indexContentJson");
