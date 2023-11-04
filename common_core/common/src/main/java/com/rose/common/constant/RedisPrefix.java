@@ -1,5 +1,8 @@
 package com.rose.common.constant;
 
+/**
+ *  @author rose
+ */
 public interface RedisPrefix {
     //websocket的服务地址，类型-hash<ip:port,nettyPort>，key为websocket节点的实例名(ip:port)，value为websocket端口
     public static String WEBSOCKETSERVER = "websocket_server";

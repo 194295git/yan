@@ -1,5 +1,7 @@
 package com.rose.common.base;
-
+/**
+ * @author rose
+ */
 public enum ServiceError {
 
     NORMAL(200, "操作成功"),

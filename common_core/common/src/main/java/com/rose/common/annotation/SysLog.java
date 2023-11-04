@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 /**
  * 系统日志注解
  *
- * @author Mark 1942951600@qq.com
+ * @author rose 1942951600@qq.com
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

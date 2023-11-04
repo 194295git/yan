@@ -4,6 +4,7 @@ package com.netty.common.model.Result;
  * @创建人 rose
  * @创建时间 2021/12/12
  * @描述 用户可以获得的好友信息
+ * @author  rose
  */
 public class Friend {
     // 用户id

@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * 返回数据
  *
- * @author Mark 1942951600@qq.com
+ * @author rose 1942951600@qq.com
  */
 public class R extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
