@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("chat/mqmessage")
-public class PushMessageController {
+public class SimplePushMessageController {
     @Autowired
     MessageSendService messageSendService;
     /**
@@ -44,13 +44,18 @@ public class PushMessageController {
         Map<String, Channel> allOnlineChannel = SessionUtils.getAllOnlineChannel();
         for(Map.Entry<String, Channel> entry:allOnlineChannel.entrySet()){
             System.out.println(entry.getKey()+"--->"+entry.getValue());
-            entry.getValue().writeAndFlush(new TextWebSocketFrame(Thread.currentThread().getName()+"服务器时间" + LocalDateTime.now() + "wdy"));
+            //http-nio-8083-exec-2服务器时间2023-11-04T20:12:00.780rose
+            entry.getValue().writeAndFlush(new TextWebSocketFrame(Thread.currentThread().getName()+"服务器时间" + LocalDateTime.now() + "rose"));
             entry.getValue().writeAndFlush(new TextWebSocketFrame(msg));
         }
 
     }
 
 
+    /**
+     * 根据表示进行传送消息.
+     * @param request
+     */
     @RequestMapping("/message/send")
     public void sendToAllClient(@RequestBody SendRequest request){
         Map<String,Channel> map =  SessionUtils.getAllOnlineChannel();

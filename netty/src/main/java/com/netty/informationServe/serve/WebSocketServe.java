@@ -153,7 +153,7 @@ public class WebSocketServe {
             tryCount++;
             if(tryCount<=tryMaxCount){
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     log.error("启动失败，继续尝试",e);
                 }

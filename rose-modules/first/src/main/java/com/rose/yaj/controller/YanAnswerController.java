@@ -11,6 +11,7 @@ import com.rose.yaj.service.YanUserService;
 import com.rose.yaj.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author rosejava
  * @since 2020-10-04
  */
+@Slf4j
 @RestController
 @RequestMapping("/yaj/yan-answer")
 @Api(tags = "回答相关接口" , description = "YanAnswerController | 回答模块")
@@ -38,7 +40,6 @@ public class YanAnswerController {
     @ApiOperation("根据id获取Answer")
     @GetMapping("/getAnswer")
     public GenericResponse getAnswer(@RequestParam("id") Long id) throws Exception {
-        System.out.println("测试是否发送求情");
 //        YanAnswer item = yanAnswerService.getById(id);
         //原先的这种方法可能是需要是主键的
         QueryWrapper<YanAnswer> wrapper = new QueryWrapper<>();

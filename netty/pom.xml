@@ -39,6 +39,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!--rocketmq依赖-->
+        <dependency>
+            <groupId>io.github.rhwayfun</groupId>
+            <artifactId>spring-boot-rocketmq-starter</artifactId>
+            <version>0.0.3.RELEASE</version>
+        </dependency>
 
         <dependency>
             <groupId>io.netty</groupId>
@@ -98,6 +104,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.76</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>20040616</version>
             <scope>compile</scope>
         </dependency>
 

@@ -13,8 +13,8 @@ import java.util.UUID;
  * @create 2022/6/13
  */
 @RestController
-@RequestMapping("order/mqmessage")
-public class MqMessageController {
+@RequestMapping("rabbit/mqmessage")
+public class RabbitMqMqMessageController {
 
     @Autowired
     RabbitTemplate rabbitTemplate;

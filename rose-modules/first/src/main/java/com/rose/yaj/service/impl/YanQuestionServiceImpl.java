@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -56,7 +57,7 @@ public class YanQuestionServiceImpl extends ServiceImpl<YanQuestionMapper, YanQu
         if( StringUtils.isEmpty(ops.get(RedisPrefix.INDEX_CONTET))){
             //缓存中没有数据 应该从数据库查询出来
             List<YanDataDiscovery> indexDataFromDB = getIndexDataFromDB();
-            ops.set(RedisPrefix.INDEX_CONTET, JSON.toJSONString(indexDataFromDB));
+            ops.set(RedisPrefix.INDEX_CONTET, JSON.toJSONString(indexDataFromDB),20 ,TimeUnit.MINUTES);
             return indexDataFromDB;
         }
         String indexContentJson = ops.get(RedisPrefix.INDEX_CONTET);
