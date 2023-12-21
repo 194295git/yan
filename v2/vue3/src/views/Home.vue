@@ -1,13 +1,3 @@
-<!--
- * 严肃声明：
- * 开源版本请务必保留此注释头信息，若删除我方将保留所有法律责任追究！
- * 本系统已申请软件著作权，受国家版权局知识产权以及国家计算机软件著作权保护！
- * 可正常分享和学习源码，不得用于违法犯罪活动，违者必究！
- * Copyright (c) 2020 陈尼克 all rights reserved.
- * 版权所有，侵权必究！
- *
--->
-
 <template>
   <div>
     <div class="container">
@@ -15,51 +5,63 @@
       <div id="top">
         <div class="top">
           <div class="d-flex align-center">
-            <div class="title font-24" style="margin:0 auto ">研战到底</div>
+            <div class="title font-18" style="margin:0 auto ">爱企聊</div>
             <div v-show="showLogin">
-              <router-link class="title" tag="span" to="./login">登录</router-link>
+              <router-link class="title" to="./login"
+                >登录</router-link
+              >
               <!-- <div class="title" style="margin-right:4px">登录</div> -->
             </div>
           </div>
-
-          <div class="top_left">
+          <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+            <van-swipe-item>1</van-swipe-item>
+            <van-swipe-item>2</van-swipe-item>
+            <van-swipe-item>3</van-swipe-item>
+            <van-swipe-item>4</van-swipe-item>
+          </van-swipe>
+          <!-- <van-grid :gutter="10" :row-num="1">
+            <van-grid-item v-for="i in 4" :key="i" icon="photo" text="标题" />
+          </van-grid> -->
+          <!-- <div class="top_left">
             <div class="top_left_1">
-              {{ now_year }}/{{ now_month }}/{{ now_date }}
+             {{ now_year }}/{{ now_month }}/{{ now_date }}
+              <div>我的待办</div>
+               <div>   我的已办</div>
             </div>
-            <div class="top_left_font">倒计时</div>
+          <div class="top_left_font">倒计时</div>
           </div>
-          <div class="top_right">
-            222
+          -->
+        </div>
+
+        <div class="index_navigation">
+          <div class="navigation_son navigation_son_1" @click="open_01">
+            <div class="navigation_son_word">商旅系统</div>
+          </div>
+          <div
+            class="navigation_son navigation_son_2 "
+            @click="open_02"
+            bindtransitionend="navigation_shadow_close"
+          >
+            <div class="navigation_son_word navigation_son_word_2">HR系统</div>
+          </div>
+          <div class="navigation_son navigation_son_2" @click="open_03">
+            <div class="navigation_son_word navigation_son_word_2">
+              报销系统
+            </div>
           </div>
         </div>
-        <div class="input_around" bindtap="test">
+        <!-- <div class="input_around" bindtap="test">
           <input type="div" class="input" placeholder="目标专业院校" />
-        </div>
+        </div> -->
       </div>
       <!-- mid 三大模块入口 -->
-      <div class="index_navigation">
-        <div class="navigation_son navigation_son_1" @click="open_01">
-          <div class="navigation_son_word">院校专业</div>
-        </div>
-        <div
-          class="navigation_son navigation_son_2 "
-          @click="open_02"
-          bindtransitionend="navigation_shadow_close"
-        >
-          <div class="navigation_son_word navigation_son_word_2">智能推荐</div>
-        </div>
-        <div class="navigation_son navigation_son_2" @click="open_03">
-          <!-- 看来这个样式 里不能使用这种方法 -->
-          <!-- <i class="fa fa-server fa-lg navigation_son_word_2"></i> -->
-          <div class="navigation_son_word navigation_son_word_2">我的课程</div>
-        </div>
-      </div>
+
       <!-- 底部 -->
 
       <div class="scroll-bottom">
         <div class="bottom">
           <div class="word d-flex justify-space-between">
-            <div class="pic_word1">研友讨论热榜</div>
+            <div class="pic_word1">资讯</div>
             <div class="pic_word2">更多</div>
           </div>
           <div class="search-content">
@@ -74,7 +76,6 @@
                   <div class="d-flex">
                     <div>
                       <van-image
-                        
                         width="35px"
                         height="35px"
                         fit="cover"
@@ -111,10 +112,10 @@ import listScroll from "@/components/ListScroll";
 // import swiper from '@/components/Swiper'
 import navBar from "@/components/NavBar";
 import { getData } from "@/service/home";
-import { getUserInfoMe } from '@/service/user'
+import { getUserInfoMe } from "@/service/user";
 import { Toast } from "vant";
 import { useStore } from "vuex";
-import { getLocal } from '@/common/js/utils'
+import { getLocal } from "@/common/js/utils";
 export default {
   name: "home",
   components: {
@@ -149,7 +150,6 @@ export default {
     });
 
     onMounted(async () => {
-     
       Toast.loading({
         message: "加载中...",
         forbidClick: true,
@@ -167,27 +167,23 @@ export default {
       //更新scroll
 
       Toast.clear();
-      const token = getLocal('token')
+      const token = getLocal("token");
       if (token) {
-        await getUserInfo()
-        state.showLogin = false
-      }else{
-        
-        console.log("首页 没有token")
+        await getUserInfo();
+        state.showLogin = false;
+      } else {
+        console.log("首页 没有token");
       }
       //设置用户信息
-     
     });
 
-    const getUserInfo =async ()=>{
-      const res =await getUserInfoMe()
+    const getUserInfo = async () => {
+      const res = await getUserInfoMe();
       // console.log("==========getUserInfo")
       // console.log(res.content)
-      store.commit("setUserInfo", res.content)
+      store.commit("setUserInfo", res.content);
       // console.log(store.state.userInfo)
-
-
-    }
+    };
 
     nextTick(() => {
       window.addEventListener("scroll", () => {
@@ -208,41 +204,40 @@ export default {
     const tips = () => {
       Toast("敬请期待");
     };
-    const getIndex = (index)=>{
-			console.log(index)
-      store.commit("setQueQuestion", state.feed[index].question)
-      console.log(store.state.que)
-      var a = store.state.to
-			console.log("======a=====")
-			console.log(a)
-      if (a == 'que') {
-        router.push({ path: '/question', query: {  id: state.feed[index].questionId }})
-        
-			} else {
-				const answerId = state.feed[index].answerId
-        router.push({ path: '/answer', query: {  id: answerId}})
-      
-			}
+    const getIndex = (index) => {
+      console.log(index);
+      store.commit("setQueQuestion", state.feed[index].question);
+      console.log(store.state.que);
+      var a = store.state.to;
+      console.log("======a=====");
+      console.log(a);
+      if (a == "que") {
+        router.push({
+          path: "/question",
+          query: { id: state.feed[index].questionId },
+        });
+      } else {
+        const answerId = state.feed[index].answerId;
+        router.push({ path: "/answer", query: { id: answerId } });
+      }
+    };
+    const bindQueTap = () => {
+      store.commit("setToAsQue");
 
-    }
-    const bindQueTap = ()=>{
-
-      store.commit("setToAsQue")
-
-			console.log(store.state.to)
-    }
-    const bindItemTap= ()=> {
-				store.commit("setToAsItem")
-		}
-    const	open_01=()=> {
-      router.push({ path: '/majorWatch'})
-		}
-    const	open_02=()=> {
-      router.push({ path: '/recommend'})
-		}
-    const	open_03=()=> {
-      router.push({ path: '/course'})
-		}
+      console.log(store.state.to);
+    };
+    const bindItemTap = () => {
+      store.commit("setToAsItem");
+    };
+    const open_01 = () => {
+      router.push({ path: "/majorWatch" });
+    };
+    const open_02 = () => {
+      router.push({ path: "/recommend" });
+    };
+    const open_03 = () => {
+      router.push({ path: "/course" });
+    };
 
     return {
       ...toRefs(state),
@@ -262,20 +257,26 @@ export default {
 <style lang="less" scoped>
 @import "../common/style/mixin";
 @import "../common/style/vuetify";
+.my-swipe .van-swipe-item {
+  color: #fff;
+  font-size: 20px;
+  line-height: 150px;
+  text-align: center;
+  background-color: #39a9ed;
+}
 
-  
 #top {
-  border: 1px solid #524f50;
-  background: #9932cc;
-  border-radius: 30px;
-  margin-top: -22.5px;
-  height: 260px;
+  // border: 1px solid #2469e9;
+  // background: #a8e5f9;
+  border-radius: 2px;
+  // margin-top: -22.5px;
+  height: 300px;
 }
 
-.top {
-  display: block;
-  margin-top: 30px;
-}
+// .top {
+//   display: block;
+//   margin-top: 30px;
+// }
 
 .top_left {
   float: left;
@@ -355,7 +356,7 @@ export default {
 }
 
 .index_navigation {
-  margin: -42px auto 1.5px;
+  margin: 12px auto;
   width: 350px;
   display: flex;
   flex-wrap: wrap;
@@ -380,7 +381,7 @@ export default {
 }
 
 .navigation_son_1 {
-  background: rgb(155, 17, 247) !important;
+  background: #39a9ed !important;
 }
 
 .navigation_son_2 {
@@ -396,7 +397,7 @@ export default {
 }
 
 .navigation_son_word_2 {
-  color: #9932cc !important;
+  color: #39a9ed !important;
 }
 
 .navigation_son .fa {
@@ -431,6 +432,6 @@ export default {
   overflow-y: hidden;
 }
 .title {
-  color: white;
+  color: rgb(24, 12, 12);
 }
 </style>

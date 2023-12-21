@@ -1,51 +1,60 @@
+<!--
+ * 严肃声明：
+ * 开源版本请务必保留此注释头信息，若删除我方将保留所有法律责任追究！
+ * 本系统已申请软件著作权，受国家版权局知识产权以及国家计算机软件著作权保护！
+ * 可正常分享和学习源码，不得用于违法犯罪活动，违者必究！
+ * Copyright (c) 2020 陈尼克 all rights reserved.
+ * 版权所有，侵权必究！
+ *
+-->
+
 <template>
   <div class="cart-box">
     <s-header :name="'爱企聊'" :noback="true"></s-header>
-
     <div>
       <div v-if="current == 0" class="box2 mb-2">
-        <form action="/">
-          <van-search
-            v-model="value"
-            show-action
-            placeholder="请输入搜索关键词"
-            @search="onSearch"
-            @cancel="onCancel"
-          />
-        </form>
-        <text @click="queryLiveUser">展示所有的用户</text>
+        <!-- todo 做树形结构框 -->
+        <van-tree-select
 
-        <div
-          class="d-flex mb-1 notify-item"
-          @click="changeToUser(index)"
-          v-for="(user, index) in userlist"
-          :key="index"
+          v-model:main-active-index="activeIndex"
+          :items="items"
         >
-          <div class="">
-            <van-image
-              width="35px"
-              height="35px"
-              fit="cover"
-              :src="user.avatarUrl"
-            />
-          </div>
-          <div class="ml-2" style="width: 70vw;">
-            {{ user.email }}
+          <template #content>
             <div
-              style="display: flex;justify-content: space-between;"
-              class="d-felx justify-space-between"
+              class="d-flex mb-1 notify-item"
+              @click="changeToUser(index)"
+              v-for="(user, index) in userlist"
+              :key="index"
             >
               <div class="">
-                <text>消息内容</text>
+                <van-image
+                  width="35px"
+                  height="35px"
+                  fit="cover"
+                  :src="user.avatarUrl"
+                />
               </div>
-              <div v-if="user.noRead !== 0" class="red">
-                {{ user.noRead }}
+              <div class="ml-2" style="width: 70vw;">
+                {{ user.email }}
+                <div
+                  style="display: flex;justify-content: space-between;"
+                  class="d-felx justify-space-between"
+                >
+                  <div class="">
+                    <text>消息内容</text>
+                  </div>
+                  <div v-if="user.noRead !== 0" class="red">
+                    {{ user.noRead }}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </template>
+        </van-tree-select>
+        <text @click="queryLiveUser">公司组织架构</text>
+
         <!-- 如下是显示群聊的部分 -->
-        <text>展示所有的群聊</text>
+        <text>分组</text>
         <div
           class="d-flex mb-2 notify-item"
           @click="changeToGroup(index)"
@@ -71,6 +80,10 @@
         </div>
       </div>
     </div>
+  
+
+
+
 
     <!-- <div @click="sendData()">发送数据</div> -->
     <nav-bar></nav-bar>
@@ -80,18 +93,15 @@
 <script>
 import { reactive, onMounted, toRefs, ref } from "vue";
 import { useRouter } from "vue-router";
-import { Toast } from "vant";
+// import { Toast } from "vant";
 import navBar from "@/components/NavBar";
 import sHeader from "@/components/SimpleHeader";
 import {
   queryEyeUser,
   getChatContent,
   getAllGroup,
-  getGroupOpenid,
-  getGroupContent,
   getGroupMemberDetail,
 } from "@/service/chat";
-import { getUserInfoMe } from "@/service/user";
 import { useStore } from "vuex";
 import { getLocal } from "@/common/js/utils";
 export default {
@@ -100,10 +110,19 @@ export default {
     sHeader,
   },
   setup() {
-    const value = ref("");
-    const onSearch = (val) => Toast(val);
-    const onCancel = () => Toast("取消");
-
+    // const activeId = ref([1, 2]);
+    const activeIndex = ref(0);
+    const items = [
+      {
+        text: "财务",
+      },
+      {
+        text: "后勤",
+      },
+      {
+        text: "开发",
+      },
+    ];
     const store = useStore();
     const router = useRouter();
     const state = reactive({
@@ -137,28 +156,22 @@ export default {
     onMounted(() => {
       getToken();
       init();
+    
     });
-
+  
     const getToken = async () => {
       const token = getLocal("token");
       console.log("======token=====");
       console.log(token);
       if (token) {
-        // 
-        await getUserInfo ();  
         state.userInfo = store.state.userInfo;
+
         return;
       } else {
         router.push({ path: "/login" });
       }
     };
-    const getUserInfo = async () => {
-      const res = await getUserInfoMe();
-      // console.log("==========getUserInfo")
-      // console.log(res.content)
-      store.commit("setUserInfo", res.content);
-      // console.log(store.state.userInfo)
-    };
+
     const init = async () => {
       // Toast.loading({ message: "加载中...", forbidClick: true });
       const data = await queryEyeUser();
@@ -172,9 +185,11 @@ export default {
       // state.result = data.map((item) => item.cartItemId);
 
       //向后端发送注册的消息
-      // sendRegisterData();
       // Toast.clear();
     };
+
+  
+    
 
     const goBack = () => {
       router.go(-1);
@@ -187,41 +202,13 @@ export default {
     const changeToUser = async (index) => {
       state.email = state.userlist[index].email;
       state.toUser = state.userlist[index];
-      state.current = 1;
-      store.commit("setToUser", state.toUser);
+      // state.current = 1;
       const openid = state.toUser.openid;
       const data = await getChatContent(openid);
       state.recesiveAllMsg = data.content;
-      router.push({
-        path: "/chatdetail",
-        query: {
-          email: state.email,
-          current: state.current,
-          openid: openid,
-        },
-      });
+      goTo('/other')
     };
-    const changeToGroup = async (index) => {
-      state.toGroup = state.groups[index];
-      state.current = 2;
-      const res = await getGroupOpenid(state.toGroup.groupId);
-      //向后端注册群聊
-
-      let data = {
-        type: 3,
-        params: {
-          userIdList: res.content.join(","),
-          groupId: state.toGroup.groupId,
-        },
-      };
-      state.socketServe.send(data);
-      console.log("发送群聊注册消息");
-
-      //展现出所有的聊天内容
-      const group = await getGroupContent(state.toGroup.groupId);
-      state.recesiveAllMsg = [];
-      state.recesiveAllMsg = group.content;
-    };
+  
     const changeCur = () => {
       state.current = 0;
     };
@@ -234,48 +221,17 @@ export default {
       console.log(429, memberDeatil.content);
       state.memberBaseDetail = memberDeatil.content;
     };
-    const sendMsg2 = () => {
-      const { content, toUser } = state;
-      let data = {
-        // 1代表着私聊的意思
-        type: 1,
-        params: {
-          toMessageId: toUser.openid,
-          message: content,
-          fileType: 0,
-        },
-      };
-      if (state.current == 2) {
-        data = {
-          type: 9,
-          params: {
-            toMessageId: state.toGroup.groupId,
-            message: content,
-            fileType: 0,
-          },
-        };
-      }
-      console.log(data);
-      state.socketServe.send(data);
-      state.recesiveAllMsg.push({
-        type: "self",
-        content: content,
-      });
-      state.content = "";
-    };
-
+  
     return {
-      value,
-      onSearch,
-      onCancel,
+      items,
+      // activeId,
+      activeIndex,
       ...toRefs(state),
       goBack,
       goTo,
       changeToUser,
-      changeToGroup,
       changeCur,
       showAllMember,
-      sendMsg2,
       changeCurDiy,
     };
   },

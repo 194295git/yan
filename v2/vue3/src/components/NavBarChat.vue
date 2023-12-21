@@ -13,21 +13,18 @@
     <ul class="nav-list">
       <router-link  class="nav-list-item active" to="chat">
         <i class="nbicon nblvsefenkaicankaoxianban-1"></i>
-        <span>消息</span>
+        <span>拍摄</span>
       </router-link>
       <router-link  class="nav-list-item" to="info">
         <i class="nbicon nbfenlei"></i>
-        <span>通讯录</span>
+        <span>相册</span>
       </router-link>
       <router-link  class="nav-list-item" to="home">
          <i class="nbicon nbfenlei"></i>
         <!-- <van-icon  name="shopping-cart-o" :badge="!count ? '' : count" /> -->
-        <span>资讯</span>
+        <span>表情</span>
       </router-link>
-      <router-link  class="nav-list-item" to="me">
-        <i class="nbicon nblvsefenkaicankaoxianban-"></i>
-        <span>我的</span>
-      </router-link>
+     
     </ul>
   </div>
 </template>

@@ -84,13 +84,14 @@
 4. netty集群的话也是需要考虑这样类似的问题
 
 ### 与本项目相关技术的博文
-1.  loginUser [分布式权限 shiro + jwt + redis ](https://blog.csdn.net/qq_21561833/article/details/127605241)
-2. [sprinboot单体项目升级成springcloud项目](https://blog.csdn.net/qq_21561833/article/details/127348148) 
-3.  devops  [给为服务添加运维模块 统一管理（第四期](https://blog.csdn.net/qq_21561833/article/details/127821543)
-4.  database [微服务数据库模块（第五期](https://blog.csdn.net/qq_21561833/article/details/131315983)  
-5.  netty  [netty与mq在项目中的使用(第六期)]()   
-6.  common [common里面添加的常用依赖以及用途]()
-7. 项目质量提升计划(1.写文档 2.加注释3.取出不需要的import 4.去除不需要的maven )
+1. [sprinboot单体项目升级成springcloud项目【第一期】](https://blog.csdn.net/qq_21561833/article/details/127348148)
+2. [前端项目技术选型以及页面展示【第二期】](https://blog.csdn.net/qq_21561833/article/details/131676184)
+3.  loginUser [分布式权限 shiro + jwt + redis 【第三期】](https://blog.csdn.net/qq_21561833/article/details/127605241)
+4.  devops  [给为服务添加运维模块 统一管理【第四期】](https://blog.csdn.net/qq_21561833/article/details/127821543)
+5.  database [微服务数据库模块【第五期】](https://blog.csdn.net/qq_21561833/article/details/131315983)  
+6.  netty  [netty与mq在项目中的使用【第六期】](https://blog.csdn.net/qq_21561833/article/details/131317748)   
+7.  common [common里面添加的常用依赖以及用途]()
+8. 项目质量提升计划(1.写文档 2.加注释3.取出不需要的import 4.去除不需要的maven )
          
 
 如果有什么问题留言联系我。qq:1942951600

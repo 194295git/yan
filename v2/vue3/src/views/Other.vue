@@ -12,7 +12,13 @@
   <div class="user-box">
     <s-header :name="'我的'"></s-header>
     <van-skeleton title :avatar="true" :row="3" :loading="loading">
-      <div class="user-info">
+       <van-contact-card
+        type="edit"
+        name="张三"
+        tel="13000000000"
+        :editable="false"
+      />
+      <!-- <div class="user-info">
         <div class="info">
           <van-image
             width="45px"
@@ -23,46 +29,12 @@
           <div class="user-desc">
             <span>昵称：{{ user.username }}</span>
             <span>登录名：{{ user.email }}</span>
-            <!-- <span class="name">个性签名：{{ user.introduceSign }}</span> -->
           </div>
         </div>
-      </div>
+      </div> -->
     </van-skeleton>
     <ul class="user-list">
-      <!-- <li class="van-hairline--bottom" @click="goTo('/course')">
-        <span>我的课程</span>
-        <van-icon name="arrow" />
-      </li>
-      <li class="van-hairline--bottom" @click="goTo('/circle')">
-        <span>我的提问</span>
-        <van-icon name="arrow" />
-      </li> -->
-      <!-- <li
-        class="van-hairline--bottom"
-        @click="goTo('/chat')"
-      >
-        <span>我的关注</span>
-        <van-icon name="arrow" />
-      </li> -->
-      <!-- <li
-        class="van-hairline--bottom"
-        @click="goTo('/address')"
-      >
-        <span>我的购物车</span>
-        <van-icon name="arrow" />
-      </li> -->
-      <li @click="goTo('/about')">
-        <span>地址管理</span>
-        <van-icon name="arrow" />
-      </li>
-       <li @click="goTo('/about')">
-        <span>修改个人信息</span>
-        <van-icon name="arrow" />
-      </li>
-      <li @click="logout()">
-        <span>退出登录</span>
-        <van-icon name="arrow" />
-      </li>
+     
     </ul>
     <nav-bar></nav-bar>
   </div>
@@ -72,9 +44,9 @@
 import { reactive, onMounted, toRefs } from "vue";
 import navBar from "@/components/NavBar";
 import sHeader from "@/components/SimpleHeader";
-import { getUserInfo,getUserInfoMe } from "@/service/user";
+import { getUserInfo, getUserInfoMe } from "@/service/user";
 import { useRouter } from "vue-router";
-import { setLocal } from '@/common/js/utils'
+import { setLocal } from "@/common/js/utils";
 export default {
   components: {
     navBar,
@@ -90,7 +62,7 @@ export default {
     onMounted(async () => {
       const data = await getUserInfo();
       const data2 = await getUserInfoMe();
-      console.log(data2)
+      console.log(data2);
       state.user = data.content;
       state.loading = false;
     });
@@ -102,10 +74,10 @@ export default {
     const goTo = (r, query) => {
       router.push({ path: r, query: query || {} });
     };
-    const logout = ()=>{
-      setLocal('token', '')
-      router.push({ path: './login'});
-    }
+    const logout = () => {
+      setLocal("token", "");
+      router.push({ path: "./login" });
+    };
 
     return {
       ...toRefs(state),

@@ -39,6 +39,8 @@ public class RocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTo
 
     /**
      * 消费rocketmq的消息，通过channel管道来完成消息的推送
+     * 使用返回值 ConsumeStatus的情况下可以确定是不是    ConsumeStatus.CONSUME_SUCCESS;
+     * ConsumeStatus作为consumeMsg方法的返回值类型可以提供更好的信息反馈和异常处理，同时可读性也更好。
      * @param content
      * @param msg
      * @return

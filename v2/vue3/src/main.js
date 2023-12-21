@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { ActionBar, ActionBarIcon, ActionBarButton, Divider, Popup, Overlay, Loading, Dialog, ContactCard, Form, AddressEdit, AddressList, Field, CellGroup, Cell, SwipeCell, Icon, Stepper, Card, Checkbox, CheckboxGroup, Button, Swipe, SwipeItem, PullRefresh, List, Tab, Tabs, SubmitBar, Toast, Skeleton,Image as VanImage,RadioGroup, Radio } from 'vant'
+import { TreeSelect , Search ,Grid, GridItem,ActionBar, ActionBarIcon, ActionBarButton, Divider, Popup, Overlay, Loading, Dialog, ContactCard, Form, AddressEdit, AddressList, Field, CellGroup, Cell, SwipeCell, Icon, Stepper, Card, Checkbox, CheckboxGroup, Button, Swipe, SwipeItem, PullRefresh, List, Tab, Tabs, SubmitBar, Toast, Skeleton,Image as VanImage,RadioGroup, Radio } from 'vant'
 import App from './App.vue'
 import store from './store'
 import router from './router'
@@ -14,7 +14,7 @@ app.config.globalProperties.$filters = {
     if (url && url.startsWith('http')) {
       return url
     } else {
-      url = `http://backend-api-01.newbee.ltd${url}`
+      url = `http://192.168.53.110:88`
       return url
     }
   }
@@ -53,6 +53,11 @@ app.use(ActionBarButton)
   .use(Skeleton)
   .use(VanImage)
   .use(Radio)
+  .use(Grid)
+  .use(GridItem)
+  .use(Search)
+  .use(TreeSelect)
+   
   .use(RadioGroup);
 
 app.use(router)

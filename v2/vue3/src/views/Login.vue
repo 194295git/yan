@@ -75,10 +75,8 @@ import { reactive, toRefs } from 'vue'
 import { login, register } from '@/service/user'
 import { setLocal } from '@/common/js/utils'
 import { Toast } from 'vant'
-
 export default {
   setup() {
-    
     const state = reactive({
       username: '',
       password: '',
@@ -105,7 +103,7 @@ export default {
         })
         console.log("token",data)
         setLocal('token', data.content)
-        
+        // getUserInfo();
         // 需要刷新页面，否则 axios.js 文件里的 token 不会被重置
         window.location.href = '/'
         

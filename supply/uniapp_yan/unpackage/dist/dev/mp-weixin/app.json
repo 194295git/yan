@@ -27,7 +27,7 @@
     "borderStyle": "white",
     "list": [
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/info/info",
         "text": "首页",
         "iconPath": "/static/images/tab/first.png",
         "selectedIconPath": "/static/images/tab/first.png"
