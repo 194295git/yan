@@ -3,6 +3,9 @@ package com.netty.informationServe.config;
 
 import com.netty.common.constants.Constants;
 
+/**
+ * RocketMQ配置
+ */
 public class RocketMQConfig {
 
     /**

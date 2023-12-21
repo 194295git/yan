@@ -35,12 +35,14 @@ import java.util.List;
 @Service
 @ChannelHandler.Sharable
 public class GroupMessageHandler extends SimpleChannelInboundHandler<GroupMessagePacket> {
+
+
     @Autowired
     MQUtils mqUtils;
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, GroupMessagePacket groupMessagePacket) throws Exception {
-        log.info("走入GroupMessageHandler");
+        log.info("走入GroupMessageHandler参数"+groupMessagePacket.toString());
         Integer groupId = groupMessagePacket.getToGroupId();
         String fileType = groupMessagePacket.getFileType();
         ChannelGroup channelGroup = SessionUtils.getChannelGroup(groupId);
@@ -48,7 +50,6 @@ public class GroupMessageHandler extends SimpleChannelInboundHandler<GroupMessag
         List<String> nameList = new ArrayList<>();
         for (Channel channel : channelGroup) {
             User user = SessionUtils.getUser(channel);
-            // 用户名是否可以不回传？？
             nameList.add(user.getOpenid());
         }
 

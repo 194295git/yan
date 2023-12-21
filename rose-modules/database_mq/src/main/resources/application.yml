@@ -63,7 +63,7 @@ mybatis-plus:
   mapperLocations: classpath:mapper/**/*.xml
 
 rocketmq:
-  name-server: 192168.56.20:9876
+  name-server: 192.168.56.20:9876
   producer:
     group: testProducerGroup
 pagehelper:

@@ -13,4 +13,5 @@ export default {
 	que: '',
   userInfo: {},
   toUser:{},
+  registerGroup:{},
 }

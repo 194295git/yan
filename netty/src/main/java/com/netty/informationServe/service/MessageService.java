@@ -2,7 +2,6 @@ package com.netty.informationServe.service;
 
 import com.netty.common.entity.SendRequest;
 import com.netty.informationServe.service.messagedispatch.MessageDispatchService;
-import com.netty.informationServe.utils.RedisUtils;
 import com.netty.informationServe.utils.ServiceException;
 import com.rose.common.constant.RedisPrefix;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +15,7 @@ import java.util.*;
 
 /**
  * 推送消息处理类
+ * @author rose
  */
 @Slf4j
 @Service
@@ -43,7 +43,7 @@ public class MessageService {
         //发送给所有在线的人.
         if (request.getSendToAll()) {
             //根据服务下的设备标识推送
-            //2.消息分发给具体的websocket实例处理
+            //2.消息分发给所有的websocket实例处理
             //serverKey => serverclients_10.9.217.160:9003
             for(String serverKey : set){
                 //因为更改过serverclient格式，所以需要重新的改一下取的公式
@@ -54,19 +54,19 @@ public class MessageService {
             //根据参数中的客户端标识,找出所在的服务器，先对应的服务器发起推送
             List<String> requestClients = request.getTo();
             //批量查询
-            List<Object> pipeResult = redisTemplate.executePipelined(RedisUtils.getClientHostByClientFromRedis(requestClients));
+//            List<Object> pipeResult = redisTemplate.executePipelined(RedisUtils.getClientHostByClientFromRedis(requestClients));
             for (int i=0;i<requestClients.size();i++) {
                 //遍历list 依次存入推送消息
                 //根据channelId找到对应的客户端对象所对应websocket服务的实例名
                 String channelId = requestClients.get(i);
                 //废弃单个查询的方式
-                //String host = redisTemplate.opsForHash().get(RedisPrefix.PREFIX_CLIENT + channelId,"host")+"";
-                Object hostObj = pipeResult.get(i);
-                if (hostObj==null) {
-                    notExist.add(channelId);
-                    continue;
-                }
-                String host = hostObj.toString();
+                String host = redisTemplate.opsForHash().get(RedisPrefix.PREFIX_CLIENT + channelId,"host")+"";
+//                Object hostObj = pipeResult.get(i);
+//                if (hostObj==null) {
+//                    notExist.add(channelId);
+//                    continue;
+//                }
+//                String host = hostObj.toString();
                 if(hostClientsMap.containsKey(host)){
                     hostClientsMap.get(host).add(channelId);
                 }else{
@@ -75,9 +75,10 @@ public class MessageService {
                     hostClientsMap.put(host,clients);
                 }
             }
-            log.info("不存在的客户端[{}]", notExist);
+            log.info("netty 分发mq消息 不存在的客户端[{}]", notExist);
             for(Map.Entry<String,List<String>> entry: hostClientsMap.entrySet()){
                 request.setTo(entry.getValue());
+                //entry.getkey()是mq将要推送过去的主题.
                 messageDispatchService.send(entry.getKey(),request);
             }
         }

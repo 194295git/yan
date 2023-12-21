@@ -30,5 +30,10 @@ export default {
     state.toUser = res || null;
 
   },
+  setRegisterGroup(state, res) {
+    state.registerGroup = res || null;
+
+  },
+  
 }
 

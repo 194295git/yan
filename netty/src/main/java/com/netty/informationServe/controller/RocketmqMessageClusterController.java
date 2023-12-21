@@ -31,9 +31,10 @@ public class RocketmqMessageClusterController {
 
         if(notExist!= null && notExist.size()>0){
             //存在找不到的客户端
-            result =GenericResponse.response(ServiceError.NOT_EXIST_CLIENT);
+            result =GenericResponse.response(ServiceError.NOT_EXIST_CLIENT,notExist);
 //                    new GenericResponse(,notExist);
         }else{
+            //客户端都存在
             result = GenericResponse.response(ServiceError.NORMAL);
         }
         return result;

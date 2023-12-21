@@ -68,14 +68,16 @@ public class ChannelService {
                 public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
                     redisConnection.openPipeline();
                     //缓存客户端信息
-//                    redisTemplate.opsForHash().putAll(RedisPrefix.PREFIX_CLIENT+channelId, ObjUtils.ObjToMap(new Client(channelId,instanceid)));
+
                     redisConnection.hMSet((RedisPrefix.PREFIX_CLIENT+channelId).getBytes(), ObjUtils.ObjToByteMap(new Client(channelId,instanceid)));
+                    redisTemplate.opsForHash().putAll(RedisPrefix.PREFIX_CLIENT+channelId, ObjUtils.ObjToMap(new Client(channelId,instanceid)));
                     //设置过期时间
 //                    redisTemplate.expire(RedisPrefix.PREFIX_CLIENT+channelId,config.getExpireTime(),TimeUnit.SECONDS);
                     redisConnection.expire((RedisPrefix.PREFIX_CLIENT+channelId).getBytes(), TimeUnit.SECONDS.toSeconds(RedisPrefix.intervalClientActiveTime));
                     //缓存服务端与客户端关联信息
-//                    redisTemplate.opsForSet().add(RedisPrefix.PREFIX_SERVERCLIENTS+instanceid,channelId);
+
                     redisConnection.sAdd((RedisPrefix.PREFIX_SERVERCLIENTS+instanceid).getBytes(),channelId.getBytes());
+                    redisTemplate.opsForSet().add(RedisPrefix.PREFIX_SERVERCLIENTS+instanceid,channelId);
                     return null;
                 }
             });

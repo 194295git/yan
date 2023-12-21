@@ -2,7 +2,10 @@ package com.netty.informationServe.serve.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.netty.common.constants.AttrConstants;
+import com.netty.common.constants.Constants;
 import com.netty.common.domain.User;
+import com.netty.common.entity.SendRequest;
 import com.netty.informationServe.config.NettyConfig;
 import com.netty.informationServe.protocol.Packet;
 import com.netty.informationServe.protocol.commond;
@@ -12,12 +15,16 @@ import com.netty.informationServe.protocol.packet.RegisterPacket;
 import com.netty.informationServe.protocol.packet.SingleMessagePacket;
 import com.netty.informationServe.service.ChannelService;
 import com.netty.informationServe.utils.SessionUtils;
+import com.rose.common.base.WebsocketMessage;
+import com.rose.common.utils.UUIDUtils;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,6 +190,20 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         byteBuf.writeBytes(bytes);
         return byteBuf;
     }
-
+    //构造推送消息体
+    private WebsocketMessage getMessage(String channelId, SendRequest request, MessageExt msg) {
+        Channel channel =SessionUtils.getChannel(channelId);
+        WebsocketMessage websocketMsg = new WebsocketMessage(
+                request.getRequestId(),
+                channel.attr(AttrConstants.sessionId).get(),
+                UUIDUtils.getUUID(),
+                WebsocketMessage.MsgType.BUSSINESS.code,
+                new String[]{channelId},
+                request.getMsg(),
+                request.getFrom(),
+                Integer.parseInt(msg.getUserProperty(Constants.Trigger))
+        );
+        return websocketMsg;
+    }
 
 }

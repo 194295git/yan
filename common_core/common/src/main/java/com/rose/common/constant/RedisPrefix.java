@@ -16,8 +16,8 @@ public interface RedisPrefix {
     //websocket服务所连接的客户端id集合前缀-list
     public static String PREFIX_SERVERCLIENTS = "yan_serverclients_";
 
-    //600s是10分钟?
-    public static Integer intervalClientActiveTime = 600;
+    //6000ms是10分钟
+    public static Integer intervalClientActiveTime = 6000;
 
     /**
      * 400s

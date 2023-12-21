@@ -88,7 +88,6 @@ import {
   getChatContent,
   getAllGroup,
   getGroupOpenid,
-  getGroupContent,
   getGroupMemberDetail,
 } from "@/service/chat";
 import { getUserInfoMe } from "@/service/user";
@@ -206,7 +205,7 @@ export default {
       state.current = 2;
       const res = await getGroupOpenid(state.toGroup.groupId);
       //向后端注册群聊
-
+      
       let data = {
         type: 3,
         params: {
@@ -214,13 +213,15 @@ export default {
           groupId: state.toGroup.groupId,
         },
       };
-      state.socketServe.send(data);
-      console.log("发送群聊注册消息");
-
-      //展现出所有的聊天内容
-      const group = await getGroupContent(state.toGroup.groupId);
-      state.recesiveAllMsg = [];
-      state.recesiveAllMsg = group.content;
+      store.commit("setRegisterGroup", data);
+       router.push({
+        path: "/chatdetail",
+        query: {
+          current: state.current,
+          groupId: state.toGroup.groupId,
+        },
+      });
+     
     };
     const changeCur = () => {
       state.current = 0;

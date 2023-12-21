@@ -1,10 +1,7 @@
-
-
 <template>
   <div class="cart-box">
     <s-header :name="'爱企聊'" :noback="true"></s-header>
 
- 
     <div>
       <div v-if="current == 1" class="box2 mt-2">
         <div class="box2">
@@ -191,7 +188,7 @@
 <script>
 import listScroll from "@/components/ListScroll";
 import { reactive, onMounted, toRefs, ref } from "vue";
-import { useRouter ,useRoute} from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { Toast } from "vant";
 import navBarChat from "@/components/NavBarChat";
 import sHeader from "@/components/SimpleHeader";
@@ -199,7 +196,6 @@ import {
   queryEyeUser,
   getChatContent,
   getAllGroup,
-  getGroupOpenid,
   getGroupContent,
   getAvatarUrlByOpenid,
   getGroupMemberDetail,
@@ -232,7 +228,7 @@ export default {
       all: false,
       result: [],
       checkAll: true,
-      current:route.query.current,
+      current: route.query.current,
       //复制来的
       keyword: "搜索好友",
       email: route.query.email,
@@ -247,7 +243,8 @@ export default {
       timeout: 40000, // 30s
       timeoutObj: null,
       groups: [],
-      openid:  route.query.openid
+      openid: route.query.openid,
+      groupId:route.query.groupId,
     });
 
     onMounted(() => {
@@ -256,9 +253,9 @@ export default {
       //收到消息后更新前端数据
       state.socketServe.ws.onmessage = (msg) => {
         console.log(msg.data, "chat__从服务端获取到了数据");
-        const res = JSON.parse(msg.data);
-        console.log("res的状态");
-        console.log(res.type);
+        const res = JSON.parse(msg.data).msg == undefined
+        ? JSON.parse(msg.data) : JSON.parse(msg.data).msg;
+        console.log(res);
         if (res.type === 0) {
           return;
         }
@@ -307,17 +304,30 @@ export default {
       const data = await queryEyeUser();
 
       state.userlist = data.content;
-      
-      state.toUser = store.state.toUser
-      console.log("state.toUser",state.toUser);
+
+      state.toUser = store.state.toUser;
+      console.log("state.toUser", state.toUser);
       const res = await getAllGroup();
       state.groups = res.content;
-      console.log(res);
-
-      const msgdata = await getChatContent(state.openid);
-      state.recesiveAllMsg = msgdata.content;
-      //向后端发送注册的消息
+      //先注册自己到channel 里面
       sendRegisterData();
+      if (state.current == 1) {
+        //单聊情况
+         //向后端发送注册的消息
+        const msgdata = await getChatContent(state.openid);
+        state.recesiveAllMsg = msgdata.content;
+      }
+      if (state.current == 2) {
+        state.socketServe.send(store.state.registerGroup);
+        console.log("发送群聊注册消息");
+
+        //展现出所有的聊天内容
+        const group = await getGroupContent(state.groupId);
+        state.recesiveAllMsg = [];
+        state.recesiveAllMsg = group.content;
+      }
+    
+     
       // Toast.clear();
     };
 
@@ -349,37 +359,10 @@ export default {
       router.push({ path: "/home" });
     };
 
-    const changeToUser = async (index) => {
-      state.email = state.userlist[index].email;
-      state.toUser = state.userlist[index];
-      state.current = 1;
-      const openid = state.toUser.openid;
-      const data = await getChatContent(openid);
-      state.recesiveAllMsg = data.content;
-    };
-    const changeToGroup = async (index) => {
-      state.toGroup = state.groups[index];
-      state.current = 2;
-      const res = await getGroupOpenid(state.toGroup.groupId);
-      //向后端注册群聊
-
-      let data = {
-        type: 3,
-        params: {
-          userIdList: res.content.join(","),
-          groupId: state.toGroup.groupId,
-        },
-      };
-      state.socketServe.send(data);
-      console.log("发送群聊注册消息");
-
-      //展现出所有的聊天内容
-      const group = await getGroupContent(state.toGroup.groupId);
-      state.recesiveAllMsg = [];
-      state.recesiveAllMsg = group.content;
-    };
+   
+    
     const changeCur = () => {
-      router.go(-1);    
+      router.go(-1);
     };
     const changeCurDiy = (param) => {
       state.current = param;
@@ -405,7 +388,7 @@ export default {
         data = {
           type: 9,
           params: {
-            toMessageId: state.toGroup.groupId,
+            toMessageId: state.groupId,
             message: content,
             fileType: 0,
           },
@@ -428,8 +411,6 @@ export default {
       goBack,
       goTo,
       sendRegisterData,
-      changeToUser,
-      changeToGroup,
       changeCur,
       showAllMember,
       sendMsg2,

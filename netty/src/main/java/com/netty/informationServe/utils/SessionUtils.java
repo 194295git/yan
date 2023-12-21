@@ -54,8 +54,12 @@ public class SessionUtils {
 	public static User getUser(Channel channel) {
 		return channel.attr(Attributes.SESSION).get();
 	}
-	
 
+	/**
+	 * 通过openid来进行channel的发送
+	 * @param openid
+	 * @return
+	 */
 	public static Channel getChannel(String openid) {
 		return userOpenidChannelMap.get(openid);
 	}
@@ -66,7 +70,7 @@ public class SessionUtils {
 	 */
 	public static void bindChannelGroup(Integer groupId, ChannelGroup channelGroup) {
 		groupIdChannelGroupMap.put(groupId, channelGroup);
-		System.out.println(channelGroup);
+		log.info("当前channelGroup"+channelGroup.toString());
 	}
 
 	public static ChannelGroup getChannelGroup(Integer groupId) {

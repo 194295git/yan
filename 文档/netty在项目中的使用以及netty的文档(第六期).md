@@ -177,3 +177,71 @@ let url = 'ws://127.0.1:8888/websocket';
 五、给ws添加权限，
 TODO  还没有做
 
+六、结合mq改造成分布式的
+mq收到消息推送到具体的netty服务器那里
+每一个netty的服务器都有接受mq的消息的
+
+先改造一下自己的消息推送模型，改推送消息为mq直接推送，
+ toUserChannel.writeAndFlush(new TextWebSocketFrame(buf));
+ 将这个地方推送给改一下，改成mq收到消息后推送，就得有人发消息；
+ 
+ 
+ 消息推送的话是分http 和websocket的；websocket是聊天形式
+ 
+ RocketmqMessageClusterController这个类已经实现了htttp形式的分发了，后续再拆分的mq模块中
+ 
+ ##测试地址
+ 
+ 将这个地址独立迁移出去后，然后就可以实现分布式消息推送了
+ 通过redis维护推送的地址，然后mq推送到具体的netty服务器，然后消费消息，完成推送
+ 
+ 
+ http://127.0.0.1:88/api/chatServe/rocketmq/mqmessage/message/send
+ ```json
+ {
+ 	"to": ["1607080309668","1607071389121"],
+ 	"msg": {
+ 		"key1": "测试是否推送",
+ 		"key2": "推送2"
+ 	},
+ 	"sendToAll": true
+ }
+ 
+```
+```json
+{
+     "success": true,
+     "statusCode": 200,
+     "content": null,
+     "msg": "操作成功"
+ }
+```
+
+ 
+ 
+ ### http
+ {
+ 	"to": ["1607080309668","1607071389121"],
+ 	"msg": {
+ 		"key1": "value",
+ 		"key2": "value2"
+ 	},
+ 	"sendToAll": false
+ }
+### websocket
+{"activeTime":1607080644685,"from":"system","messageId":"725cf41a5798474fb31a1258bed2d5d8","msg":{"key1":"value","key2":"value2"},"requestId":"f231012a-b2ed-40b1-841a-45538dc48ee1","sessionId":"172.31.236.11:9000_1607080309668_20201204191140","to":"1607080309668","trigger":1,"msgType":1}  
+## 客户端收到的websocket消息详解
+| 值 |  意义  |
+| -- | ---- |
+| activeTime | 发生时间 |
+| from | 消息来源 |
+| messageId | 唯一消息id，用于回执重发保证送达率（暂未实现） |
+| requestId | 请求id，以http形式触发的时候会存在，用于写es统计 |     
+| sessionId | 会话id，在一次连接中保持一致，用于写es统计 |
+| msg | 具体推送的消息内容 |
+| to | 推送的目的地（客户端标识） |
+| trigger | 消息触发方式（http或者websocket） |
+| msgType | //错误代码ERROR(-1,"error"),//连接类型消息CONNECTION(0,"connection"),//发送的业务类型消息BUSSINESS(1,"bussiness"),//发送的业务类型消息的回执BUSSINESS_ACK(2,"bussiness_ack"),//心跳类型HEARTBEAT(3,"heartbeat"),//心跳类型回执HEARTBEAT_ACK(4,"heartbeat_ack");|
+
+这种通过channelGroup的方式来完成群聊的方式肯定是不行的，因为有可能分不再不同的服务其上面，
+还是按照mq那种to那种形式一下分发一下。
