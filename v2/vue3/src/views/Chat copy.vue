@@ -1,7 +1,7 @@
 
 <template>
   <div class="cart-box">
-    <s-header :name="'爱企聊'" :noback="true"></s-header>
+    <s-header :name="'企聊聊'" :noback="true"></s-header>
 
     <div>
       <div v-if="current == 0" class="box2 mb-2">
@@ -356,8 +356,7 @@ export default {
     };
     const getToken = async () => {
       const token = getLocal("token");
-      console.log("======token=====");
-      console.log(token);
+      console.log(token==undefined ?"token为空":"token不为空");
       if (token) {
         state.userInfo = store.state.userInfo;
 

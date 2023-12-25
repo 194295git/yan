@@ -2,10 +2,10 @@ package com.rose.yaj.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 
@@ -15,7 +15,7 @@ import lombok.Data;
  * @date 2022-06-21 12:52:33
  */
 @Data
-@TableName("yan_user_address")
+@TableName("yan_im_user_address")
 public class YanUserAddressEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

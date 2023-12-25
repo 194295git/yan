@@ -5,7 +5,7 @@
       <div id="top">
         <div class="top">
           <div class="d-flex align-center">
-            <div class="title font-18" style="margin:0 auto ">爱企聊</div>
+            <div class="title font-18" style="margin:0 auto ">企聊聊</div>
             <div v-show="showLogin">
               <router-link class="title" to="./login"
                 >登录</router-link

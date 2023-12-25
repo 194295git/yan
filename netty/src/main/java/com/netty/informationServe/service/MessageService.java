@@ -75,7 +75,7 @@ public class MessageService {
                     hostClientsMap.put(host,clients);
                 }
             }
-            log.info("netty 分发mq消息 不存在的客户端[{}]", notExist);
+            log.info("netty 分发mq消息 不存在的客户端是[{}]", notExist);
             for(Map.Entry<String,List<String>> entry: hostClientsMap.entrySet()){
                 request.setTo(entry.getValue());
                 //entry.getkey()是mq将要推送过去的主题.

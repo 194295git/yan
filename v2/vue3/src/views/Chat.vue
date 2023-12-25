@@ -1,6 +1,6 @@
 <template>
   <div class="cart-box">
-    <s-header :name="'爱企聊'" :noback="true"></s-header>
+    <s-header :name="'企聊聊'" :noback="true"></s-header>
 
     <div>
       <div v-if="current == 0" class="box2 mb-2">
@@ -85,10 +85,8 @@ import navBar from "@/components/NavBar";
 import sHeader from "@/components/SimpleHeader";
 import {
   queryEyeUser,
-  getChatContent,
   getAllGroup,
   getGroupOpenid,
-  getGroupMemberDetail,
 } from "@/service/chat";
 import { getUserInfoMe } from "@/service/user";
 import { useStore } from "vuex";
@@ -106,10 +104,8 @@ export default {
     const store = useStore();
     const router = useRouter();
     const state = reactive({
-      memberBaseDetail: [],
       userlist: [],
       // socketServe: SocketService.Instance,
-      recesiveAllMsg: [],
       userInfo: {},
       checked: false,
       list: [],
@@ -140,8 +136,7 @@ export default {
 
     const getToken = async () => {
       const token = getLocal("token");
-      console.log("======token=====");
-      console.log(token);
+      console.log(token==undefined ?"token为空":"token不为空");
       if (token) {
         // 
         await getUserInfo ();  
@@ -189,8 +184,6 @@ export default {
       state.current = 1;
       store.commit("setToUser", state.toUser);
       const openid = state.toUser.openid;
-      const data = await getChatContent(openid);
-      state.recesiveAllMsg = data.content;
       router.push({
         path: "/chatdetail",
         query: {
@@ -229,41 +222,8 @@ export default {
     const changeCurDiy = (param) => {
       state.current = param;
     };
-    const showAllMember = async () => {
-      state.current = 3;
-      const memberDeatil = await getGroupMemberDetail(state.toGroup.groupId);
-      console.log(429, memberDeatil.content);
-      state.memberBaseDetail = memberDeatil.content;
-    };
-    const sendMsg2 = () => {
-      const { content, toUser } = state;
-      let data = {
-        // 1代表着私聊的意思
-        type: 1,
-        params: {
-          toMessageId: toUser.openid,
-          message: content,
-          fileType: 0,
-        },
-      };
-      if (state.current == 2) {
-        data = {
-          type: 9,
-          params: {
-            toMessageId: state.toGroup.groupId,
-            message: content,
-            fileType: 0,
-          },
-        };
-      }
-      console.log(data);
-      state.socketServe.send(data);
-      state.recesiveAllMsg.push({
-        type: "self",
-        content: content,
-      });
-      state.content = "";
-    };
+    
+    
 
     return {
       value,
@@ -275,8 +235,6 @@ export default {
       changeToUser,
       changeToGroup,
       changeCur,
-      showAllMember,
-      sendMsg2,
       changeCurDiy,
     };
   },

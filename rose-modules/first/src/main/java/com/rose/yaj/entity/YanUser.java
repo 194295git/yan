@@ -1,13 +1,12 @@
 package com.rose.yaj.entity;
 
-import java.time.LocalDateTime;
-import java.io.Serializable;
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -20,7 +19,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("yan_user")
+@TableName("yan_im_user")
 public class YanUser implements Serializable {
 
     private static final long serialVersionUID = 1L;

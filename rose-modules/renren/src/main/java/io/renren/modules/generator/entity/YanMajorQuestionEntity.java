@@ -15,7 +15,7 @@ import lombok.Data;
  * @date 2021-08-26 22:28:50
  */
 @Data
-@TableName("yan_major_question")
+@TableName("yan_info_major_question")
 public class YanMajorQuestionEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -42,8 +42,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, SingleMessagePacket singleMessagePacket) throws Exception {
-// TODO Auto-generated method stu
-//        onLine标志字符为下面使用那个消息队列标志
+
         Boolean onLine;
         String message = "";
         Channel toUserChannel = SessionUtils.getChannel(singleMessagePacket.getToUserId());
