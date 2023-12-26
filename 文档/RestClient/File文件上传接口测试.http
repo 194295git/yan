@@ -1,0 +1,57 @@
+### LoginUser 登录接口 request
+POST http://127.0.0.1:88/api/loginUser/sys/login
+User-Agent: okhttp/3.12.1   
+Content-Type: application/json
+
+{"password": "admin", "username": "rose"}
+###
+
+###File-读取excel内容
+POST /user/readExcel HTTP/1.1
+Host: localhost:8999
+Cookie: JSESSIONID=2EE22EEEF1E868CA5CA3C115FC6D5D23
+Content-Length: 228
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="/C:/Users/renyun/Desktop/easyexcel (3).xls"
+Content-Type: application/vnd.ms-excel
+
+(data)
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+
+###
+
+### File-文件服务上传文件(不限于EXCEL，TXT等)
+POST /api/file/FileUpload HTTP/1.1
+Host: localhost:88
+token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJzZXNzaW9uX2tleVwiOlwicVZYVmtkMTIzNDU2YjhZZXpRPT1cIn0iLCJvcGVuaWQiOiIxODc5ODc4LU5LQ05PLU5LTksiLCJpc3MiOiJyb3NlIiwiZXhwIjoxNzAzNjgzMzk0LCJ1c2VyaWQiOjEsImlhdCI6MTcwMzU5Njk5NCwianRpIjoiMTIzNDU2In0.pW0EY-WD7IKsm0rlGRJpIlaJJr_aRDqdb5VY1lGpzKc
+Cookie: JSESSIONID=2EE22EEEF1E868CA5CA3C115FC6D5D2
+Content-Length: 475
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="files"; filename="/C:/Users/renyun/Desktop/AA.txt"
+Content-Type: text/plain
+
+(data)
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+5
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="timeStamp"
+
+true
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="path"
+
+aaa
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+###
+
+

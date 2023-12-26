@@ -1,0 +1,29 @@
+### LoginUser 登录接口 request
+POST http://127.0.0.1:88/api/loginUser/sys/login
+User-Agent: okhttp/3.12.1   
+Content-Type: application/json
+
+{"password": "admin", "username": "rose"}
+###
+
+###注册接口
+
+POST /api/loginUser/sys/registByWeb HTTP/1.1
+Host: 127.0.0.1:88
+Content-Type: application/json
+Content-Length: 51
+
+{"password": "123", "username": "testFeign@qq.com"}
+###
+
+
+### 测试权限临时接口 needPermission(login)
+GET /api/file/test/needAuthentication HTTP/1.1
+Host: 127.0.0.1:88
+token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJzZXNzaW9uX2tleVwiOlwicVZYVmtkMTIzNDU2YjhZZXpRPT1cIn0iLCJvcGVuaWQiOiIxODc5ODc4LU5LQ05PLU5LTksiLCJpc3MiOiJyb3NlIiwiZXhwIjoxNjY2NTExNDM0LCJ1c2VyaWQiOjEsImlhdCI6MTY2NjUwNTQzNCwianRpIjoiMTIzNDU2In0.DXZM9TTqu91kSjQTPDFycRvsg_rJRaVV04_XvhFpLEg
+
+###测试权限临时接口 needAuthentication(login)
+
+GET /api/loginUser/test/needAuthentication HTTP/1.1
+Host: 127.0.0.1:88
+token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJzZXNzaW9uX2tleVwiOlwicVZYVmtkMTIzNDU2YjhZZXpRPT1cIn0iLCJvcGVuaWQiOiIxODc5ODc4LU5LQ05PLU5LTksiLCJpc3MiOiJyb3NlIiwiZXhwIjoxNjY2NTExNDM0LCJ1c2VyaWQiOjEsImlhdCI6MTY2NjUwNTQzNCwianRpIjoiMTIzNDU2In0.DXZM9TTqu91kSjQTPDFycRvsg_rJRaVV04_XvhFpLEg

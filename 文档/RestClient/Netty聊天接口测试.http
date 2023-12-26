@@ -1,0 +1,35 @@
+### LoginUser 登录接口 request
+POST http://127.0.0.1:88/api/loginUser/sys/login
+User-Agent: okhttp/3.12.1   
+Content-Type: application/json
+
+{"password": "admin", "username": "rose"}
+###
+
+###添加所有群组
+POST /yaj/yan-group/addGroupMember HTTP/1.1
+Host: localhost:8999
+Content-Type: application/json
+Cookie: JSESSIONID=2EE22EEEF1E868CA5CA3C115FC6D5D23
+Content-Length: 66
+
+{
+  "groupId": 1,
+  "memberIds":[
+      "1",
+      "2"
+  ]
+}
+###
+
+###获得所有群组
+GET /yaj/yan-product/goods/detail/1 HTTP/1.1
+Host: localhost:8999
+Cookie: JSESSIONID=2EE22EEEF1E868CA5CA3C115FC6D5D23
+###
+
+###获取指定id群聊下的所有用户openid
+GET /api/first/yaj/yan-group/getGroupOpenid?id=1 HTTP/1.1
+Host: localhost:88
+Cookie: JSESSIONID=2EE22EEEF1E868CA5CA3C115FC6D5D23
+###
