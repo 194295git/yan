@@ -49,12 +49,9 @@
 1. 一个后台管理系统 一个前台应用
 2. 问题，回答，评论，点赞增删改查
 4. 考研面临的专业以及专业下的细分学科
-5. 基于netty,websocket 以及rocketmq的聊天功能
-6. 将python开发的智能择校模块集成进去
-7. 异常处理系统
-8. swagger 接口文档地址 localhost:8999/swagger-ui.html
-9. 引入springcloud，使用了gateway网关与nacos注册中心
-10. 将使用的中间件rabbitmq使用docker部署在虚拟机上
+5. 引入springcloud，使用了gateway网关与nacos注册中心
+6. 将使用的中间件rabbitmq使用docker部署在虚拟机上
+7. 给common模块添加了日志，完善了日志模块，清理了一些不需要的依赖
 
 ### 补充：
 1. swagger 接口文档地址 localhost:8999/swagger-ui.html

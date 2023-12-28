@@ -1,5 +1,8 @@
 package com.rose.common.base;
 
+/**
+ * @author rose
+ */
 public class GenericResponse {
 
     //是否成功

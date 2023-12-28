@@ -5,7 +5,23 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/home'
+      redirect: '/chat'
+    },
+    {
+      path: '/info',
+      name: 'info',
+      component: () => import(/* webpackChunkName: "home" */ '@/views/Info.vue'),
+      meta: {
+        index: 1
+      }
+    },
+    {
+      path: '/other',
+      name: 'other',
+      component: () => import(/* webpackChunkName: "home" */ '@/views/Other.vue'),
+      meta: {
+        index: 1
+      }
     },
     {
       path: '/home',
@@ -35,6 +51,14 @@ const router = createRouter({
       path: '/chat',
       name: 'chat',
       component: () => import(/* webpackChunkName: "login" */ '@/views/Chat.vue'),
+      meta: {
+        index: 1
+      }
+    },
+    {
+      path: '/chatdetail',
+      name: 'chatdetail',
+      component: () => import(/* webpackChunkName: "login" */ '@/views/ChatDetail.vue'),
       meta: {
         index: 1
       }

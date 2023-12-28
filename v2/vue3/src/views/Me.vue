@@ -29,28 +29,28 @@
       </div>
     </van-skeleton>
     <ul class="user-list">
-      <li class="van-hairline--bottom" @click="goTo('/course')">
+      <!-- <li class="van-hairline--bottom" @click="goTo('/course')">
         <span>我的课程</span>
         <van-icon name="arrow" />
       </li>
       <li class="van-hairline--bottom" @click="goTo('/circle')">
         <span>我的提问</span>
         <van-icon name="arrow" />
-      </li>
-      <li
+      </li> -->
+      <!-- <li
         class="van-hairline--bottom"
         @click="goTo('/chat')"
       >
         <span>我的关注</span>
         <van-icon name="arrow" />
-      </li>
-      <li
+      </li> -->
+      <!-- <li
         class="van-hairline--bottom"
         @click="goTo('/address')"
       >
         <span>我的购物车</span>
         <van-icon name="arrow" />
-      </li>
+      </li> -->
       <li @click="goTo('/about')">
         <span>地址管理</span>
         <van-icon name="arrow" />

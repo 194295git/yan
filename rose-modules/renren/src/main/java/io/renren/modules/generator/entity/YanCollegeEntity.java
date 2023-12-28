@@ -15,7 +15,7 @@ import lombok.Data;
  * @date 2021-08-26 22:19:18
  */
 @Data
-@TableName("yan_college")
+@TableName("yan_info_college")
 public class YanCollegeEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

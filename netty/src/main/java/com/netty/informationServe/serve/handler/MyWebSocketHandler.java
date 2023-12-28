@@ -2,7 +2,10 @@ package com.netty.informationServe.serve.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.netty.common.constants.AttrConstants;
+import com.netty.common.constants.Constants;
 import com.netty.common.domain.User;
+import com.netty.common.entity.SendRequest;
 import com.netty.informationServe.config.NettyConfig;
 import com.netty.informationServe.protocol.Packet;
 import com.netty.informationServe.protocol.commond;
@@ -10,15 +13,21 @@ import com.netty.informationServe.protocol.packet.CreateGroupPacket;
 import com.netty.informationServe.protocol.packet.GroupMessagePacket;
 import com.netty.informationServe.protocol.packet.RegisterPacket;
 import com.netty.informationServe.protocol.packet.SingleMessagePacket;
+import com.netty.informationServe.service.ChannelService;
 import com.netty.informationServe.utils.SessionUtils;
+import com.rose.common.base.WebsocketMessage;
+import com.rose.common.utils.UUIDUtils;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.Charset;
@@ -36,6 +45,9 @@ import java.util.List;
 @ChannelHandler.Sharable
 public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    ChannelService channelService;
 
 //    服务端处理客户端websocket请求的核心方法
 //    这是模板方法的实现
@@ -138,14 +150,17 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         NettyConfig.group.add(ctx.channel());
-        System.out.println("客户端与服务端连接开启....");
+       log.info("channelActive客户端与服务端连接开启....");
     }
 
     //客户端与服务端断开连接
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        //删除redis里面的数据
+        channelService.remove(SessionUtils.getUser(ctx.channel()).getOpenid());
+        //删除缓存的hashmap
         NettyConfig.group.remove(ctx.channel());
-        System.out.println("客户端与服务端连接关闭....");
+       log.info("channelInactive客户端与服务端连接关闭....");
     }
 
     //接收结束之后 read相对于服务端
@@ -175,6 +190,20 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         byteBuf.writeBytes(bytes);
         return byteBuf;
     }
-
+    //构造推送消息体
+    private WebsocketMessage getMessage(String channelId, SendRequest request, MessageExt msg) {
+        Channel channel =SessionUtils.getChannel(channelId);
+        WebsocketMessage websocketMsg = new WebsocketMessage(
+                request.getRequestId(),
+                channel.attr(AttrConstants.sessionId).get(),
+                UUIDUtils.getUUID(),
+                WebsocketMessage.MsgType.BUSSINESS.code,
+                new String[]{channelId},
+                request.getMsg(),
+                request.getFrom(),
+                Integer.parseInt(msg.getUserProperty(Constants.Trigger))
+        );
+        return websocketMsg;
+    }
 
 }

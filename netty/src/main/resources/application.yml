@@ -1,3 +1,5 @@
+hostip: 192.168.56.1
+
 # 应用名称
 spring:
   application:
@@ -5,7 +7,18 @@ spring:
   cloud:
     nacos:
       discovery:
+        ip: 192.168.56.1
         server-addr: 192.168.56.20:8848
+  rocketmq:
+    name-server: 192.168.56.20:9876
+    producer-send-msg-timeout: 3000
+    producer:
+      shutdown:
+        enable: false
+    producer-group-name: ${spring.application.name}-127-0-0-1-${server.port}
+  redis:
+    host: 192.168.56.20
+    port: 6379
   rabbitmq:
     host: 192.168.56.20
     port: 5672
@@ -21,7 +34,7 @@ spring:
         acknowledge-mode: manual
 # 应用服务 WEB 访问端口
 server:
-  port: 8083
+  port: 8084
 
 
 #rocketmq:

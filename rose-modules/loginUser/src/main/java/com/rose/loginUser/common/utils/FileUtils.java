@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 
 /**
  * 文件工具类
+ * @author rose
  */
 public class FileUtils {
 

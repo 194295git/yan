@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName(value = "yan_category")
+@TableName(value = "yan_info_category")
 public class YanCategory implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)

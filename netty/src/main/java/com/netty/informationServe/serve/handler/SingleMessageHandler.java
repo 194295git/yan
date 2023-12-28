@@ -3,24 +3,27 @@ package com.netty.informationServe.serve.handler;
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
-import com.rose.common.mqutil.Topic;
 import com.netty.common.domain.Message;
 import com.netty.common.domain.User;
+import com.netty.common.entity.SendRequest;
 import com.netty.informationServe.protocol.packet.SingleMessagePacket;
+import com.netty.informationServe.service.MessageService;
 import com.netty.informationServe.utils.SessionUtils;
+import com.rose.common.mqutil.Topic;
 import com.rose.common.to.mq.Message2;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @创建人 rose
@@ -34,10 +37,12 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
     @Autowired
     MQUtils mqUtils;
 
+    @Autowired
+    private MessageService messageService;
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, SingleMessagePacket singleMessagePacket) throws Exception {
-// TODO Auto-generated method stu
-//        onLine标志字符为下面使用那个消息队列标志
+
         Boolean onLine;
         String message = "";
         Channel toUserChannel = SessionUtils.getChannel(singleMessagePacket.getToUserId());
@@ -49,19 +54,49 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         } else {
             message = singleMessagePacket.getMessage();
             sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OffLine,true);
-            System.out.println("SingleMessageHandler ======> 该用户不存在或者未登录");
-//            System.err.println(message);
+            log.info("SingleMessageHandler ======> 该用户不存在或者未登录");
             return;
         }
         User toUser = SessionUtils.getUser(toUserChannel);
         String fileType = singleMessagePacket.getFileType();
-        ByteBuf buf = getByteBuf(channelHandlerContext, message, toUser, fileType);
+//
+        //使用mq发送替代直接发送
+        messageService.execute(createSendRequest(channelHandlerContext, message, toUser, fileType));
+        //这行重要的代码就先注释
+//        ByteBuf buf = getByteBuf(channelHandlerContext, message, toUser, fileType);
+//        toUserChannel.writeAndFlush(new TextWebSocketFrame(buf));
 
-        toUserChannel.writeAndFlush(new TextWebSocketFrame(buf));
-
-        System.out.println(/*singleMessagePacket.getToUserId() + */"发送了消息给" + singleMessagePacket.getToUserId() + "：" + singleMessagePacket.getMessage());
+        log.info(/*singleMessagePacket.getToUserId() + */"发送了消息给" + singleMessagePacket.getToUserId() + "：" + singleMessagePacket.getMessage());
     }
 
+    /**
+     * 生成mq需要的消息体
+     * @param ctx
+     * @param message
+     * @param toUser
+     * @param fileType
+     * @return
+     */
+    public SendRequest createSendRequest(ChannelHandlerContext ctx, String message, User toUser, String fileType){
+        User fromUser = SessionUtils.getUser(ctx.channel());
+        JSONObject data = new JSONObject();
+        data.put("type", 2);
+        data.put("status", 200);
+        JSONObject params = new JSONObject();
+        params.put("message", message);
+        params.put("fileType", fileType);
+        params.put("fromUser", fromUser);
+        params.put("toUser", toUser);
+        data.put("params", params);
+
+        SendRequest req =  new SendRequest();
+        List<String> toList = new ArrayList<String>();
+        toList.add(toUser.getOpenid());
+        req.setTo(toList);
+        req.setSendToAll(false);
+        req.setMsg(data);
+        return req;
+    }
     public ByteBuf getByteBuf(ChannelHandlerContext ctx, String message, User toUser, String fileType) {
         ByteBuf byteBuf = ctx.alloc().buffer();
         User fromUser = SessionUtils.getUser(ctx.channel());

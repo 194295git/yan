@@ -11,6 +11,7 @@ package com.rose.permission.oauth2;
 
 import com.google.gson.Gson;
 
+import com.rose.common.constant.RedisPrefix;
 import com.rose.permission.entity.SysUserPermission;
 import com.rose.permission.util.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
@@ -75,7 +76,7 @@ public class OAuth2Realm extends AuthorizingRealm {
             Gson gson = new Gson();
 //            Set<String> permsSet = shiroService.getUserPermissions(userId);
 //            SysUserPermission user = shiroService.queryUser(userId);
-            String  permsSetString = ( String )redisTemplate.opsForValue().get(openid);
+            String  permsSetString = ( String )redisTemplate.opsForValue().get(RedisPrefix.SHIROPERFIX +openid);
             Set<String> permsSet=  gson.fromJson(permsSetString,Set.class);
             SysUserPermission user = new SysUserPermission();
             user.setUserId(userId);

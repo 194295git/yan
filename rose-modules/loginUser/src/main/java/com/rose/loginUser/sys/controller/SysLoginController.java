@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.rose.common.base.GenericResponse;
 import com.rose.common.base.R;
 import com.rose.common.base.ServiceError;
+import com.rose.common.constant.RedisPrefix;
 import com.rose.common.utils.CommonUser;
 import com.rose.common.utils.JwtTokenUtil;
 import com.rose.loginUser.sys.entity.SysUserEntity;
@@ -159,7 +160,7 @@ public class SysLoginController extends AbstractController {
 		Gson gson = new Gson();
 //		redisTemplate.opsForValue().set(user.getUserId().toString(), gson.toJson(permsSet));
 		try{
-			redisTemplate.opsForValue().set(user.getOpenid(), gson.toJson(permsSet));
+			redisTemplate.opsForValue().set(RedisPrefix.SHIROPERFIX +user.getOpenid(), gson.toJson(permsSet));
 		}catch(Exception e){
 			throw e;
 		}

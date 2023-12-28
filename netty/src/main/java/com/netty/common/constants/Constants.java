@@ -121,4 +121,28 @@ public class Constants
      * 令牌有效期（分钟）
      */
     public final static long TOKEN_EXPIRE = 720;
+
+
+
+    public static final String WEBSOCKET_SERVER = "websocket";
+
+    public static final String ROCKETMQ_TOPIC_PREFIX = "websocket";
+
+    public static final String ROCKETMQ_GROUP_PREFIX = "group";
+
+    public static final String UPGRADE = "Upgrade";
+
+    public static final  String SYSTEM = "system";
+
+    public static final String POST = "POST";
+
+    public static final String GET = "GET";
+
+    public static final String CHANNELID = "channelId";
+
+    public static final String SESSIONID = "sessionId";
+
+    public static final String Trigger = "Trigger";
+
+    public static final String MSG = "msg";
 }

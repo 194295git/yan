@@ -1,5 +1,7 @@
 package com.rose.common.base;
-
+/**
+ * @author rose
+ */
 public enum ServiceError {
 
     NORMAL(200, "操作成功"),
@@ -14,6 +16,7 @@ public enum ServiceError {
     UPDATE_ERROR(-400,"代码更新错误"),
     GLOBAL_ERROR(-250,"执行了全局处理异常"),
     EMAIL_ERROT(-500,"该邮箱已经注册过"),
+    NOT_EXIST_CLIENT(-501,"存在找不到的客户端"),
 
     /**
      * Global Error

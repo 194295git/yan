@@ -1,18 +1,18 @@
-<!--
- * 严肃声明：
- * 开源版本请务必保留此注释头信息，若删除我方将保留所有法律责任追究！
- * 本系统已申请软件著作权，受国家版权局知识产权以及国家计算机软件著作权保护！
- * 可正常分享和学习源码，不得用于违法犯罪活动，违者必究！
- * Copyright (c) 2020 陈尼克 all rights reserved.
- * 版权所有，侵权必究！
- *
--->
-
 <template>
   <div class="cart-box">
-    <s-header :name="'研战到底'" :noback="true"></s-header>
+    <s-header :name="'企聊聊'" :noback="true"></s-header>
+
     <div>
       <div v-if="current == 0" class="box2 mb-2">
+        <form action="/">
+          <van-search
+            v-model="value"
+            show-action
+            placeholder="请输入搜索关键词"
+            @search="onSearch"
+            @cancel="onCancel"
+          />
+        </form>
         <text @click="queryLiveUser">展示所有的用户</text>
 
         <div
@@ -71,184 +71,6 @@
         </div>
       </div>
     </div>
-    <div>
-      <div v-if="current == 1" class="box2 mt-2">
-        <div class="box2">
-          <van-icon name="chat-o" @click="changeCur()" />
-
-          <text class="mt-2 ml-2" @click="changeCur()">返回</text>
-        </div>
-        <div class="scroll">
-          <list-scroll :scroll-data="recesiveAllMsg">
-            <div class="swiper-container">
-              <div
-                class="content"
-                v-for="(item, index) in recesiveAllMsg"
-                :key="index"
-              >
-                <div class="d-felx justify-start " v-if="item.type === 'self'">
-                  <div style="display: flex;">
-                    <van-image
-                      width="35px"
-                      height="35px"
-                      fit="cover"
-                      :src="userInfo.avatarUrl"
-                    />
-                    <div class="font-18 content1">
-                      <text>{{ item.content }}</text>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style="display: flex; justify-content: flex-end;"
-                  v-if="item.type === 'receive'"
-                >
-                  <div class="font-18 content2">
-                    <text>{{ item.content }}</text>
-                  </div>
-                  <div class="">
-                    <van-image
-                      width="35px"
-                      height="35px"
-                      fit="cover"
-                      :src="toUser.avatarUrl"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </list-scroll>
-        </div>
-        <div
-          class="boxS d-flex justify-space-between align-centers send-msg mt-4"
-        >
-          <!-- 可以使用 CellGroup 作为容器 -->
-          <div style="height:10px">
-            <van-cell-group inset>
-              <van-field
-                v-model="content"
-                placeholder="请输入文本内容"
-                class="box-border-grey "
-              />
-            </van-cell-group>
-          </div>
-          <div class="mt-1 send">
-            <button
-              style="background-color: aqua;"
-              :size="mini"
-              type="default"
-              @click="sendMsg2()"
-            >
-              发送
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div v-if="current == 2" class="box2 mt-2">
-        <div class="box2">
-          <van-icon name="chat-o" @click="changeCur()" />
-
-          <text class="mt-2 ml-2" @click="changeCur()">返回</text>
-          <text class="mt-2 ml-2" @click="showAllMember()">查看成员</text>
-        </div>
-        <div class="scroll">
-          <list-scroll :scroll-data="recesiveAllMsg">
-            <div class="swiper-container">
-              <div
-                class="content"
-                v-for="(item, index) in recesiveAllMsg"
-                :key="index"
-              >
-                <!-- self -->
-                <div class="d-felx justify-start " v-if="item.type === 'self'">
-                  <div style="display: flex;">
-                    <van-image
-                      width="35px"
-                      height="35px"
-                      fit="cover"
-                      :src="userInfo.avatarUrl"
-                    />
-                    <div class="font-18 content1">
-                      <text>{{ item.content }}</text>
-                    </div>
-                  </div>
-                </div>
-                <!-- receive这边的消息 -->
-                <div
-                  style="display: flex; justify-content: flex-end;"
-                  v-if="item.type === 'receive'"
-                >
-                  <div class="font-18 content2">
-                    <text>{{ item.content }}</text>
-                  </div>
-                  <div class="">
-                    <van-image
-                      width="35px"
-                      height="35px"
-                      fit="cover"
-                      :src="item.avatarUrl"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </list-scroll>
-        </div>
-        <div
-          class="boxS d-flex justify-space-between align-centers send-msg mt-4"
-        >
-          <!-- 可以使用 CellGroup 作为容器 -->
-          <div style="height:10px">
-            <van-cell-group inset>
-              <van-field
-                v-model="content"
-                placeholder="请输入文本内容"
-                class="box-border-grey "
-              />
-            </van-cell-group>
-          </div>
-          <div class="mt-1 send">
-            <button
-              style="background-color: aqua;"
-              :size="mini"
-              type="default"
-              @click="sendMsg2()"
-            >
-              发送
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div v-if="current == 3"  class="box2 mt-2">
-        <div @click="changeCurDiy(2)">返回</div>
-                <div
-          class="d-flex mb-1 notify-item"
-
-          v-for="(userBase, index) in memberBaseDetail"
-          :key="index"
-        >
-          <div class="">
-            <van-image
-              width="35px"
-              height="35px"
-              fit="cover"
-              :src="userBase.avatarUrl"
-            />
-          </div>
-          <div class="ml-2" style="width: 10vw;">
-            {{ userBase.email }}
-          </div>
-           <div class="ml-2" style="width: 70vw;">
-            {{ userBase.username }}
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- <div @click="sendData()">发送数据</div> -->
     <nav-bar></nav-bar>
@@ -256,38 +78,34 @@
 </template>
 
 <script>
-import listScroll from "@/components/ListScroll";
-import { reactive, onMounted, toRefs } from "vue";
+import { reactive, onMounted, toRefs, ref } from "vue";
 import { useRouter } from "vue-router";
-// import { Toast } from "vant";
+import { Toast } from "vant";
 import navBar from "@/components/NavBar";
 import sHeader from "@/components/SimpleHeader";
 import {
   queryEyeUser,
-  getChatContent,
   getAllGroup,
   getGroupOpenid,
-  getGroupContent,
-  getAvatarUrlByOpenid,
-  getGroupMemberDetail
 } from "@/service/chat";
-import SocketService from "@/common/js/websocket";
+import { getUserInfoMe } from "@/service/user";
 import { useStore } from "vuex";
 import { getLocal } from "@/common/js/utils";
 export default {
   components: {
     navBar,
     sHeader,
-    listScroll,
   },
   setup() {
+    const value = ref("");
+    const onSearch = (val) => Toast(val);
+    const onCancel = () => Toast("取消");
+
     const store = useStore();
     const router = useRouter();
     const state = reactive({
-      memberBaseDetail:[],
       userlist: [],
-      socketServe: SocketService.Instance,
-      recesiveAllMsg: [],
+      // socketServe: SocketService.Instance,
       userInfo: {},
       checked: false,
       list: [],
@@ -314,58 +132,27 @@ export default {
     onMounted(() => {
       getToken();
       init();
-      //收到消息后更新前端数据
-      state.socketServe.ws.onmessage = (msg) => {
-        console.log(msg.data, "chat__从服务端获取到了数据");
-        const res = JSON.parse(msg.data);
-        console.log("res的状态");
-        console.log(res.type);
-        if (res.type === 0) {
-          return;
-        }
-        //收消息的情况，把消息推送上去
-        if (res.type === 2) {
-          state.recesiveAllMsg.push({
-            type: "receive",
-            content: res.params.message,
-          });
-        }
-        //群聊收消息
-        if (res.type === 10) {
-          const avatar= getAvatarUrl(res.params.fromUser.openid)
-          avatar.then((result)=>{
-            console.log(result)
-            state.recesiveAllMsg.push({
-            type: "receive",
-            content: res.params.message,
-            avatarUrl:result
-          });
-
-          })
-          // console.log(avatar)
-          //  这里写个接口去获取头像res.params.fromUser.openid
-         
-        }
-      };
     });
-    const getAvatarUrl = async (id)=>{
-      const  res =await  getAvatarUrlByOpenid(id);
-      return res.content
-    }
+
     const getToken = async () => {
       const token = getLocal("token");
-      console.log("======token=====");
-      console.log(token);
+      console.log(token==undefined ?"token为空":"token不为空");
       if (token) {
-        state.userInfo = store.state.userInfo
-      
+        // 
+        await getUserInfo ();  
+        state.userInfo = store.state.userInfo;
         return;
       } else {
         router.push({ path: "/login" });
       }
-     
     };
-
+    const getUserInfo = async () => {
+      const res = await getUserInfoMe();
+      // console.log("==========getUserInfo")
+      // console.log(res.content)
+      store.commit("setUserInfo", res.content);
+      // console.log(store.state.userInfo)
+    };
     const init = async () => {
       // Toast.loading({ message: "加载中...", forbidClick: true });
       const data = await queryEyeUser();
@@ -379,66 +166,55 @@ export default {
       // state.result = data.map((item) => item.cartItemId);
 
       //向后端发送注册的消息
-      sendRegisterData();
+      // sendRegisterData();
       // Toast.clear();
-    };
-
-    //建立连接
-    SocketService.Instance.connect();
-    state.socketServe = SocketService.Instance;
-    state.socketServe.registerCallBack("callback1", state.socketServe);
-
-    //发送注册的数据
-    const sendRegisterData = () => {
-      var data = {
-        type: 7,
-        params: {
-          openid: store.state.userInfo.openid,
-          userName: store.state.userInfo.email,
-          loginStatus: "1",
-        },
-      };
-      console.log(data);
-      state.socketServe.send(data);
-      console.log("发送注册数据");
     };
 
     const goBack = () => {
       router.go(-1);
     };
 
-    const goTo = () => {
-      router.push({ path: "/home" });
+    const goTo = (r, query) => {
+      router.push({ path: r, query: query || {} });
     };
 
     const changeToUser = async (index) => {
       state.email = state.userlist[index].email;
       state.toUser = state.userlist[index];
       state.current = 1;
+      store.commit("setToUser", state.toUser);
       const openid = state.toUser.openid;
-      const data = await getChatContent(openid);
-      state.recesiveAllMsg = data.content;
+      router.push({
+        path: "/chatdetail",
+        query: {
+          email: state.email,
+          current: state.current,
+          openid: openid,
+        },
+      });
     };
     const changeToGroup = async (index) => {
       state.toGroup = state.groups[index];
       state.current = 2;
       const res = await getGroupOpenid(state.toGroup.groupId);
       //向后端注册群聊
-
+      
       let data = {
         type: 3,
         params: {
           userIdList: res.content.join(","),
-          groupId:state.toGroup.groupId
+          groupId: state.toGroup.groupId,
         },
       };
-      state.socketServe.send(data);
-      console.log("发送群聊注册消息");
-
-      //展现出所有的聊天内容
-      const group = await getGroupContent(state.toGroup.groupId);
-      state.recesiveAllMsg = [];
-      state.recesiveAllMsg = group.content;
+      store.commit("setRegisterGroup", data);
+       router.push({
+        path: "/chatdetail",
+        query: {
+          current: state.current,
+          groupId: state.toGroup.groupId,
+        },
+      });
+     
     };
     const changeCur = () => {
       state.current = 0;
@@ -446,54 +222,19 @@ export default {
     const changeCurDiy = (param) => {
       state.current = param;
     };
-    const showAllMember = async ()=>{
-      state.current = 3;
-      const memberDeatil = await getGroupMemberDetail(state.toGroup.groupId);
-      console.log(429,memberDeatil.content);
-      state.memberBaseDetail = memberDeatil.content;
-
-
-    };
-    const sendMsg2 = () => {
-      const { content, toUser } = state;
-      let data = {
-        // 1代表着私聊的意思
-        type: 1,
-        params: {
-          toMessageId: toUser.openid,
-          message: content,
-          fileType: 0,
-        },
-      };
-      if(state.current == 2){
-        data ={
-          type: 9,
-          params: {
-            toMessageId: state.toGroup.groupId,
-            message: content,
-            fileType: 0,
-          }
-        }
-      }
-      console.log(data);
-      state.socketServe.send(data);
-      state.recesiveAllMsg.push({
-        type: "self",
-        content: content,
-      });
-      state.content = "";
-    };
+    
+    
 
     return {
+      value,
+      onSearch,
+      onCancel,
       ...toRefs(state),
       goBack,
       goTo,
-      sendRegisterData,
       changeToUser,
       changeToGroup,
       changeCur,
-      showAllMember,
-      sendMsg2,
       changeCurDiy,
     };
   },

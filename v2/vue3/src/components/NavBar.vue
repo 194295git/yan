@@ -11,17 +11,18 @@
 <template>
   <div class="nav-bar van-hairline--top">
     <ul class="nav-list">
-      <router-link  class="nav-list-item active" to="home">
+      <router-link  class="nav-list-item active" to="chat">
         <i class="nbicon nblvsefenkaicankaoxianban-1"></i>
-        <span>首页</span>
+        <span>消息</span>
       </router-link>
-      <router-link  class="nav-list-item" to="circle">
+      <router-link  class="nav-list-item" to="info">
         <i class="nbicon nbfenlei"></i>
-        <span>圈层</span>
+        <span>通讯录</span>
       </router-link>
-      <router-link  class="nav-list-item" to="chat">
-        <van-icon  name="shopping-cart-o" :badge="!count ? '' : count" />
-        <span>聊天</span>
+      <router-link  class="nav-list-item" to="home">
+         <i class="nbicon nbfenlei"></i>
+        <!-- <van-icon  name="shopping-cart-o" :badge="!count ? '' : count" /> -->
+        <span>资讯</span>
       </router-link>
       <router-link  class="nav-list-item" to="me">
         <i class="nbicon nblvsefenkaicankaoxianban-"></i>

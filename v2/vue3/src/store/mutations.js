@@ -26,5 +26,14 @@ export default {
     state.userInfo = res || null;
 
   },
+  setToUser(state, res) {
+    state.toUser = res || null;
+
+  },
+  setRegisterGroup(state, res) {
+    state.registerGroup = res || null;
+
+  },
+  
 }
 

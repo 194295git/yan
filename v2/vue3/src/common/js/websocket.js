@@ -24,7 +24,7 @@ export default class SocketService {
     }
     // let token = $.cookie('123');
     // let token = '4E6EF539AAF119D82AC4C2BC84FBA21F';
-    let url = 'ws://127.0.1:8888/websocket';
+    let url = 'ws://127.0.1:88/websocket';
     this.ws = new WebSocket(url);
     // 连接成功的事件
     this.ws.onopen = () => {

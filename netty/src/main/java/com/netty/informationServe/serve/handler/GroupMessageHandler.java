@@ -3,11 +3,13 @@ package com.netty.informationServe.serve.handler;
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
-import com.rose.common.mqutil.Topic;
 import com.netty.common.domain.Message;
 import com.netty.common.domain.User;
+import com.netty.common.entity.SendRequest;
 import com.netty.informationServe.protocol.packet.GroupMessagePacket;
+import com.netty.informationServe.service.MessageService;
 import com.netty.informationServe.utils.SessionUtils;
+import com.rose.common.mqutil.Topic;
 import com.rose.common.to.mq.Message2;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -15,7 +17,6 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,34 +36,60 @@ import java.util.List;
 @Service
 @ChannelHandler.Sharable
 public class GroupMessageHandler extends SimpleChannelInboundHandler<GroupMessagePacket> {
+
+    @Autowired
+    private MessageService messageService;
     @Autowired
     MQUtils mqUtils;
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, GroupMessagePacket groupMessagePacket) throws Exception {
-        log.info("走入GroupMessageHandler");
+        log.info("走入GroupMessageHandler参数"+groupMessagePacket.toString());
         Integer groupId = groupMessagePacket.getToGroupId();
         String fileType = groupMessagePacket.getFileType();
         ChannelGroup channelGroup = SessionUtils.getChannelGroup(groupId);
         log.info(" GroupMessageHandler channelGroup"+channelGroup);
         List<String> nameList = new ArrayList<>();
+        User userself = SessionUtils.getUser(channelHandlerContext.channel());
         for (Channel channel : channelGroup) {
             User user = SessionUtils.getUser(channel);
-            // 用户名是否可以不回传？？
-            nameList.add(user.getOpenid());
+            if (!user.getOpenid().equals(userself.getOpenid())){
+                nameList.add(user.getOpenid());
+            }
+
         }
 
         sendMessage(channelHandlerContext,groupMessagePacket.getMessage(),groupId.toString(),Topic.OnLine,false);
 
-        if (channelGroup != null) {
-            User user = SessionUtils.getUser(channelHandlerContext.channel());
-            ByteBuf byteBuf = getByteBuf(channelHandlerContext, groupId, groupMessagePacket.getMessage(), user, fileType, nameList);
-            channelGroup.remove(channelHandlerContext.channel());//发送方不需要自己再收到消息
-            channelGroup.writeAndFlush(new TextWebSocketFrame(byteBuf));
-            channelGroup.add(channelHandlerContext.channel()); //发送完消息再添加回去 ---todo 是否有更好得方式
-        }
+        messageService.execute(createSendRequest(channelHandlerContext, groupId, groupMessagePacket.getMessage(), userself, fileType, nameList));
+//        if (channelGroup != null) {
+//            User user = SessionUtils.getUser(channelHandlerContext.channel());
+//            ByteBuf byteBuf = getByteBuf(channelHandlerContext, groupId, groupMessagePacket.getMessage(), user, fileType, nameList);
+//            channelGroup.remove(channelHandlerContext.channel());//发送方不需要自己再收到消息
+//            channelGroup.writeAndFlush(new TextWebSocketFrame(byteBuf));
+//            channelGroup.add(channelHandlerContext.channel()); //发送完消息再添加回去 ---todo 是否有更好得方式
+//        }
     }
+    public SendRequest createSendRequest(ChannelHandlerContext ctx, Integer groupId, String message,
+                                         User fromUser, String fileType, List<String> nameList){
+        JSONObject data = new JSONObject();
+        data.put("type", 10);
+        data.put("status", 200);
+        JSONObject params = new JSONObject();
+        params.put("message", message);
+        params.put("fileType", fileType);
+        params.put("fromUser", fromUser);
+        params.put("groupId", groupId);
+        Collections.reverse(nameList);
+        params.put("nameList", nameList);
+        data.put("params", params);
 
+        SendRequest req =  new SendRequest();
+        req.setTo(nameList);
+        req.setSendToAll(false);
+        req.setMsg(data);
+        return req;
+    }
     public ByteBuf getByteBuf(ChannelHandlerContext ctx, Integer groupId, String message,
                               User fromUser, String fileType, List<String> nameList) {
         ByteBuf byteBuf = ctx.alloc().buffer();
