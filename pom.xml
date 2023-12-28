@@ -13,6 +13,7 @@
         <module>rose-modules/first</module>
         <module>gateway</module>
         <module>common_core/common</module>
+        <module>common_core/leaf-core</module>
         <module>rose-modules/file</module>
 
         <module>netty</module>
