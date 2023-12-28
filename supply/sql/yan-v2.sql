@@ -291,11 +291,7 @@ CREATE TABLE `sys_user` (
 -- Dumping data for table `sys_user`
 --
 
-LOCK TABLES `sys_user` WRITE;
-/*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
-INSERT INTO `sys_user` VALUES (1,'1879878-NKCNO-NKNK','rose','9ec9750e709431dad22365cabc5c625482e574c74adaebba7dd02f1129e4ce1d','YzcmCZNvbXocrsz9dm8e','root@renren.io','13612345678',1,1,'2016-11-11 11:11:11'),(3,'5977d40a-ff98-4764-a066-36b85a6e97e2877654868','testFeign@qq.com','e8b534ca61a3de94c95f3cee37ecdfa058d2d11ed85acd5b994eea22b7d9ee18','FNEFORZSOpEpkTokf8k2',NULL,NULL,NULL,NULL,'2022-10-16 21:09:19'),(7,'B9C6A3A357534C7F9DD4C2F22FA42AD5','admin','8a457910e54bff0eff54b1bc4c742d7f14f5d159a41b985a861153746fd9cfac','LoFVocgLmCLNI3ECe5Wk','admin@xx.com','18503568331',1,1,'2023-01-22 20:50:34'),(8,'56C02DF0516B4B079ABFCEC08169E577','123','b25ad8e4bdd078e4fb674ada03d6d0e92c1142c4aa209adaceebe187849d61ab','kHjDJDTPlnlHwQNJLvBq','123@qq.com','18503568331',1,7,'2023-01-23 15:45:02'),(9,'test','tom','f9d3e893a08f45c87811d3ddf087baef3e0179212ddbdd5b27667d18417fc586','06s44oO5Mv1TIg75ENpR','tom@xx.com','18503568331',1,1,'2023-01-23 15:45:41'),(10,'obba-4kQv-DSbg2ZZm_liCEorcqk','jack','4afac5383c24bc45c232701f06bfe776c380ca856637c0d535d750def083809e','XY9OCvgzeZpwr1PoLeF1','jack@qq.com','18503568331',1,7,'2023-01-23 15:46:12');
-/*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `sys_user_role`
@@ -458,20 +454,6 @@ CREATE TABLE `yan_im_user` (
   UNIQUE KEY `user_name_unique` (`username`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `yan_im_user`
---
-
-LOCK TABLES `yan_im_user` WRITE;
-/*!40000 ALTER TABLE `yan_im_user` DISABLE KEYS */;
-INSERT INTO `yan_im_user` VALUES ('1879878-NKCNO-NKNK',555,'我是rose','123','https://edu-renyun.oss-cn-beijing.aliyuncs.com/2021/07/26/81ec9f7958e14c3ba9225b8bd359ea6asrc=http___imagev2.xmcdn.com_group73_M05_30_05_wKgO216cR1OSZxXWAAq2Sh42txU217.png!strip=1&quality=7&magick=jpg&op_type=5&upload_type=album&name=mobile_large&device_type=ios&refer=http___imagev2.xmcdn.jpg','rose',NULL,1,NULL,NULL,'笔趣阁','斗破苍穹','2020-10-01 16:19:47','2022-06-03 09:41:34'),('56C02DF0516B4B079ABFCEC08169E577',666,'我不是123','123','https://edu-renyun.oss-cn-beijing.aliyuncs.com/2021/07/26/a10016be5a4348a885bc79bb7bf78ad4logo1.png','123',NULL,1,NULL,NULL,'山西财经大学','管理科学','2021-05-27 09:35:30','2022-06-03 09:43:14'),('B9C6A3A357534C7F9DD4C2F22FA42AD5',777,'管理员','123','https://edu-renyun.oss-cn-beijing.aliyuncs.com/2021/07/26/0ea48cb529e54573ae791ffbde3fcd9fu=2095913610,1514262792&fm=26&gp=0.jpg','admin',NULL,1,NULL,NULL,'山西大学','管理','2021-07-23 16:51:28','2022-02-24 05:20:14'),('BEE8E17A7A794A979211DE3C4590824E',888,'机器人','123','https://edu-renyun.oss-cn-beijing.aliyuncs.com/2021/07/26/8a30971eaea243fdbf727d11f67b3f3d下载 (1).jpg','admin2',NULL,1,NULL,NULL,'山西大学','机器人','2021-07-22 21:54:01','2022-02-23 13:26:06'),('obba-4kQv-DSbg2ZZm_liCEorcqk',999,'浅笑  风尘','jack','https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eric2ZvHFMLWSGwkspibURzL12HHicSAx09XhC5BJx1LQEXR7icIB3usUEkIgtKSbibvMjwtFNWWGuK28Q/132','jack',NULL,NULL,NULL,NULL,'江苏大学','自动化','2020-10-01 20:53:15','2020-10-09 22:23:52'),('test',444,'治愈云','tom','https://edu-renyun.oss-cn-beijing.aliyuncs.com/2021/07/26/54854bde796a455aa81ddafb026e1e97src=http___c-ssl.duitang.com_uploads_item_201509_20_20150920130412_YhnLR.jpeg&refer=http___c-ssl.duitang.jpg','tom',NULL,NULL,NULL,NULL,'太原理工大学','动漫设计','2021-07-22 20:06:59','2021-07-26 09:41:06');
-/*!40000 ALTER TABLE `yan_im_user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `yan_im_user_address`
---
 
 DROP TABLE IF EXISTS `yan_im_user_address`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
