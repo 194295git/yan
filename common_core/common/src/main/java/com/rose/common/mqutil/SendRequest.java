@@ -1,6 +1,7 @@
-package com.netty.common.entity;
+package com.rose.common.mqutil;
 
 import com.alibaba.fastjson.JSONObject;
+import com.rose.common.mqutil.AbstractRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

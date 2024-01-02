@@ -1,4 +1,4 @@
-package com.netty.common.entity;
+package com.rose.common.mqutil;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

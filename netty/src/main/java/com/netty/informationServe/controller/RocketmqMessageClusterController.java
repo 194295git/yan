@@ -1,6 +1,6 @@
 package com.netty.informationServe.controller;
 
-import com.netty.common.entity.SendRequest;
+import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.service.MessageService;
 import com.rose.common.base.GenericResponse;
 import com.rose.common.base.ServiceError;

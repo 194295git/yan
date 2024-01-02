@@ -3,24 +3,24 @@ package com.netty.informationServe.serve.handler;
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
-import com.netty.common.domain.Message;
+import com.rose.common.mqutil.MqMessage;
 import com.netty.common.domain.User;
-import com.netty.common.entity.SendRequest;
+import com.netty.informationServe.service.messagedispatch.MessageDispatchService;
+import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.protocol.packet.SingleMessagePacket;
 import com.netty.informationServe.service.MessageService;
 import com.netty.informationServe.utils.SessionUtils;
 import com.rose.common.mqutil.Topic;
-import com.rose.common.to.mq.Message2;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,8 @@ import java.util.List;
 public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMessagePacket> {
     @Autowired
     MQUtils mqUtils;
-
+    @Resource(name = "MQDispatchServiceImpl")
+    private MessageDispatchService messageDispatchService;
     @Autowired
     private MessageService messageService;
 
@@ -47,7 +48,6 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         String message = "";
         Channel toUserChannel = SessionUtils.getChannel(singleMessagePacket.getToUserId());
         log.info("SingleMessageHandler"+toUserChannel);
-
         if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
             message = singleMessagePacket.getMessage();
             sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OnLine,true);
@@ -57,6 +57,15 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
             log.info("SingleMessageHandler ======> 该用户不存在或者未登录");
             return;
         }
+//        if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
+//            message = singleMessagePacket.getMessage();
+//            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OnLine,true);
+//        } else {
+//            message = singleMessagePacket.getMessage();
+//            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OffLine,true);
+//            log.info("SingleMessageHandler ======> 该用户不存在或者未登录");
+//            return;
+//        }
         User toUser = SessionUtils.getUser(toUserChannel);
         String fileType = singleMessagePacket.getFileType();
 //
@@ -88,6 +97,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         params.put("fromUser", fromUser);
         params.put("toUser", toUser);
         data.put("params", params);
+//        data.put("message",messageForSave);
 
         SendRequest req =  new SendRequest();
         List<String> toList = new ArrayList<String>();
@@ -108,6 +118,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         params.put("fileType", fileType);
         params.put("fromUser", fromUser);
         params.put("toUser", toUser);
+
         data.put("params", params);
         byte []bytes = data.toJSONString().getBytes(Charset.forName("utf-8"));
         byteBuf.writeBytes(bytes);
@@ -115,7 +126,24 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
     }
 
     public void sendMessage(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type) {
-        Message messageMQ = new Message();
+        MqMessage messageMQ = new MqMessage();
+        messageMQ.setFromId(SessionUtils.getUser(ctx.channel()).getOpenid());
+        messageMQ.setToId(toUser);
+        messageMQ.setType(state);
+        messageMQ.setInfoContent(message);
+        messageMQ.setTime(new DateTime().toString());
+        messageMQ.setState(type);
+        messageDispatchService.sendForSave(messageMQ);
+//        return messageMQ;
+
+//        mqUtils.MessageSend(Topic.OnLineTopic,messageMQ);
+//        log.info("是否走到了mqUtils.MessageSend2");
+//        Message2 message2 = new Message2();
+//        BeanUtils.copyProperties(messageMQ,message2);
+//        mqUtils.MessageSend2(message2);
+    }
+    public void sendMessageRabbit(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type) {
+        MqMessage messageMQ = new MqMessage();
         messageMQ.setFromId(SessionUtils.getUser(ctx.channel()).getOpenid());
         messageMQ.setToId(toUser);
         messageMQ.setType(state);
@@ -124,10 +152,9 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         messageMQ.setState(type);
 
 //        mqUtils.MessageSend(Topic.OnLineTopic,messageMQ);
-        log.info("是否走到了mqUtils.MessageSend2");
-        Message2 message2 = new Message2();
-        BeanUtils.copyProperties(messageMQ,message2);
-        mqUtils.MessageSend2(message2);
+//        log.info("是否走到了mqUtils.MessageSend2");
+//        Message2 message2 = new Message2();
+//        BeanUtils.copyProperties(messageMQ,message2);
+//        mqUtils.MessageSend2(message2);
     }
-
 }

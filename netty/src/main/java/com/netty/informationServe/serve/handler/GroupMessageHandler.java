@@ -3,9 +3,9 @@ package com.netty.informationServe.serve.handler;
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
-import com.netty.common.domain.Message;
+import com.rose.common.mqutil.MqMessage;
 import com.netty.common.domain.User;
-import com.netty.common.entity.SendRequest;
+import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.protocol.packet.GroupMessagePacket;
 import com.netty.informationServe.service.MessageService;
 import com.netty.informationServe.utils.SessionUtils;
@@ -110,7 +110,7 @@ public class GroupMessageHandler extends SimpleChannelInboundHandler<GroupMessag
     }
 
     public void sendMessage(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type) {
-        Message messageMQ = new Message();
+        MqMessage messageMQ = new MqMessage();
         messageMQ.setFromId(SessionUtils.getUser(ctx.channel()).getOpenid());
         messageMQ.setToId(toUser);
         messageMQ.setType(state);

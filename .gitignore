@@ -8,7 +8,7 @@ target
 # local env files
 .env.local
 .env.*.local
-.iml
+
 # Log files
 npm-debug.log*
 yarn-debug.log*

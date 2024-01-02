@@ -1,6 +1,6 @@
 package com.netty.informationServe.service;
 
-import com.netty.common.entity.SendRequest;
+import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.service.messagedispatch.MessageDispatchService;
 import com.netty.informationServe.utils.ServiceException;
 import com.rose.common.constant.RedisPrefix;

@@ -1,6 +1,6 @@
 package com.netty.informationServe.task;
 
-import com.netty.common.constants.AttrConstants;
+import com.rose.common.netty.AttrConstants;
 import com.netty.informationServe.service.ChannelService;
 import com.netty.informationServe.utils.Nettyutil;
 import com.netty.informationServe.utils.SessionUtils;
