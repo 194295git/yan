@@ -5,7 +5,7 @@ package com.netty.common.domain;
  * @创建时间 2021/12/10
  * @描述 返回前端的消息主题与消息队列中储存的消息
  */
-public class Message {
+public class MqMessage {
     // 发送方id
     private String fromId;
 
