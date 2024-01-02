@@ -1,7 +1,7 @@
 package com.netty.informationServe.protocol.packet;
 
 import com.netty.informationServe.protocol.Packet;
-import com.netty.informationServe.protocol.commond;
+import com.netty.informationServe.protocol.Commond;
 
 /**
  * @创建人 rose
@@ -43,6 +43,6 @@ public class GroupMessagePacket extends Packet {
 
     @Override
     public Byte getCommand() {
-        return commond.GROUP_MESSAGE;
+        return Commond.GROUP_MESSAGE;
     }
 }

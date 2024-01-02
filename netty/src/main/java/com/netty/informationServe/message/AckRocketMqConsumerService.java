@@ -1,14 +1,12 @@
 package com.netty.informationServe.message;
 
 import com.alibaba.fastjson.JSON;
-import com.rose.common.constant.NettyConstants;
-import com.rose.common.netty.AttrConstants;
-import com.rose.common.mqutil.SendRequest;
-import com.netty.informationServe.config.RocketMQConfig;
 import com.netty.informationServe.utils.Nettyutil;
 import com.netty.informationServe.utils.SessionUtils;
 import com.rose.common.base.WebsocketMessage;
-import com.rose.common.utils.UUIDUtils;
+import com.rose.common.constant.NettyConstants;
+import com.rose.common.mqutil.SendRequest;
+import com.rose.common.netty.AttrConstants;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.AbstractRocketMqConsumer;
 import io.github.rhwayfun.springboot.rocketmq.starter.constants.RocketMqContent;
 import io.github.rhwayfun.springboot.rocketmq.starter.constants.RocketMqTopic;
@@ -27,7 +25,7 @@ import java.util.Set;
  */
 @Service
 @Slf4j
-public class RocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, RocketMqContent> {
+public class AckRocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, RocketMqContent> {
 
     @Autowired
     private Nettyutil nettyutil;
@@ -77,7 +75,7 @@ public class RocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTo
         WebsocketMessage websocketMsg = new WebsocketMessage(
                 request.getRequestId(),
                 channel.attr(AttrConstants.sessionId).get(),
-                UUIDUtils.getUUID(),
+                request.getUniqueMsgid(),
                 WebsocketMessage.MsgType.BUSSINESS.code,
                 new String[]{channelId},
                 request.getMsg(),
@@ -97,7 +95,7 @@ public class RocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTo
         Map<String, Set<String>> map = new HashMap<>();
         String instanceId =   nettyutil.getInstance();
 
-        map.put(RocketMQConfig.getWebsocketTopic(instanceId), null);
+        map.put("netty-ack", null);
         return map;
     }
 
@@ -108,7 +106,7 @@ public class RocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTo
     @Override
     public String getConsumerGroup() {
         String instanceId =   nettyutil.getInstance();
-        return RocketMQConfig.getWebsocketGroup(instanceId);
+        return "consume-ack";
     }
 
 }

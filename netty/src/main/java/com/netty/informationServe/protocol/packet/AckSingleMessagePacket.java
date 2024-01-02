@@ -1,19 +1,30 @@
 package com.netty.informationServe.protocol.packet;
 
 import com.netty.informationServe.protocol.Packet;
-import com.netty.informationServe.protocol.commond;
+import com.netty.informationServe.protocol.Commond;
+import com.rose.common.base.WebsocketMessage;
 
 /**
  * @创建人 rose
  * @创建时间 2021/12/2
  * @描述
  */
-public class SingleMessagePacket extends Packet {
+public class AckSingleMessagePacket extends Packet {
+
+    private WebsocketMessage websocketMessage;
     private String toUserId;
 
     private String message;
 
     private String fileType;
+
+    public WebsocketMessage getWebsocketMessage() {
+        return websocketMessage;
+    }
+
+    public void setWebsocketMessage(WebsocketMessage websocketMessage) {
+        this.websocketMessage = websocketMessage;
+    }
 
     public String getToUserId() {
         return toUserId;
@@ -41,6 +52,6 @@ public class SingleMessagePacket extends Packet {
 
     @Override
     public Byte getCommand() {
-        return commond.SINGLE_MESSAGE;
+        return Commond.SINGLE_MESSAGE;
     }
 }

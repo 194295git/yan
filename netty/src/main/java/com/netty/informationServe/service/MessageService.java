@@ -31,7 +31,7 @@ public class MessageService {
      * @param request
      * @return
      */
-    public Set execute(SendRequest request) {
+    public Set execute(SendRequest request,Byte type) {
         checkServer();
         //查询redis中所有的websocket服务
         Set<String> set = redisTemplate.keys(RedisPrefix.PREFIX_SERVERCLIENTS + "*");

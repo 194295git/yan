@@ -1,7 +1,6 @@
 package com.rose.common.mqutil;
 
 import com.alibaba.fastjson.JSONObject;
-import com.rose.common.mqutil.AbstractRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,6 +23,9 @@ public class SendRequest extends AbstractRequest implements Serializable {
      */
     @ApiModelProperty(value="推送消息的内容" ,required=true)
     private JSONObject msg;
+
+    //唯一id 从后台查询 ,不能是每次生成一下。需要通过唯一id去过滤消息
+    private String uniqueMsgid;
 
     /**
      * 推送发起者默认系统

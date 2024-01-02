@@ -1,7 +1,7 @@
 package com.netty.informationServe.protocol.packet;
 
 import com.netty.informationServe.protocol.Packet;
-import com.netty.informationServe.protocol.commond;
+import com.netty.informationServe.protocol.Commond;
 
 /**
  * @创建人 rose
@@ -41,6 +41,6 @@ public class SingleMessagePacket extends Packet {
 
     @Override
     public Byte getCommand() {
-        return commond.SINGLE_MESSAGE;
+        return Commond.SINGLE_MESSAGE;
     }
 }
