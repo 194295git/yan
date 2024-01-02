@@ -1,7 +1,7 @@
 //package com.netty.informationServe.service.messagedispatch;
 //
 //
-//import com.netty.common.entity.SendRequest;
+//import com.rose.common.mqutil.SendRequest;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.stereotype.Service;
 //import org.springframework.web.client.RestTemplate;

@@ -1,8 +1,9 @@
 package com.netty.informationServe.service.messagedispatch;
 
 import com.alibaba.fastjson.JSONObject;
-import com.netty.common.constants.Constants;
-import com.netty.common.entity.SendRequest;
+import com.rose.common.mqutil.MqMessage;
+import com.rose.common.constant.NettyConstants;
+import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.config.RocketMQConfig;
 import com.rose.common.base.WebsocketMessage;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.DefaultRocketMqProducer;
@@ -28,11 +29,27 @@ public class MQDispatchServiceImpl implements MessageDispatchService {
         producer.sendMsg(getInstants(instants,  request));
     }
 
+    @Override
+    public void sendForSave( MqMessage request) {
+        producer.sendMsg(getInstantsSaveDB(request));
+    }
+
+
     private Message getInstants(String topic, SendRequest msg) {
         //构建message消息体
         Message message = new Message(RocketMQConfig.getWebsocketTopic(topic), JSONObject.toJSONString(msg).getBytes());
         //由调用接口的方式触发消息
-        message.putUserProperty(Constants.Trigger, WebsocketMessage.Trigger.HTTP.code + "");
+        message.putUserProperty(NettyConstants.Trigger, WebsocketMessage.Trigger.HTTP.code + "");
         return message;
     }
+
+    private Message getInstantsSaveDB( MqMessage msg) {
+        //构建message消息体
+        Message message = new Message(NettyConstants.ROCKETMQ_TPOIC_SAVECHAT, JSONObject.toJSONString(msg).getBytes());
+        //由调用接口的方式触发消息
+        message.putUserProperty(NettyConstants.Trigger, WebsocketMessage.Trigger.HTTP.code + "");
+        return message;
+    }
+
+
 }

@@ -1,6 +1,6 @@
 package com.netty.informationServe.controller;
 
-import com.netty.common.entity.SendRequest;
+import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.message.MessageSendService;
 import com.netty.informationServe.utils.SessionUtils;
 import com.netty.informationServe.utils.WebsocketMessageGenerateUtils;

@@ -1,7 +1,7 @@
 package com.netty.informationServe.config;
 
 
-import com.netty.common.constants.Constants;
+import com.rose.common.constant.NettyConstants;
 
 /**
  * RocketMQ配置
@@ -14,7 +14,7 @@ public class RocketMQConfig {
      * @return
      */
     public static String getWebsocketTopic(String instantceId){
-        return  Constants.ROCKETMQ_TOPIC_PREFIX + getMqInstance(instantceId);
+        return  NettyConstants.ROCKETMQ_TOPIC_PREFIX + getMqInstance(instantceId);
     }
 
     /**
@@ -23,7 +23,7 @@ public class RocketMQConfig {
      * @return
      */
     public static String getWebsocketGroup(String instantceId){
-        return  Constants.ROCKETMQ_GROUP_PREFIX + getMqInstance(instantceId);
+        return  NettyConstants.ROCKETMQ_GROUP_PREFIX + getMqInstance(instantceId);
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.netty.common.constants;
+package com.rose.common.netty;
 
 import io.netty.util.AttributeKey;
 

@@ -1,4 +1,4 @@
-package com.netty.common.constants;
+package com.rose.common.constant;
 
 /**
  * 通用常量信息
@@ -6,7 +6,7 @@ package com.netty.common.constants;
  * @author ruoyi
  * @edit rose
  */
-public class Constants
+public class NettyConstants
 {
     /**
      * UTF-8 字符集
@@ -145,4 +145,7 @@ public class Constants
     public static final String Trigger = "Trigger";
 
     public static final String MSG = "msg";
+
+
+    public static final String ROCKETMQ_TPOIC_SAVECHAT = "SAVECHAT";
 }

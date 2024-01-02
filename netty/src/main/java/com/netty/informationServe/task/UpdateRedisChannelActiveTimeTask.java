@@ -66,7 +66,7 @@ public class UpdateRedisChannelActiveTimeTask{
                 //1000条客户端活跃时间提交一次redis
                 while(it.hasNext()){
                     Map.Entry<String,Date> entry = it.next();
-                    //redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get(),"lastActiveTime" ,DateUtils.dateToDateTime(now));
+                    //redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(NettyConstants.attrChannelId).get(),"lastActiveTime" ,DateUtils.dateToDateTime(now));
                     redisConnection.hSet((RedisPrefix.PREFIX_CLIENT+entry.getKey()).getBytes(),"lastActiveTime".getBytes(), DateUtils.dateToDateTime(entry.getValue()).getBytes() );
                     it.remove();
                     count++;

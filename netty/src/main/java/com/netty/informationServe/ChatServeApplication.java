@@ -58,7 +58,7 @@ public class ChatServeApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        Message message = new Message();
+//        MqMessage message = new MqMessage();
 //        message.setFromId(1);
 //        message.setInfoContent("465");
 //        rocketMQTemplate.convertAndSend("NettyInfo",message);

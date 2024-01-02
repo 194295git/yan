@@ -149,7 +149,7 @@ public class WebSocketServe {
             redisTemplate.opsForHash().put(RedisPrefix.WEBSOCKETSERVER,instanceid,nettyPort);
             log.info("设置实例[{}]的netty端口为[{}].",instanceid,nettyPort);
         }else{
-            log.info("不存在[{}]的..",nettyPort);
+            log.info("setRedisWebsocketPort时 不存在[{}]的..",nettyPort);
             tryCount++;
             if(tryCount<=tryMaxCount){
                 try {

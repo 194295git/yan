@@ -40,7 +40,7 @@ public  class NacosInstancesChangeEventListener extends Subscriber<InstancesChan
         Instance instanceInfo = event.getHosts().get(0);
 //        InstanceInfo instanceInfo = event.getInstanceInfo();
         log.info("服务注册事件:"+event.getServiceName().toLowerCase()+"-"+instanceInfo.getIp()+":"+instanceInfo.getPort());
-//        if(Constants.WEBSOCKET_SERVER.equalsIgnoreCase(event.getServiceName())){
+//        if(NettyConstants.WEBSOCKET_SERVER.equalsIgnoreCase(event.getServiceName())){
             if(!redisTemplate.opsForHash().hasKey(RedisPrefix.WEBSOCKETSERVER,instanceInfo.getInstanceId())){
                 redisTemplate.opsForHash().put(RedisPrefix.WEBSOCKETSERVER,instanceInfo.getInstanceId(),"");
             }

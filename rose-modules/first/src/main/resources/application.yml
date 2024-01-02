@@ -4,6 +4,7 @@ spring:
 #    password: 1942951600
 #    url: jdbc:mysql://localhost:3306/yan?characterEncoding=utf-8&useSSL=false&useUnicode=true&serverTimezone=UTC
 #    driver-class-name: com.mysql.cj.jdbc.Driver
+
   application:
     name: yan-first
   cloud:
@@ -60,7 +61,13 @@ spring:
           alg_round:
             type: ROUND_ROBIN
 
-
+  rocketmq:
+    name-server: 192.168.56.20:9876
+    producer-send-msg-timeout: 3000
+    producer:
+      shutdown:
+        enable: false
+    producer-group-name: consumeNetty
 
   redis:
     host: 192.168.56.20
@@ -103,7 +110,7 @@ server:
 
 
 #rocketmq:
-#  name-server: 192.168.56.10:9876
+#  name-server: 192.168.56.20:9876
 #  producer:
 #    group: Netty-group
 #    sendMessageTimeout: 300000

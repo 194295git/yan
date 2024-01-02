@@ -2,10 +2,10 @@ package com.netty.informationServe.serve.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.netty.common.constants.AttrConstants;
-import com.netty.common.constants.Constants;
+import com.rose.common.constant.NettyConstants;
+import com.rose.common.netty.AttrConstants;
 import com.netty.common.domain.User;
-import com.netty.common.entity.SendRequest;
+import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.config.NettyConfig;
 import com.netty.informationServe.protocol.Packet;
 import com.netty.informationServe.protocol.commond;
@@ -157,6 +157,12 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         //删除redis里面的数据
+        if( SessionUtils.getUser(ctx.channel()) == null){
+            log.info("当前channel没有登录用户");
+            return;
+
+        }
+
         channelService.remove(SessionUtils.getUser(ctx.channel()).getOpenid());
         //删除缓存的hashmap
         NettyConfig.group.remove(ctx.channel());
@@ -201,7 +207,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 new String[]{channelId},
                 request.getMsg(),
                 request.getFrom(),
-                Integer.parseInt(msg.getUserProperty(Constants.Trigger))
+                Integer.parseInt(msg.getUserProperty(NettyConstants.Trigger))
         );
         return websocketMsg;
     }

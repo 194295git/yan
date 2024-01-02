@@ -1,9 +1,9 @@
 package com.netty.informationServe.message;
 
 import com.alibaba.fastjson.JSON;
-import com.netty.common.constants.AttrConstants;
-import com.netty.common.constants.Constants;
-import com.netty.common.entity.SendRequest;
+import com.rose.common.constant.NettyConstants;
+import com.rose.common.netty.AttrConstants;
+import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.config.RocketMQConfig;
 import com.netty.informationServe.utils.Nettyutil;
 import com.netty.informationServe.utils.SessionUtils;
@@ -82,7 +82,7 @@ public class RocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTo
                 new String[]{channelId},
                 request.getMsg(),
                 request.getFrom(),
-                Integer.parseInt(msg.getUserProperty(Constants.Trigger))
+                Integer.parseInt(msg.getUserProperty(NettyConstants.Trigger))
                 );
         return websocketMsg;
     }
