@@ -3,6 +3,7 @@ package com.netty.informationServe.serve.handler;
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
+import com.netty.informationServe.protocol.Commond;
 import com.rose.common.mqutil.MqMessage;
 import com.netty.common.domain.User;
 import com.netty.informationServe.service.messagedispatch.MessageDispatchService;
@@ -70,7 +71,10 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         String fileType = singleMessagePacket.getFileType();
 //
         //使用mq发送替代直接发送
-        messageService.execute(createSendRequest(channelHandlerContext, message, toUser, fileType));
+        messageService.execute(
+                createSendRequest(channelHandlerContext, message, toUser, fileType),
+                Commond.SINGLE_MESSAGE
+        );
         //这行重要的代码就先注释
 //        ByteBuf buf = getByteBuf(channelHandlerContext, message, toUser, fileType);
 //        toUserChannel.writeAndFlush(new TextWebSocketFrame(buf));

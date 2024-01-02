@@ -1,5 +1,6 @@
 package com.netty.informationServe.controller;
 
+import com.netty.informationServe.protocol.Commond;
 import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.service.MessageService;
 import com.rose.common.base.GenericResponse;
@@ -27,7 +28,7 @@ public class RocketmqMessageClusterController {
     @RequestMapping(value="/message/send",method = RequestMethod.POST)
     public GenericResponse send(@RequestBody @Valid SendRequest request){
         GenericResponse result = null;
-        Set notExist = messageService.execute(request);
+        Set notExist = messageService.execute(request, Commond.HTTP_REQUEST);
 
         if(notExist!= null && notExist.size()>0){
             //存在找不到的客户端

@@ -29,6 +29,9 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
     SingleMessageHandler singleMessageHandler;
 
     @Autowired
+    AckSingleMessageHandler ackSingleMessageHandler;
+
+    @Autowired
     GroupMessageHandler groupMessageHandler;
 
     @Autowired
@@ -62,6 +65,7 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
                     .addLast("base_handler",myWebSocketHandler)
                     .addLast("register_handler",registerHandler)
                     .addLast("single_message",singleMessageHandler)
+                     .addLast("ack_single_message",ackSingleMessageHandler)
                     .addLast("creat_group",creatGroupHandler)
                     .addLast("group_message",groupMessageHandler)
 //                    .addLast(HeartBeatRequestHandler.INSTANCE)

@@ -34,7 +34,17 @@ public class MQDispatchServiceImpl implements MessageDispatchService {
         producer.sendMsg(getInstantsSaveDB(request));
     }
 
+    @Override
+    public void sendAck(String instants, SendRequest request) {
 
+    }
+
+    /**
+     * 构建消息请求体.
+     * @param topic
+     * @param msg
+     * @return
+     */
     private Message getInstants(String topic, SendRequest msg) {
         //构建message消息体
         Message message = new Message(RocketMQConfig.getWebsocketTopic(topic), JSONObject.toJSONString(msg).getBytes());
@@ -43,6 +53,11 @@ public class MQDispatchServiceImpl implements MessageDispatchService {
         return message;
     }
 
+    /**
+     * 构造保存消息.
+     * @param msg
+     * @return
+     */
     private Message getInstantsSaveDB( MqMessage msg) {
         //构建message消息体
         Message message = new Message(NettyConstants.ROCKETMQ_TPOIC_SAVECHAT, JSONObject.toJSONString(msg).getBytes());

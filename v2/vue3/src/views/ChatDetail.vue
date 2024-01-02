@@ -244,7 +244,7 @@ export default {
       timeoutObj: null,
       groups: [],
       openid: route.query.openid,
-      groupId:route.query.groupId,
+      groupId: route.query.groupId,
     });
 
     onMounted(() => {
@@ -253,8 +253,10 @@ export default {
       //收到消息后更新前端数据
       state.socketServe.ws.onmessage = (msg) => {
         console.log(msg.data, "chat__从服务端获取到了数据");
-        const res = JSON.parse(msg.data).msg == undefined
-        ? JSON.parse(msg.data) : JSON.parse(msg.data).msg;
+        const res =
+          JSON.parse(msg.data).msg == undefined
+            ? JSON.parse(msg.data)
+            : JSON.parse(msg.data).msg;
         console.log(res);
         if (res.type === 0) {
           return;
@@ -265,6 +267,7 @@ export default {
             type: "receive",
             content: res.params.message,
           });
+          singleAck(JSON.parse(msg.data));
         }
         //群聊收消息
         if (res.type === 10) {
@@ -288,7 +291,7 @@ export default {
     };
     const getToken = async () => {
       const token = getLocal("token");
-       console.log(token==undefined ?"token为空":"token不为空");
+      console.log(token == undefined ? "token为空" : "token不为空");
       if (token) {
         state.userInfo = store.state.userInfo;
 
@@ -312,8 +315,9 @@ export default {
       sendRegisterData();
       if (state.current == 1) {
         //单聊情况
-         //向后端发送注册的消息
+        //向后端发送注册的消息
         const msgdata = await getChatContent(state.openid);
+
         state.recesiveAllMsg = msgdata.content;
       }
       if (state.current == 2) {
@@ -325,8 +329,7 @@ export default {
         state.recesiveAllMsg = [];
         state.recesiveAllMsg = group.content;
       }
-    
-     
+
       // Toast.clear();
     };
 
@@ -350,6 +353,23 @@ export default {
       console.log("发送注册数据");
     };
 
+    //发送单聊ack
+    const singleAck = (receive) => {
+      console.log("receive",receive)
+      var data = {
+        type: 15,
+        params: {
+          from: "client",
+          msgid: receive.messageId,
+          fromUser: receive.msg.params.fromUser.openid,
+          toUser: receive.msg.params.toUser.openid,
+        },
+      };
+      console.log(data);
+      state.socketServe.send(data);
+      console.log("回应单聊ack");
+    };
+
     const goBack = () => {
       router.go(-1);
     };
@@ -358,8 +378,6 @@ export default {
       router.push({ path: "/home" });
     };
 
-   
-    
     const changeCur = () => {
       router.go(-1);
     };

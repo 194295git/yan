@@ -1,7 +1,7 @@
 package com.netty.informationServe.protocol.packet;
 
 import com.netty.informationServe.protocol.Packet;
-import com.netty.informationServe.protocol.commond;
+import com.netty.informationServe.protocol.Commond;
 
 import java.util.List;
 
@@ -36,6 +36,6 @@ public class CreateGroupPacket extends Packet {
 
     @Override
     public Byte getCommand() {
-        return commond.CREATE_GROUP;
+        return Commond.CREATE_GROUP;
     }
 }

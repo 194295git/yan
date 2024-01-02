@@ -2,20 +2,17 @@ package com.netty.informationServe.serve.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.rose.common.constant.NettyConstants;
-import com.rose.common.netty.AttrConstants;
 import com.netty.common.domain.User;
-import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.config.NettyConfig;
 import com.netty.informationServe.protocol.Packet;
-import com.netty.informationServe.protocol.commond;
-import com.netty.informationServe.protocol.packet.CreateGroupPacket;
-import com.netty.informationServe.protocol.packet.GroupMessagePacket;
-import com.netty.informationServe.protocol.packet.RegisterPacket;
-import com.netty.informationServe.protocol.packet.SingleMessagePacket;
+import com.netty.informationServe.protocol.Commond;
+import com.netty.informationServe.protocol.packet.*;
 import com.netty.informationServe.service.ChannelService;
 import com.netty.informationServe.utils.SessionUtils;
 import com.rose.common.base.WebsocketMessage;
+import com.rose.common.constant.NettyConstants;
+import com.rose.common.mqutil.SendRequest;
+import com.rose.common.netty.AttrConstants;
 import com.rose.common.utils.UUIDUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -109,6 +106,18 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 messageRequestPacket.setFileType(parmas.getString("fileType"));
                 packet = messageRequestPacket;
                 break;
+            // 单聊ack
+            case 15:
+                AckSingleMessagePacket ackmessageRequestPacket = new AckSingleMessagePacket();
+                WebsocketMessage websocketMessage= new  WebsocketMessage();
+                websocketMessage.setFrom("client");
+                websocketMessage.setMessageId(parmas.getString("msgid"));
+                websocketMessage.setFrom(parmas.getString("fromUser"));
+                String[] touser = {parmas.getString("toUser")};
+                websocketMessage.setTo(touser);
+                ackmessageRequestPacket.setWebsocketMessage(websocketMessage);
+                packet = ackmessageRequestPacket;
+                break;
             // 创建群聊
             case 3:
                 CreateGroupPacket createGroupPacket = new CreateGroupPacket();
@@ -135,8 +144,14 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
 
         //        返回应答消息
 //        获取客户端向服务端发送的消息
-        if(type == commond.SINGLE_MESSAGE||type == commond.GROUP_MESSAGE){
+        if(type.equals(Commond.SINGLE_MESSAGE)||type.equals(Commond.GROUP_MESSAGE)){
             ByteBuf buf = getByteBuf(ctx, parmas.getString("message"));
+            TextWebSocketFrame tws = new TextWebSocketFrame(buf);
+            ctx.writeAndFlush(tws);
+        }
+        //返回给client b的回应
+        if(type.equals(Commond.SINGLE_MESSAGE_ACK)){
+            ByteBuf buf = getByteBufAck(ctx, parmas.getString("msgid"));
             TextWebSocketFrame tws = new TextWebSocketFrame(buf);
             ctx.writeAndFlush(tws);
         }
@@ -186,7 +201,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         ByteBuf byteBuf = ctx.alloc().buffer();
         User fromUser = SessionUtils.getUser(ctx.channel());
         JSONObject data = new JSONObject();
-        data.put("type", commond.SELF_RESPONSE);
+        data.put("type", Commond.SELF_RESPONSE);
         data.put("status", 200);
         JSONObject params = new JSONObject();
         params.put("message", message);
@@ -196,6 +211,23 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         byteBuf.writeBytes(bytes);
         return byteBuf;
     }
+
+    public ByteBuf getByteBufAck(ChannelHandlerContext ctx, String message) {
+        ByteBuf byteBuf = ctx.alloc().buffer();
+        User fromUser = SessionUtils.getUser(ctx.channel());
+        JSONObject data = new JSONObject();
+        data.put("type", Commond.SINGLE_MESSAGE_ACK_RESPONSE);
+        data.put("status", 200);
+        JSONObject params = new JSONObject();
+        params.put("message", message);
+        params.put("date", new Date().toString());
+        data.put("params", params);
+        byte []bytes = data.toJSONString().getBytes(Charset.forName("utf-8"));
+        byteBuf.writeBytes(bytes);
+        return byteBuf;
+    }
+
+
     //构造推送消息体
     private WebsocketMessage getMessage(String channelId, SendRequest request, MessageExt msg) {
         Channel channel =SessionUtils.getChannel(channelId);

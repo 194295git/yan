@@ -2,7 +2,7 @@ package com.netty.informationServe.protocol.packet;
 
 import com.netty.common.domain.User;
 import com.netty.informationServe.protocol.Packet;
-import com.netty.informationServe.protocol.commond;
+import com.netty.informationServe.protocol.Commond;
 
 /**
  * @创建人 rose
@@ -24,6 +24,6 @@ public class RegisterPacket extends Packet{
 
     @Override
     public Byte getCommand() {
-        return commond.REGISTER;
+        return Commond.REGISTER;
     }
 }

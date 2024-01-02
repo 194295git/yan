@@ -3,6 +3,7 @@ package com.netty.informationServe.serve.handler;
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
+import com.netty.informationServe.protocol.Commond;
 import com.rose.common.mqutil.MqMessage;
 import com.netty.common.domain.User;
 import com.rose.common.mqutil.SendRequest;
@@ -61,7 +62,10 @@ public class GroupMessageHandler extends SimpleChannelInboundHandler<GroupMessag
 
         sendMessage(channelHandlerContext,groupMessagePacket.getMessage(),groupId.toString(),Topic.OnLine,false);
 
-        messageService.execute(createSendRequest(channelHandlerContext, groupId, groupMessagePacket.getMessage(), userself, fileType, nameList));
+        messageService.execute(
+                createSendRequest(channelHandlerContext, groupId, groupMessagePacket.getMessage(), userself, fileType, nameList),
+                Commond.GROUP_MESSAGE_RESPONSE
+        );
 //        if (channelGroup != null) {
 //            User user = SessionUtils.getUser(channelHandlerContext.channel());
 //            ByteBuf byteBuf = getByteBuf(channelHandlerContext, groupId, groupMessagePacket.getMessage(), user, fileType, nameList);
