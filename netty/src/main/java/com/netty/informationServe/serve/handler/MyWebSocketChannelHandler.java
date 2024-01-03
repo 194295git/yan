@@ -59,7 +59,7 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
                  * 浏览器请求时，ws://localhost:7000/XXX 表示请求的资源
                  * 核心功能是 将http协议升级为ws协议，保持长连接
                  */
-//                    .addLast("nettyWebSocketParamHandler",nettyWebSocketParamHandler)
+                    .addLast("nettyWebSocketParamHandler",nettyWebSocketParamHandler)
                     .addLast("protocolHandler",new WebSocketServerProtocolHandler("/websocket"))
 //                    .addLast("nettyWebSocketHandler",nettyWebSocketHandler)
                     .addLast("base_handler",myWebSocketHandler)

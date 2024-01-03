@@ -17,14 +17,14 @@ export default class SocketService {
   // 重新连接尝试的次数
   connectRetryCount = 0;
   //  定义连接服务器的方法
-  connect() {
+  connect(token) {
     // 连接服务器
     if (!window.WebSocket) {
       return console.log('您的浏览器不支持WebSocket');
     }
     // let token = $.cookie('123');
     // let token = '4E6EF539AAF119D82AC4C2BC84FBA21F';
-    let url = 'ws://127.0.1:88/websocket';
+    let url = 'ws://127.0.1:88/websocket?token='+token;
     this.ws = new WebSocket(url);
     // 连接成功的事件
     this.ws.onopen = () => {

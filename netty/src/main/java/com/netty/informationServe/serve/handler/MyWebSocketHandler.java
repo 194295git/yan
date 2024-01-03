@@ -20,6 +20,9 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.*;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
@@ -46,7 +49,42 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
     @Autowired
     ChannelService channelService;
 
-//    服务端处理客户端websocket请求的核心方法
+
+
+    /**
+     * 事件回调  在这个地方完成参数认证和授权.需要去调用一个接口去测试.
+     *
+     * @param ctx
+     * @param evt
+     * @throws Exception
+     */
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete) {
+            //协议握手成功完成
+            log.info("NettyWebSocketHandler.userEventTriggered --> : 协议握手成功完成");
+            //检查用户token
+            AttributeKey<String> attributeKey = AttributeKey.valueOf("token");
+            //从通道中获取用户token
+            String token = ctx.channel().attr(attributeKey).get();
+            log.info("NettyWebSocketHandler.userEventTriggered"+token);
+//            ctx.fireChannelRead();
+            //校验token逻辑
+            //......
+//            if(1 == 2) {
+//                //如果token校验不通过，发送连接关闭的消息给客户端，设置自定义code和msg用来区分下服务器是因为token不对才导致关闭
+//                ctx.writeAndFlush(new CloseWebSocketFrame(400, "token 无效")).addListener(ChannelFutureListener.CLOSE);
+//            }
+        }
+        //通过判断IdleStateEvent的状态来实现自己的读空闲，写空闲，读写空闲处理逻辑
+        if (evt instanceof IdleStateEvent && ((IdleStateEvent) evt).state() == IdleState.READER_IDLE) {
+            //读空闲，关闭通道
+            log.info("NettyWebSocketHandler.userEventTriggered --> : 读空闲，关闭通道");
+            ctx.close();
+        }
+    }
+
+    //    服务端处理客户端websocket请求的核心方法
 //    这是模板方法的实现
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, WebSocketFrame msg) throws Exception {

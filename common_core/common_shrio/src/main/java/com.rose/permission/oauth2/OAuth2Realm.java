@@ -62,7 +62,7 @@ public class OAuth2Realm extends AuthorizingRealm {
 
 
     /**
-     * 认证(登录时调用)
+     * 认证(判断是否登录的一个方法。每一次请求都需要判断是否需要登录)
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
