@@ -85,10 +85,10 @@ export default {
         click: true
       })
       this.bs.on('scroll', () => {
-          console.log('scrolling-')
+          console.log('【UI】scrolling-')
         })
         this.bs.on('scrollEnd', () => {
-          console.log('scrollingEnd')
+          console.log('【UI】scrollingEnd')
         })
     } 
   }

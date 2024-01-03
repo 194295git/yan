@@ -4,9 +4,17 @@
 [给为服务添加运维模块 统一管理（第四期）](https://blog.csdn.net/qq_21561833/article/details/127821543)
 [微服务数据库模块（第五期）](https://blog.csdn.net/qq_21561833/article/details/131315983)
 
+### 0.微服务用户认证解析方案
+
+通常微服务对于用户认证信息解析有两种方案
+1. 在 gateway 就解析用户的 token 然后路由的时候把 userId 等相关信息添加到 header 中传递下去。
+2. 在 gateway 直接把 token 传递下去，每个子微服务自己在过滤器解析 token
+
+
 ### 1.分布式权限技术选型
 使用的是JWT +Shiro + Redis
-关于springSecurity 做分布式可能挺多。但是自己这个项目最开始使用的shiro，而且权限对应的角色，菜单都已经写好了，所以主体采用的shiro。使用jwt 标识每个用户的身份。使用redis 存储每个用户的权限。然后每次都从redis里面读取权限。
+关于springSecurity 做分布式可能挺多。但是自己这个项目最开始使用的shiro，而且权限对应的角色，
+菜单都已经写好了，所以主体采用的shiro。使用jwt 标识每个用户的身份。使用redis 存储每个用户的权限。然后每次都从redis里面读取权限。
 ### 2.理解jwt
 JWT由3部分组成：标头(Header)、有效载荷(Payload)和签名(Signature)。在传输的时候，会将JWT的3部分分别进行Base64编码后用.进行连接形成最终传输的字符串。
 在payload部分放上存储用户的id。然后可以从jwt字符串中解析出用户的id。

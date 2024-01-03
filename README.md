@@ -4,9 +4,11 @@
 - 一个开源的springcloud项目。体验和尝试springcloud的各种功能。
 - 内容：抽象出cloud中使用到的常用技术。目标做一个低代码的组件平台。将流程，数据库操作，
 建模、docker运维、文件系统等抽象出来方便的调用。会定期提升代码质量。还有移动端uniapp的支持。
+目前重点在做netty模块。通过websocket构建消息推送系统以及IM相关功能。先完成简单的音视频推送，
+后续考虑添加视频推流
 - 目的：将工作中使用到的技术脱离业务剥离出来，方便复用、借鉴。让使用者可以轻松调用
 - 模块：包括文件模块、运维模块、数据库模块、netty模块、用户中心模块、还有其他业务模块。
-- 后续：会开发sdk，文档，APIStroe等提供更加简介的调用方式。然后考虑孵化一个产品。
+- 后续：会开发sdk，文档，APIStroe等提供更加简介的调用方式。
 
 
 #### 服务说明
@@ -21,6 +23,16 @@
 9. common_shiro    分布式权限
 10. loginUser      用户中心、统一完成授权
 11. devops         相关的运维板块
+
+
+### netty 模块实现功能重点说明
+1.支持单聊和群聊 ，支持发送表情包
+2.聊天内容ack机制，然后未送达重试机制
+3.TODO 支持websocket集群（已经做了相关的集群需要的redis相关准备，需要测试一下gateway）
+4.TODO 支持websocket授权功能（已经做了相关的截取参数以及改造前端vue）
+5.TODO 支持心跳功能以及
+
+
 
 #### 软件架构
 软件架构说明
@@ -45,15 +57,13 @@
 8. (loginUser) 用户中心模块。统一完成用户授权
 9. (database)展示不同数据源的表结构，生成项目所需要的代码，执行sql文件
 #### 完成的功能
-1. 一个后台管理系统 一个前台应用
-2. 问题，回答，评论，点赞增删改查
-4. 考研面临的专业以及专业下的细分学科
-5. 基于netty,websocket 以及rocketmq的聊天功能
-6. 将python开发的智能择校模块集成进去
-7. 异常处理系统
-8. swagger 接口文档地址 localhost:8999/swagger-ui.html
-9. 引入springcloud，使用了gateway网关与nacos注册中心
-10. 将使用的中间件rabbitmq使用docker部署在虚拟机上
+1. 一个后台管理系统(运维模块，数据库模块等模块) 一个前台应用(vue3，主要包含IM模块，文件模块，相关增删改查模块)
+2. 基于netty,websocket 以及rocketmq的聊天功能
+3. 异常处理系统
+4. swagger 接口文档地址 localhost:8999/swagger-ui.html
+5. 引入springcloud，使用了gateway网关与nacos注册中心
+6. 将使用的中间件RabbitMQ，RocketMQ使用docker部署在虚拟机上
+7. 分布式权限功能已完成
 
 ### 补充：
 1. swagger 接口文档地址 localhost:8999/swagger-ui.html

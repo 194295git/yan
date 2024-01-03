@@ -64,6 +64,7 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<WebSocket
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, WebSocketFrame textWebSocketFrame) throws Exception {
         log.info("NettyWebSocketHandler.channelRead0 --> : 发消息来了");
+
     }
 
     @Override

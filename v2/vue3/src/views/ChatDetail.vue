@@ -315,7 +315,7 @@ export default {
     };
     const getToken = async () => {
       const token = getLocal("token");
-      console.log(token == undefined ? "token为空" : "token不为空");
+      // console.log(token == undefined ? "token为空" : "token不为空");
       if (token) {
         state.userInfo = store.state.userInfo;
 
@@ -332,7 +332,7 @@ export default {
       state.userlist = data.content;
 
       state.toUser = store.state.toUser;
-      console.log("state.toUser", state.toUser);
+      console.log("【vuex】state.toUser", state.toUser);
       const res = await getAllGroup();
       state.groups = res.content;
       //先注册自己到channel 里面
@@ -358,7 +358,8 @@ export default {
     };
 
     //建立连接
-    SocketService.Instance.connect();
+
+    SocketService.Instance.connect(localStorage.getItem('token'));
     state.socketServe = SocketService.Instance;
     state.socketServe.registerCallBack("callback1", state.socketServe);
 
@@ -372,9 +373,8 @@ export default {
           loginStatus: "1",
         },
       };
-      console.log(data);
       state.socketServe.send(data);
-      console.log("【IM日志】 发送注册数据");
+      console.log("【IM日志】 发送注册数据",data);
     };
 
     //发送单聊ack
