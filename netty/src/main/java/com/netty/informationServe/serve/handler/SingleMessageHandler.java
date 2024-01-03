@@ -72,7 +72,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
 //
         //使用mq发送替代直接发送
         messageService.execute(
-                createSendRequest(channelHandlerContext, message, toUser, fileType),
+                createSendRequest(channelHandlerContext, message, toUser, fileType,singleMessagePacket.getMsgid()),
                 Commond.SINGLE_MESSAGE
         );
         //这行重要的代码就先注释
@@ -88,12 +88,13 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
      * @param message
      * @param toUser
      * @param fileType
+     * @param msgid
      * @return
      */
-    public SendRequest createSendRequest(ChannelHandlerContext ctx, String message, User toUser, String fileType){
+    public SendRequest createSendRequest(ChannelHandlerContext ctx, String message, User toUser, String fileType, String msgid){
         User fromUser = SessionUtils.getUser(ctx.channel());
         JSONObject data = new JSONObject();
-        data.put("type", 2);
+        data.put("type", Commond.SINGLE_MESSAGE_OTHER);
         data.put("status", 200);
         JSONObject params = new JSONObject();
         params.put("message", message);
@@ -109,6 +110,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         req.setTo(toList);
         req.setSendToAll(false);
         req.setMsg(data);
+        req.setUniqueMsgid(msgid);
         return req;
     }
     public ByteBuf getByteBuf(ChannelHandlerContext ctx, String message, User toUser, String fileType) {

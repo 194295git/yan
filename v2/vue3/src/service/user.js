@@ -21,6 +21,11 @@
  export function getUserInfo() {
    return apiFirstGet('/yaj/yan-user/getUserInfo');
  }
+
+ export function getLeaf(params) {
+  return apiLoginUserPost('/api/segment/get/leaf-segment-test',params);
+}
+
  export function getUserInfoMe() {
    return apiFirstGet('/yaj/yan-user/getUserInfoMe');
  }

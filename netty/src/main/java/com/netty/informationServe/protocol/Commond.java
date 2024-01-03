@@ -11,7 +11,10 @@ public interface Commond {
     //私聊消息
     Byte SINGLE_MESSAGE = 1;
     //私聊响应
-    Byte MESSAGE_RESPONSE = 2;
+    Byte SINGLE_MESSAGE_RESPONSE = -1;
+
+    //私聊响应
+    Byte SINGLE_MESSAGE_OTHER = 2;
     //创建群
     Byte CREATE_GROUP = 3;
     //创建群响应

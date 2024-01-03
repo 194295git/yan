@@ -67,6 +67,52 @@ msg:N
 	"trigger": 1
 } 
 ```
+```json
+//发送ack消息
+{
+	"type": 15,
+	"params": {
+		"from": "client",
+		"msgid": "16516",
+		"fromUser": "56C02DF0516B4B079ABFCEC08169E577",
+		"toUser": "1879878-NKCNO-NKNK"
+	}
+}
+//收到消息
+{
+	"type": 16,
+	"params": {
+		"date": "Tue Jan 02 21:59:05 CST 2024",
+		"message": "16516"
+	},
+	"status": 200
+}
+
+```
+```json
+{
+	"activeTime": 1704203945910,
+	"from": "system",
+	"messageId": "17adfc694782429ea973076d83fe8c8a",
+	"msg": {
+		"type": 17,
+		"status": 200
+	},
+	"msgType": 1,
+	"requestId": "eee728b0-0182-46c7-9d97-39e711f20368",
+	"sessionId": "192.168.56.1:8084_56C02DF0516B4B079ABFCEC08169E577_20240102215858",
+	"to": ["56C02DF0516B4B079ABFCEC08169E577"],
+	"trigger": 1
+}
+```
+
+type为 15  16 17三条消息完成消息的闭环
+然后消息队里那块还是需要处理一下；
+
+消息重发机制需要再次研究一下
+还有mq的ack机制也是需要研究的；
+
+
 分发消息还需要ack一下；
 ACK的话使用mq换一个主题。 netty-ack 后续建立一个常量类来记录所有使用到的mq主题
 订阅该服务实例名的topic

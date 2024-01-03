@@ -1,5 +1,7 @@
 package com.rose.loginUser.sys.controller;
 
+import com.rose.common.base.GenericResponse;
+import com.rose.common.base.ServiceError;
 import com.rose.loginUser.sys.serviceleaf.SegmentService;
 import com.sankuai.inf.leaf.common.Result;
 import com.sankuai.inf.leaf.common.Status;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+
 public class LeafController {
     private Logger logger = LoggerFactory.getLogger(LeafController.class);
 
@@ -19,8 +22,8 @@ public class LeafController {
 
 
     @RequestMapping(value = "/api/segment/get/{key}")
-    public String getSegmentId(@PathVariable("key") String key) {
-        return get(key, segmentService.getId(key));
+    public GenericResponse getSegmentId(@PathVariable("key") String key) {
+        return GenericResponse.response(ServiceError.NORMAL, get(key, segmentService.getId(key)));
     }
 
 

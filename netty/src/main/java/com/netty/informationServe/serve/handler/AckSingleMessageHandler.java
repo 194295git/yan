@@ -53,7 +53,7 @@ public class AckSingleMessageHandler extends SimpleChannelInboundHandler<AckSing
             message = singleMessagePacket.getMessage();
             User toUser = SessionUtils.getUser(toUserChannel);
             String fileType = singleMessagePacket.getFileType();
-            String msgid = singleMessagePacket.getMessage();
+            String msgid = singleMessagePacket.getWebsocketMessage().getMessageId();
             //使用mq发送替代直接发送
             messageService.execute(
                     createSendRequest(channelHandlerContext, message, toUser, fileType,msgid),
