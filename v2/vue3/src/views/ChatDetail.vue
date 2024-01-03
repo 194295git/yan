@@ -200,7 +200,12 @@ import {
   getAvatarUrlByOpenid,
   getGroupMemberDetail,
 } from "@/service/chat";
+import {getLeaf
+
+} from "@/service/user";
 import SocketService from "@/common/js/websocket";
+import Queue from "@/common/js/queue";
+import * as imconstant from '@/common/js/imconstant';
 import { useStore } from "vuex";
 import { getLocal } from "@/common/js/utils";
 export default {
@@ -220,6 +225,7 @@ export default {
     const state = reactive({
       memberBaseDetail: [],
       userlist: [],
+      queue: new Queue(),
       socketServe: SocketService.Instance,
       recesiveAllMsg: [],
       userInfo: {},
@@ -247,12 +253,14 @@ export default {
       groupId: route.query.groupId,
     });
 
+   
+
     onMounted(() => {
       getToken();
       init();
       //收到消息后更新前端数据
       state.socketServe.ws.onmessage = (msg) => {
-        console.log(msg.data, "chat__从服务端获取到了数据");
+        console.log("【IM日志】从服务端获取到的原始数据",msg.data);
         const res =
           JSON.parse(msg.data).msg == undefined
             ? JSON.parse(msg.data)
@@ -261,13 +269,29 @@ export default {
         if (res.type === 0) {
           return;
         }
+         // msg:A 收消息的情况，把消息推送上去
+        if (res.type === imconstant.SINGLE_MESSAGE_RESPONSE) {
+          //发送消息成功的时候将自己这条消息维护进如队列。
+          console.log("【IM日志】 msg:A 维护消息进入队列")
+          // Queue
+          state.queue.offer("测试队列功能");
+          console.log("【IM日志】队列信息",state.queue)
+          // TODO 使用了timer机制
+          //使用timer机制 检测队列里面是否存在ack，如果存在，则超时重发以及限制次数
+        }
         //收消息的情况，把消息推送上去
-        if (res.type === 2) {
+        if (res.type === imconstant.SINGLE_MESSAGE_OTHER) {
           state.recesiveAllMsg.push({
             type: "receive",
             content: res.params.message,
           });
           singleAck(JSON.parse(msg.data));
+        }
+
+        if(res.type ===imconstant.SINGLE_MESSAGE_ACK_OTHERCLIENT){
+          //代表客户端a成功的把消息发送了出去
+          console.log("【IM日志】ack:N 成功收到了ack消息  队列中的消息已经被删除")
+          console.log("poll=" +  state.queue.poll()); //返回第一个元素，并在队列中删除
         }
         //群聊收消息
         if (res.type === 10) {
@@ -341,7 +365,7 @@ export default {
     //发送注册的数据
     const sendRegisterData = () => {
       var data = {
-        type: 7,
+        type: imconstant.REGISTER,
         params: {
           openid: store.state.userInfo.openid,
           userName: store.state.userInfo.email,
@@ -350,12 +374,13 @@ export default {
       };
       console.log(data);
       state.socketServe.send(data);
-      console.log("发送注册数据");
+      console.log("【IM日志】 发送注册数据");
     };
 
     //发送单聊ack
-    const singleAck = (receive) => {
+    const singleAck = async(receive) => {
       console.log("receive",receive)
+
       var data = {
         type: 15,
         params: {
@@ -367,7 +392,7 @@ export default {
       };
       console.log(data);
       state.socketServe.send(data);
-      console.log("回应单聊ack");
+      console.log("【IM日志】回应单聊ack");
     };
 
     const goBack = () => {
@@ -390,12 +415,14 @@ export default {
       console.log(429, memberDeatil.content);
       state.memberBaseDetail = memberDeatil.content;
     };
-    const sendMsg2 = () => {
+    const sendMsg2 = async () => {
       const { content, toUser } = state;
+      const no =await getLeaf();
       let data = {
         // 1代表着私聊的意思
         type: 1,
         params: {
+          msgid:no.content,
           toMessageId: toUser.openid,
           message: content,
           fileType: 0,
@@ -412,6 +439,8 @@ export default {
         };
       }
       console.log(data);
+
+
       state.socketServe.send(data);
       state.recesiveAllMsg.push({
         type: "self",

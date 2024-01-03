@@ -28,7 +28,7 @@ export default class SocketService {
     this.ws = new WebSocket(url);
     // 连接成功的事件
     this.ws.onopen = () => {
-      console.log('连接服务端成功了');
+      console.log('【IM日志】连接服务端成功了');
       this.connected = true;
       // 重置重新连接的次数
       this.connectRetryCount = 0;
@@ -36,7 +36,7 @@ export default class SocketService {
     // 1.连接服务端失败
     // 2.当连接成功之后, 服务器关闭的情况
     this.ws.onclose = () => {
-      console.log('连接服务端失败');
+      console.log('【IM日志】连接服务端失败');
       this.connected = false;
       this.connectRetryCount++;
       setTimeout(() => {

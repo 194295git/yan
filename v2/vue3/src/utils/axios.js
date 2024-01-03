@@ -51,5 +51,8 @@ export function apiFirstGet(url,params){
 export function apiLoginUserPost(url,params){
   return axios.post('/api/loginUser'+url, params);
 }
-export default {axios,apiFirstPost,apiFirstGet,apiLoginUserPost}
+export function apiLoginUserGet(url,params){
+  return axios.get('/api/loginUser'+url, params);
+}
+export default {axios,apiFirstPost,apiFirstGet,apiLoginUserPost,apiLoginUserGet}
 

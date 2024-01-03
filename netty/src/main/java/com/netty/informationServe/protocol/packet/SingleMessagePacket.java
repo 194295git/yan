@@ -6,7 +6,7 @@ import com.netty.informationServe.protocol.Commond;
 /**
  * @创建人 rose
  * @创建时间 2021/12/2
- * @描述
+ * @描述 单聊的packet的一些属性.
  */
 public class SingleMessagePacket extends Packet {
     private String toUserId;
@@ -14,6 +14,16 @@ public class SingleMessagePacket extends Packet {
     private String message;
 
     private String fileType;
+
+    private String msgid;
+
+    public String getMsgid() {
+        return msgid;
+    }
+
+    public void setMsgid(String msgid) {
+        this.msgid = msgid;
+    }
 
     public String getToUserId() {
         return toUserId;

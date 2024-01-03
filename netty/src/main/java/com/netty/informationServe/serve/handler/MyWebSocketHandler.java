@@ -104,6 +104,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 messageRequestPacket.setMessage(parmas.getString("message"));
                 messageRequestPacket.setToUserId(parmas.getString("toMessageId"));
                 messageRequestPacket.setFileType(parmas.getString("fileType"));
+                messageRequestPacket.setMsgid(parmas.getString("msgid"));
                 packet = messageRequestPacket;
                 break;
             // 单聊ack
@@ -201,7 +202,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         ByteBuf byteBuf = ctx.alloc().buffer();
         User fromUser = SessionUtils.getUser(ctx.channel());
         JSONObject data = new JSONObject();
-        data.put("type", Commond.SELF_RESPONSE);
+        data.put("type", Commond.SINGLE_MESSAGE_RESPONSE);
         data.put("status", 200);
         JSONObject params = new JSONObject();
         params.put("message", message);
