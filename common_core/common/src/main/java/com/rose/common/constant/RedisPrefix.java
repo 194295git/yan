@@ -30,4 +30,6 @@ public interface RedisPrefix {
 
     String SHIROPERFIX = "yan_shiro_";
 
+    String LEAF_PERFIX = "yan_leaf";
+
 }

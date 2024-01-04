@@ -21,6 +21,17 @@ public class MqMessage {
     // 消息状态 在线或离线 1为私聊 0为群聊
     private Boolean state;
 
+
+    private String msgid;
+
+    public String getMsgid() {
+        return msgid;
+    }
+
+    public void setMsgid(String msgid) {
+        this.msgid = msgid;
+    }
+
     //发送时间
     private String time;
 

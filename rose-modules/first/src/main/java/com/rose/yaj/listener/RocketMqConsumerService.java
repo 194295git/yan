@@ -3,6 +3,7 @@ package com.rose.yaj.listener;
 import com.alibaba.fastjson.JSON;
 import com.rose.common.base.WebsocketMessage;
 import com.rose.common.constant.NettyConstants;
+import com.rose.common.constant.RedisPrefix;
 import com.rose.common.mqutil.MqMessage;
 import com.rose.common.mqutil.SendRequest;
 import com.rose.common.utils.UUIDUtils;
@@ -14,6 +15,8 @@ import io.github.rhwayfun.springboot.rocketmq.starter.constants.RocketMqTopic;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -30,6 +33,8 @@ public class RocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTo
     @Autowired
     YanUserChatService yanUserChatService;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     /**
      * 消费rocketmq的消息，通过channel管道来完成消息的推送
      * 使用返回值 ConsumeStatus的情况下可以确定是不是    ConsumeStatus.CONSUME_SUCCESS;
@@ -40,26 +45,40 @@ public class RocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTo
      */
     @Override
     public boolean consumeMsg(RocketMqContent content, MessageExt msg) {
+        String mqmsg = new String(msg.getBody());
+        log.info("RocketMqConsumerService=====消费消息:"+mqmsg);
+        //消息内容
+
+        MqMessage message1 = JSON.parseObject(mqmsg, MqMessage.class);
         try {
-            String mqmsg = new String(msg.getBody());
-            log.info("RocketMqConsumerService=====消费消息:"+mqmsg);
-            //消息内容
-            MqMessage message1 = JSON.parseObject(mqmsg, MqMessage.class);
+
 
             ChatDto chatDto = new ChatDto();
             chatDto.setContent(message1.getInfoContent());
             chatDto.setToOpenid(message1.getToId());
             chatDto.setGroup(message1.getState());
-            if (message1.getState() !=null){
-                if(message1.getType().equals("onLine")){
-                    yanUserChatService.saveChat(message1.getFromId(),chatDto,1);
-                }else {
-                    yanUserChatService.saveChat(message1.getFromId(),chatDto,0);
+
+            SetOperations<String, String> opsForSet = stringRedisTemplate.opsForSet();
+            Boolean member = opsForSet.isMember(RedisPrefix.LEAF_PERFIX, message1.getMsgid());
+            if(member){
+                Long remove = opsForSet.remove(RedisPrefix.LEAF_PERFIX, message1.getMsgid());//删除元素
+
+                //使用lua 表达式 防止同时多个请求进来；
+//            String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+//            Long res = redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(key), orderToken);
+                if (message1.getState() !=null){
+                    if(message1.getType().equals("onLine")){
+                        yanUserChatService.saveChat(message1.getFromId(),chatDto,1);
+                    }else {
+                        yanUserChatService.saveChat(message1.getFromId(),chatDto,0);
+                    }
                 }
             }
-            //处理业务逻辑
             return true;
         }catch (Exception e){
+            //失败的话需要把redis的这个消息还回去.
+            SetOperations<String, String> opsForSet = stringRedisTemplate.opsForSet();
+            Long add = opsForSet.add(RedisPrefix.LEAF_PERFIX,  message1.getMsgid());//往集合添加元素
             log.error("推送失败.",e);
         }
         return false;

@@ -126,7 +126,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         Byte type = jsonObject.getByte("type");
         JSONObject parmas = jsonObject.getJSONObject("params");
         Packet packet = null;
-
+        Channel toUserChannel = null;
         switch (type) {
             // 注册user-->channel 映射
             case 7:
@@ -143,6 +143,8 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 messageRequestPacket.setToUserId(parmas.getString("toMessageId"));
                 messageRequestPacket.setFileType(parmas.getString("fileType"));
                 messageRequestPacket.setMsgid(parmas.getString("msgid"));
+                toUserChannel= SessionUtils.getChannel(messageRequestPacket.getToUserId());
+
                 packet = messageRequestPacket;
                 break;
             // 单聊ack
@@ -184,7 +186,11 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         //        返回应答消息
 //        获取客户端向服务端发送的消息
         if(type.equals(Commond.SINGLE_MESSAGE)||type.equals(Commond.GROUP_MESSAGE)){
-            ByteBuf buf = getByteBuf(ctx, parmas.getString("message"));
+            ByteBuf buf = getByteBuf(ctx,
+                    parmas.getString("message"),
+                    parmas.getString("msgid"),toUserChannel,
+                    parmas.getString("isretry")
+            );
             TextWebSocketFrame tws = new TextWebSocketFrame(buf);
             ctx.writeAndFlush(tws);
         }
@@ -236,7 +242,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         ctx.close();
     }
 
-    public ByteBuf getByteBuf(ChannelHandlerContext ctx, String message) {
+    public ByteBuf getByteBuf(ChannelHandlerContext ctx, String message, String msgid, Channel toUserChannel, String isretry) {
         ByteBuf byteBuf = ctx.alloc().buffer();
         User fromUser = SessionUtils.getUser(ctx.channel());
         JSONObject data = new JSONObject();
@@ -245,6 +251,10 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         JSONObject params = new JSONObject();
         params.put("message", message);
         params.put("date", new Date().toString());
+        params.put("msgid",msgid);
+        params.put("online",toUserChannel == null? false: true);
+        //是否重传的消息
+        params.put("isretry",isretry);
         data.put("params", params);
         byte []bytes = data.toJSONString().getBytes(Charset.forName("utf-8"));
         byteBuf.writeBytes(bytes);
