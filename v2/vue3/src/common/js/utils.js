@@ -17,6 +17,33 @@ export function getQueryString(name) {
   }
 }
 
+//重试的一个方法
+export function retry(fn, maxRetry, timeout,msg) {
+  return new Promise(async (resolve, reject) => {
+    let retryCount = 0;
+    let timer;
+ 
+    const run = async () => {
+      try {
+        const result = await fn(msg);
+        resolve(result);
+      } catch (err) {
+        if (retryCount < maxRetry) {
+          retryCount++;
+          clearTimeout(timer);
+          timer = setTimeout(run, timeout);
+        } else {
+          reject(err);
+        }
+      }
+    };
+ 
+    timer = setTimeout(run, timeout);
+  });
+}
+
+
+
 export const getLocal = (name) => {
   return localStorage.getItem(name)
 }

@@ -41,7 +41,15 @@ public class RedisUtils {
     private final static Gson gson = new Gson();
 
     public void set(String key, Object value, long expire){
+
         valueOperations.set(key, toJson(value));
+        if(expire != NOT_EXPIRE){
+            redisTemplate.expire(key, expire, TimeUnit.SECONDS);
+        }
+    }
+
+    public void setSet(String key, Object value, long expire){
+        setOperations.add(key, toJson(value));
         if(expire != NOT_EXPIRE){
             redisTemplate.expire(key, expire, TimeUnit.SECONDS);
         }

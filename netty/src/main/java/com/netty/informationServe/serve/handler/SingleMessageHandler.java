@@ -51,10 +51,10 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         log.info("SingleMessageHandler"+toUserChannel);
         if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
             message = singleMessagePacket.getMessage();
-            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OnLine,true);
+            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OnLine,true,singleMessagePacket.getMsgid());
         } else {
             message = singleMessagePacket.getMessage();
-            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OffLine,true);
+            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OffLine,true, singleMessagePacket.getMsgid());
             log.info("SingleMessageHandler ======> 该用户不存在或者未登录");
             return;
         }
@@ -131,7 +131,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         return byteBuf;
     }
 
-    public void sendMessage(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type) {
+    public void sendMessage(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type, String msgid) {
         MqMessage messageMQ = new MqMessage();
         messageMQ.setFromId(SessionUtils.getUser(ctx.channel()).getOpenid());
         messageMQ.setToId(toUser);
@@ -139,6 +139,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         messageMQ.setInfoContent(message);
         messageMQ.setTime(new DateTime().toString());
         messageMQ.setState(type);
+        messageMQ.setMsgid(msgid);
         messageDispatchService.sendForSave(messageMQ);
 //        return messageMQ;
 
