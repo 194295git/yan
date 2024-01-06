@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.netty.common.domain.User;
 import com.netty.informationServe.config.NettyConfig;
 import com.netty.informationServe.protocol.Packet;
-import com.netty.informationServe.protocol.Commond;
+import com.rose.common.netty.Commond;
 import com.netty.informationServe.protocol.packet.*;
 import com.netty.informationServe.service.ChannelService;
 import com.netty.informationServe.utils.SessionUtils;

@@ -1,4 +1,4 @@
-package com.netty.informationServe.protocol;
+package com.rose.common.netty;
 
 /**
  * @创建人 rose
@@ -47,6 +47,9 @@ public interface Commond {
 
     //私聊响应
     Byte SINGLE_MESSAGE_ACK_RESPONSE = 16;
+
+    //私聊响应
+    Byte SINGLE_MESSAGE_ACK_FIRST = 18;
 
 
     Byte HTTP_REQUEST = 16;

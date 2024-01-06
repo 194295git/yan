@@ -3,7 +3,7 @@ package com.netty.informationServe.serve.handler;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
 import com.netty.common.domain.User;
-import com.netty.informationServe.protocol.Commond;
+import com.rose.common.netty.Commond;
 import com.netty.informationServe.protocol.packet.AckSingleMessagePacket;
 import com.netty.informationServe.service.MessageService;
 import com.netty.informationServe.service.messagedispatch.MessageDispatchService;

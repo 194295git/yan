@@ -26,7 +26,7 @@ public class OssController {
 
     /**
      * 上传头像(图片)的方法.
-     * @param file
+     * @param fileve
      * @return
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

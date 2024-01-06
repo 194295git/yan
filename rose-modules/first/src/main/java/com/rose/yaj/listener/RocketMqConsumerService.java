@@ -1,13 +1,16 @@
 package com.rose.yaj.listener;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.rose.common.base.WebsocketMessage;
 import com.rose.common.constant.NettyConstants;
 import com.rose.common.constant.RedisPrefix;
 import com.rose.common.mqutil.MqMessage;
 import com.rose.common.mqutil.SendRequest;
+import com.rose.common.netty.Commond;
 import com.rose.common.utils.UUIDUtils;
 import com.rose.yaj.dto.ChatDto;
+import com.rose.yaj.feign.NettyMqFeign;
 import com.rose.yaj.service.YanUserChatService;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.AbstractRocketMqConsumer;
 import io.github.rhwayfun.springboot.rocketmq.starter.constants.RocketMqContent;
@@ -19,9 +22,7 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 处理MQ中的推送消息，对客户端发起推送
@@ -32,6 +33,9 @@ public class RocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTo
 
     @Autowired
     YanUserChatService yanUserChatService;
+
+    @Autowired
+    NettyMqFeign nettyMqFeign;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -74,12 +78,29 @@ public class RocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTo
                     }
                 }
             }
+            //在线离是需要ack一下的； 构造一下请求，然后开始发送
+            // 前端目前不是特别篇需要处理离线消息的ack 是百里离线消息需要再发一次
+            SendRequest send = new SendRequest();
+            JSONObject data = new JSONObject();
+            data.put("type", Commond.SINGLE_MESSAGE_ACK_FIRST);
+            data.put("status", 200);
+            JSONObject params = new JSONObject();
+            params.put("message", message1.getInfoContent());
+//            params.put("fileType", fileType);
+            List to = new ArrayList<String>();
+            to.add(message1.getFromId());
+            send.setTo(to);
+            send.setMsg(data);
+            send.setUniqueMsgid(message1.getMsgid());
+            send.setSendToAll(false);
+            nettyMqFeign.send(send);
+
             return true;
         }catch (Exception e){
             //失败的话需要把redis的这个消息还回去.
             SetOperations<String, String> opsForSet = stringRedisTemplate.opsForSet();
             Long add = opsForSet.add(RedisPrefix.LEAF_PERFIX,  message1.getMsgid());//往集合添加元素
-            log.error("推送失败.",e);
+            log.error("consumeMsg 消费mq消息失败.",e);
         }
         return false;
     }
