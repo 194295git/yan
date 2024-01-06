@@ -109,6 +109,28 @@ msg:N
 用户不在线是几条报文呢；
 离线消息也是需要ack 的。如果没有ack 将不知道是否保存成功了没有；
 
+在first里面需要构造一下这样的消息来完成相关的消息推送机制.
+将mq封装成http请求；
+需要使用到openfeign这样的技术 或者先使用restTemplateld 完成http消息的发送.
+
+```java
+    @ApiOperation(value="消息推送接口", notes="根据用户标识进行推送，返回不存在的用户")
+    @RequestMapping(value="/message/send",method = RequestMethod.POST)
+    public GenericResponse send(@RequestBody @Valid SendRequest request){
+        GenericResponse result = null;
+        Set notExist = messageService.execute(request, Commond.HTTP_REQUEST);
+
+        if(notExist!= null && notExist.size()>0){
+            //存在找不到的客户端
+            result =GenericResponse.response(ServiceError.NOT_EXIST_CLIENT,notExist);
+//                    new GenericResponse(,notExist);
+        }else{
+            //客户端都存在
+            result = GenericResponse.response(ServiceError.NORMAL);
+        }
+        return result;
+    }
+```
 
 
 

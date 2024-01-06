@@ -1,0 +1,1 @@
+shiro 配合spring.factory技术实现仅通过一个依赖完成权限框架的引入.

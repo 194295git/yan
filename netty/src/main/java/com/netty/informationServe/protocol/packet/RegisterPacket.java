@@ -2,7 +2,7 @@ package com.netty.informationServe.protocol.packet;
 
 import com.netty.common.domain.User;
 import com.netty.informationServe.protocol.Packet;
-import com.netty.informationServe.protocol.Commond;
+import com.rose.common.netty.Commond;
 
 /**
  * @创建人 rose
