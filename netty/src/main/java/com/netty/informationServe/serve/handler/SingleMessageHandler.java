@@ -17,6 +17,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,10 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, SingleMessagePacket singleMessagePacket) throws Exception {
+        //检查用户token
+        AttributeKey<String> attributeKey = AttributeKey.valueOf("token");
+        //从通道中获取用户token
+        String token = channelHandlerContext.channel().attr(attributeKey).get();
 
         Boolean onLine;
         String message = "";
@@ -51,10 +56,12 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         log.info("SingleMessageHandler"+toUserChannel);
         if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
             message = singleMessagePacket.getMessage();
-            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OnLine,true,singleMessagePacket.getMsgid());
+            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(),
+                    Topic.OnLine,true,singleMessagePacket.getMsgid(),token);
         } else {
             message = singleMessagePacket.getMessage();
-            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OffLine,true, singleMessagePacket.getMsgid());
+            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(),
+                    Topic.OffLine,true, singleMessagePacket.getMsgid(),token);
             log.info("SingleMessageHandler ======> 该用户不存在或者未登录");
             return;
         }
@@ -131,7 +138,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         return byteBuf;
     }
 
-    public void sendMessage(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type, String msgid) {
+    public void sendMessage(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type, String msgid,String token) {
         MqMessage messageMQ = new MqMessage();
         messageMQ.setFromId(SessionUtils.getUser(ctx.channel()).getOpenid());
         messageMQ.setToId(toUser);
@@ -140,6 +147,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         messageMQ.setTime(new DateTime().toString());
         messageMQ.setState(type);
         messageMQ.setMsgid(msgid);
+        messageMQ.setToken(token);
         messageDispatchService.sendForSave(messageMQ);
 //        return messageMQ;
 
