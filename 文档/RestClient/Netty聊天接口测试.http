@@ -6,6 +6,31 @@ Content-Type: application/json
 {"password": "admin", "username": "rose"}
 ###
 
+
+### netty测试通过接口触发websocket消息 登录接口 request
+POST http://127.0.0.1:88/api/chatServe/rocketmq/mqmessage/message/send
+User-Agent: okhttp/3.12.1   
+Content-Type: application/json
+token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJzZXNzaW9uX2tleVwiOlwicVZYVmtkMTIzNDU2YjhZZXpRPT1cIn0iLCJvcGVuaWQiOiIxODc5ODc4LU5LQ05PLU5LTksiLCJpc3MiOiJyb3NlIiwiZXhwIjoxNzA0NjE0NzM0LCJ1c2VyaWQiOjEsImlhdCI6MTcwNDUyODMzNCwianRpIjoiMTIzNDU2In0.D2_gSnbN2UyJtJOQg8VSzG4pIy7adQQPCpuVRVDdVgw
+
+{
+	"activeTime": 1704203945910,
+	"from": "system",
+	"messageId": "17adfc694782429ea973076d83fe8c8a",
+	"msg": {
+		"type": 22,
+		"status": 200
+	},
+	"msgType": 1,
+	"requestId": "eee728b0-0182-46c7-9d97-39e711f20368",
+	"sessionId": "192.168.56.1:8084_56C02DF0516B4B079ABFCEC08169E577_20240102215858",
+	"to": ["1879878-NKCNO-NKNK"],
+	"trigger": 1
+}
+###
+
+
+
 ###添加所有群组
 POST /yaj/yan-group/addGroupMember HTTP/1.1
 Host: localhost:8999

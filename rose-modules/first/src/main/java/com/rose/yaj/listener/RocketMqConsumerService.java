@@ -9,6 +9,7 @@ import com.rose.common.mqutil.MqMessage;
 import com.rose.common.mqutil.SendRequest;
 import com.rose.common.netty.Commond;
 import com.rose.common.utils.UUIDUtils;
+import com.rose.yaj.config.RoseFeignConfig;
 import com.rose.yaj.dto.ChatDto;
 import com.rose.yaj.feign.NettyMqFeign;
 import com.rose.yaj.service.YanUserChatService;
@@ -93,6 +94,8 @@ public class RocketMqConsumerService extends AbstractRocketMqConsumer<RocketMqTo
             send.setMsg(data);
             send.setUniqueMsgid(message1.getMsgid());
             send.setSendToAll(false);
+            //设置过滤应该有的token
+            RoseFeignConfig.token.set(message1.getToken());
             nettyMqFeign.send(send);
 
             return true;

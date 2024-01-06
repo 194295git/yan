@@ -69,6 +69,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
             String token = ctx.channel().attr(attributeKey).get();
             log.info("NettyWebSocketHandler.userEventTriggered"+token);
 //            ctx.fireChannelRead();
+            //先使用一个接口吧。后续添加个人有哪些权限的时候在做改进
             //校验token逻辑
             //......
 //            if(1 == 2) {

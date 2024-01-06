@@ -178,6 +178,8 @@ ACK的话使用mq换一个主题。 netty-ack 后续建立一个常量类来记�
  放到http那里处理的话就不需要每次都参数带上token去校验了；看起来也不难做
  
  还需要一些openfeign的知识 添加上请求头header 然后去请求。测试接口通过结果.
+ 自己写一个feign的过滤器 添加上token就得了；
+ 使用一下threadlocal来存储一下token完事了；
  
  ### java 实现一下幂等操作；
 ####  哪些语句是幂等的

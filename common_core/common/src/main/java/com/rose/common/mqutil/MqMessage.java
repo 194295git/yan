@@ -21,6 +21,16 @@ public class MqMessage {
     // 消息状态 在线或离线 1为私聊 0为群聊
     private Boolean state;
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    private String token;
+
 
     private String msgid;
 
