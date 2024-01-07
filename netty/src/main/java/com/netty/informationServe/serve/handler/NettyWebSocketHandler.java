@@ -4,6 +4,10 @@ package com.netty.informationServe.serve.handler;
  * @author rose
  * @create 2023/6/27
  */
+
+import com.netty.informationServe.config.RoseFeignConfig;
+import com.netty.informationServe.feign.NettyMqFeign;
+import com.rose.common.base.GenericResponse;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -14,6 +18,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,6 +32,10 @@ import org.springframework.stereotype.Component;
 @Component
 @ChannelHandler.Sharable
 public class NettyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
+
+
+    @Autowired
+    NettyMqFeign nettyMqFeign;
 
     /**
      * 事件回调
@@ -44,6 +53,8 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<WebSocket
             AttributeKey<String> attributeKey = AttributeKey.valueOf("token");
             //从通道中获取用户token
             String token = ctx.channel().attr(attributeKey).get();
+            RoseFeignConfig.token.set(token);
+            GenericResponse auth = nettyMqFeign.getAuth();
 
 //            ctx.fireChannelRead();
             //校验token逻辑

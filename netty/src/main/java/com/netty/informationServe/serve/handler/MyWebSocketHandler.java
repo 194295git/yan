@@ -4,21 +4,21 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.domain.User;
 import com.netty.informationServe.config.NettyConfig;
+import com.netty.informationServe.config.RoseFeignConfig;
+import com.netty.informationServe.feign.NettyMqFeign;
 import com.netty.informationServe.protocol.Packet;
-import com.rose.common.netty.Commond;
 import com.netty.informationServe.protocol.packet.*;
 import com.netty.informationServe.service.ChannelService;
 import com.netty.informationServe.utils.SessionUtils;
+import com.rose.common.base.GenericResponse;
 import com.rose.common.base.WebsocketMessage;
 import com.rose.common.constant.NettyConstants;
 import com.rose.common.mqutil.SendRequest;
 import com.rose.common.netty.AttrConstants;
+import com.rose.common.netty.Commond;
 import com.rose.common.utils.UUIDUtils;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -50,6 +50,8 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
     ChannelService channelService;
 
 
+    @Autowired
+    NettyMqFeign nettyMqFeign;
 
     /**
      * 事件回调  在这个地方完成参数认证和授权.需要去调用一个接口去测试.
@@ -68,14 +70,25 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
             //从通道中获取用户token
             String token = ctx.channel().attr(attributeKey).get();
             log.info("NettyWebSocketHandler.userEventTriggered"+token);
+//            if (token.equals("undefined")){
+//                ctx.writeAndFlush(new CloseWebSocketFrame(400, "token 无效")).addListener(ChannelFutureListener.CLOSE);
+//            }
 //            ctx.fireChannelRead();
+            RoseFeignConfig.token.set(token);
+            GenericResponse auth = nettyMqFeign.getAuth();
             //先使用一个接口吧。后续添加个人有哪些权限的时候在做改进
             //校验token逻辑
             //......
 //            if(1 == 2) {
 //                //如果token校验不通过，发送连接关闭的消息给客户端，设置自定义code和msg用来区分下服务器是因为token不对才导致关闭
-//                ctx.writeAndFlush(new CloseWebSocketFrame(400, "token 无效")).addListener(ChannelFutureListener.CLOSE);
+//
 //            }
+            if (auth.getStatusCode() == 200){
+                //token校验通过
+                log.info("token校验通过");
+            }else{
+                ctx.writeAndFlush(new CloseWebSocketFrame(400, "token 无效")).addListener(ChannelFutureListener.CLOSE);
+            }
         }
         //通过判断IdleStateEvent的状态来实现自己的读空闲，写空闲，读写空闲处理逻辑
         if (evt instanceof IdleStateEvent && ((IdleStateEvent) evt).state() == IdleState.READER_IDLE) {
