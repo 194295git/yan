@@ -31,6 +31,16 @@ token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJzZXNzaW9uX2tleVwiOlwicVZYVmtkMTIzNDU2
 
 
 
+### netty测试loginuser权限接口 request
+GET http://127.0.0.1:88/api/loginUser/auth/issuccess
+User-Agent: okhttp/3.12.1   
+Content-Type: application/json
+token:eyJhbGciOiJIeyJzdWIiOiJ7XCJzZXNzaW9uX2tleVwiOlwicVZYVmtkMTIzNDU2YjhZZXpRPT1cIn0iLCJvcGVuaWQiOiIxODc5ODc4LU5LQ05PLU5LTksiLCJpc3MiOiJyb3NlIiwiZXhwIjoxNzA0NjIzMzM3LCJ1c2VyaWQiOjEsImlhdCI6MTcwNDUzNjkzNywianRpIjoiMTIzNDU2In0.xYkc8Fnmyax8YqoYkSJtwo-dYPTGDSgShRxseGh-KZQ
+
+
+###
+
+
 ###添加所有群组
 POST /yaj/yan-group/addGroupMember HTTP/1.1
 Host: localhost:8999

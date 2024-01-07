@@ -31,7 +31,9 @@ export default class SocketService {
       console.log('【IM日志】连接服务端成功了');
       this.connected = true;
       // 重置重新连接的次数
-      this.connectRetryCount = 0;
+      //连接成功并且返回正确结果 才能重置连接次数
+      // this.connectRetryCount = 0;
+      console.log( "onopen",this.connectRetryCount )
     };
     // 1.连接服务端失败
     // 2.当连接成功之后, 服务器关闭的情况
@@ -39,6 +41,10 @@ export default class SocketService {
       console.log('【IM日志】连接服务端失败');
       this.connected = false;
       this.connectRetryCount++;
+      console.log( "onclose",this.connectRetryCount )
+      if( this.connectRetryCount ==5 ){
+        return;
+      }
       setTimeout(() => {
         this.connect();
       }, 500 * this.connectRetryCount);

@@ -86,7 +86,7 @@
           <text class="mt-2 ml-2" @click="showAllMember()">查看成员</text>
         </div>
         <div class="scroll">
-          <list-scroll :scroll-data="recesiveAllMsg">
+          <list-scroll :scroll-data="recesiveAllMsg"  :scrollToEndFlag="scrollToEndFlag">
             <div class="swiper-container">
               <div
                 class="content"
