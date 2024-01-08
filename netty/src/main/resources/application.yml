@@ -1,5 +1,8 @@
 hostip: 192.168.56.1
 
+netty:
+  application:
+    name: nettyChatServe
 # 应用名称
 spring:
   application:
