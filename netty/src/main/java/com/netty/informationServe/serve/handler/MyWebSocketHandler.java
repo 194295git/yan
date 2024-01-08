@@ -87,7 +87,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 //token校验通过
                 log.info("token校验通过");
             }else{
-                ctx.writeAndFlush(new CloseWebSocketFrame(400, "token 无效")).addListener(ChannelFutureListener.CLOSE);
+//                ctx.writeAndFlush(new CloseWebSocketFrame(400, "token 无效")).addListener(ChannelFutureListener.CLOSE);
             }
         }
         //通过判断IdleStateEvent的状态来实现自己的读空闲，写空闲，读写空闲处理逻辑

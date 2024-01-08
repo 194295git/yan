@@ -227,11 +227,6 @@ export default {
       socketServe: SocketService.Instance,
       recesiveAllMsg: [],
       userInfo: {},
-      checked: false,
-      list: [],
-      all: false,
-      result: [],
-      checkAll: true,
       current: route.query.current,
       //复制来的
       keyword: "搜索好友",
@@ -249,6 +244,7 @@ export default {
       groups: [],
       openid: route.query.openid,
       groupId: route.query.groupId,
+      //用于消息重试时候的消息
       tempSendMsg: {},
     });
 
@@ -444,7 +440,7 @@ export default {
     };
     const showAllMember = async () => {
       state.current = 3;
-      const memberDeatil = await getGroupMemberDetail(state.toGroup.groupId);
+      const memberDeatil = await getGroupMemberDetail(state.groupId);
       console.log(429, memberDeatil.content);
       state.memberBaseDetail = memberDeatil.content;
     };
