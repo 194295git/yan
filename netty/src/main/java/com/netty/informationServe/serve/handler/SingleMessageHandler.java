@@ -53,6 +53,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         Boolean onLine;
         String message = "";
         Channel toUserChannel = SessionUtils.getChannel(singleMessagePacket.getToUserId());
+        //应该修改判断离线的方式
         log.info("SingleMessageHandler"+toUserChannel);
         if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
             message = singleMessagePacket.getMessage();

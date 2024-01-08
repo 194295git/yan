@@ -1,5 +1,8 @@
 package com.netty.informationServe.serve;
 
+import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
+import com.alibaba.nacos.api.naming.NamingFactory;
+import com.alibaba.nacos.api.naming.NamingService;
 import com.netty.informationServe.serve.handler.MyWebSocketChannelHandler;
 import com.netty.informationServe.utils.Nettyutil;
 import com.rose.common.constant.RedisPrefix;
@@ -14,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import java.net.InetAddress;
 
 /**
  * @创建人 rose
@@ -55,6 +60,9 @@ public class WebSocketServe {
     @Autowired
     MyWebSocketChannelHandler myWebSocketChannelHandler;
 
+    @Autowired
+    private NacosDiscoveryProperties nacosDiscoveryProperties;
+
 //    public void run(){
 //
 //        try{
@@ -77,6 +85,26 @@ public class WebSocketServe {
 //            workGroup.shutdownGracefully();
 //        }
 //    }
+    @Value("${netty.application.name}")
+    private String serverName;
+
+    /**
+     * 注册到 nacos 服务中
+     *
+     * @param nettyName netty服务名称
+     * @param nettyPort netty服务端口
+     */
+    private void registerNamingService(String nettyName, String nettyPort) {
+        try {
+//            192.168.56.20:8848 nacosDiscoveryProperties.getServerAddr()
+            NamingService namingService = NamingFactory.createNamingService(nacosDiscoveryProperties.getServerAddr());
+            InetAddress address = InetAddress.getLocalHost();
+            namingService.registerInstance(nettyName, address.getHostAddress(), Integer.parseInt(nettyPort));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ChannelFuture run(){
         ChannelFuture f = null;
         try{
@@ -90,6 +118,8 @@ public class WebSocketServe {
             System.out.println("WebSocketServe========>客户端等待连接....");
             f = bind(bootstrap,InitPort);
             channel = f.channel();
+
+
             //尝试三次 服务初始化
             //或者改一下直接获取当前服务名称下面的所有实例来注册redis
             init();
@@ -148,12 +178,16 @@ public class WebSocketServe {
         if(redisTemplate.opsForHash().hasKey(RedisPrefix.WEBSOCKETSERVER,instanceid)){
             redisTemplate.opsForHash().put(RedisPrefix.WEBSOCKETSERVER,instanceid,nettyPort);
             log.info("设置实例[{}]的netty端口为[{}].",instanceid,nettyPort);
+            //注册到Nacos里
+            registerNamingService(serverName, nettyPort);
         }else{
-            log.info("setRedisWebsocketPort时 不存在[{}]的..",nettyPort);
+
+            log.info("setRedisWebsocketPort时 不存在[{}]的RedisPrefix.WEBSOCKETSERVER",nettyPort);
             tryCount++;
             if(tryCount<=tryMaxCount){
+                //设置时间稍微长一点方便注册
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     log.error("启动失败，继续尝试",e);
                 }

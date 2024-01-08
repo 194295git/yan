@@ -75,6 +75,8 @@ public class MessageService {
                     hostClientsMap.put(host,clients);
                 }
             }
+            //host 的是 从yan_client里面取host 然后发送给这个主题 ，mq消费消息的时候定好就没有问题；
+
             log.info("netty 分发mq消息 不存在的客户端是[{}]", notExist);
             for(Map.Entry<String,List<String>> entry: hostClientsMap.entrySet()){
                 request.setTo(entry.getValue());

@@ -74,11 +74,18 @@ spring:
             - Path=/api/chatServe/**
           filters:
             - RewritePath=/api/chatServe/(?<segment>.*), /$\{segment}
-        #升级为gateway 代理websocket
-        - id: websocket1
-          uri: ws://127.0.0.1:8888
+#        #升级为gateway 代理websocket
+#        - id: websocket1
+#          uri: ws://127.0.0.1:8888
+#          predicates:
+#            - Path=/websocket
+        ###负载均衡一下netty的端口nettyChatServe.
+        - id: IM_NETTY
+          uri: lb:ws://nettyChatServe
           predicates:
-            - Path=/websocket
+            - Path=/websocket**
+#          filters:
+#            - StripPrefix=1
 #        - id: auth_route
 #          uri: lb://mall-auth-server
 #          predicates:
