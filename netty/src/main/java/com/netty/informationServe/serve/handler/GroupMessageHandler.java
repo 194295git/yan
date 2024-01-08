@@ -3,14 +3,14 @@ package com.netty.informationServe.serve.handler;
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
-import com.rose.common.netty.Commond;
-import com.rose.common.mqutil.MqMessage;
 import com.netty.common.domain.User;
-import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.protocol.packet.GroupMessagePacket;
 import com.netty.informationServe.service.MessageService;
 import com.netty.informationServe.utils.SessionUtils;
+import com.rose.common.mqutil.MqMessage;
+import com.rose.common.mqutil.SendRequest;
 import com.rose.common.mqutil.Topic;
+import com.rose.common.netty.Commond;
 import com.rose.common.to.mq.Message2;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -70,6 +70,7 @@ public class GroupMessageHandler extends SimpleChannelInboundHandler<GroupMessag
 //            User user = SessionUtils.getUser(channelHandlerContext.channel());
 //            ByteBuf byteBuf = getByteBuf(channelHandlerContext, groupId, groupMessagePacket.getMessage(), user, fileType, nameList);
 //            channelGroup.remove(channelHandlerContext.channel());//发送方不需要自己再收到消息
+//
 //            channelGroup.writeAndFlush(new TextWebSocketFrame(byteBuf));
 //            channelGroup.add(channelHandlerContext.channel()); //发送完消息再添加回去 ---todo 是否有更好得方式
 //        }

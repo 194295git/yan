@@ -105,27 +105,18 @@ export default {
     const router = useRouter();
     const state = reactive({
       userlist: [],
-      // socketServe: SocketService.Instance,
       userInfo: {},
-      checked: false,
-      list: [],
-      all: false,
-      result: [],
-      checkAll: true,
       current: 0,
       //复制来的
       keyword: "搜索好友",
       email: "",
-      socketTask: null,
       // 确保websocket是打开状态
-      is_open_socket: false,
       toUser: {},
       toGroup: {},
       content: "",
       mini: "mini",
       //关于重连的需要的
       timeout: 40000, // 30s
-      timeoutObj: null,
       groups: [],
     });
 
@@ -163,7 +154,6 @@ export default {
       state.groups = res.content;
       console.log(res);
       // state.list = data;
-      // state.result = data.map((item) => item.cartItemId);
 
       //向后端发送注册的消息
       // sendRegisterData();
