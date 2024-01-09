@@ -7,6 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+/**
+ * 目前用于netty模块的websocket鉴权
+ */
 @RestController
 @RequestMapping("/auth")
 public class ChatAuthController {

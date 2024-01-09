@@ -40,6 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * 登录相关
@@ -81,6 +82,39 @@ public class SysLoginController extends AbstractController {
 	}
 
 
+
+	@PostMapping("/refresh")
+	public GenericResponse refreshToken(@RequestParam String refreshToken) {
+		try {
+//			String newAccessToken = tokenService.refreshAccessToken(refreshToken);
+//			if (newAccessToken == null) {
+//				return Response.status(Response.Status.UNAUTHORIZED).build();
+//			}
+//			return Response.ok(newAccessToken).build();
+
+			//1.先校验refreshtoken失效了没有  要调用函数库shrio里面丰富一下吧；
+
+
+
+			//2.refreshtoken 成功则去申请新的token：
+			CommonUser commonUser = new CommonUser();
+			commonUser.setOpenid("");
+			commonUser.setUserId(1L);
+			String token = "";
+			try {
+				token = JwtTokenUtil.generateToken(commonUser);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			String newAccessToken = UUID.randomUUID().toString();
+			//3.存储token
+			//为了撤销机制。数据库或者redis 也是需要存储一下的
+
+			return GenericResponse.response(ServiceError.NORMAL,token);
+		} catch (Exception e) {
+			return GenericResponse.response(ServiceError.LOGIN_ERROR);
+		}
+	}
 	/**
 	 * 很明显这块设计到事务了；要么就写成保存sys_user失败了然后就不调用后面的方法这样子；
 	 * 看起来也还不错；应该还用不到分布式事务。
@@ -126,7 +160,7 @@ public class SysLoginController extends AbstractController {
 	}
 
 	/**
-	 * 登录
+	 * 登录  目前还需要去添加一个refreshtoken
 	 */
 	@ApiOperation("shiro的登录方法【启用】")
 	@PostMapping("/sys/login")
