@@ -18,9 +18,11 @@ import com.rose.common.netty.AttrConstants;
 import com.rose.common.netty.Commond;
 import com.rose.common.utils.UUIDUtils;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.*;
-import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
@@ -90,12 +92,37 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
 //                ctx.writeAndFlush(new CloseWebSocketFrame(400, "token 无效")).addListener(ChannelFutureListener.CLOSE);
             }
         }
-        //通过判断IdleStateEvent的状态来实现自己的读空闲，写空闲，读写空闲处理逻辑
-        if (evt instanceof IdleStateEvent && ((IdleStateEvent) evt).state() == IdleState.READER_IDLE) {
-            //读空闲，关闭通道
-            log.info("NettyWebSocketHandler.userEventTriggered --> : 读空闲，关闭通道");
-            ctx.close();
+//        //通过判断IdleStateEvent的状态来实现自己的读空闲，写空闲，读写空闲处理逻辑
+//        if (evt instanceof IdleStateEvent && ((IdleStateEvent) evt).state() == IdleState.READER_IDLE) {
+//            //读空闲，关闭通道
+//            log.info("NettyWebSocketHandler.userEventTriggered --> : 读空闲，关闭通道");
+//            ctx.close();
+//        }
+
+        if(evt instanceof IdleStateEvent) {
+
+            //将  evt 向下转型 IdleStateEvent
+            IdleStateEvent event = (IdleStateEvent) evt;
+            String eventType = null;
+            switch (event.state()) {
+                case READER_IDLE:
+                    eventType = "读空闲";
+                    break;
+                case WRITER_IDLE:
+                    eventType = "写空闲";
+                    break;
+                case ALL_IDLE:
+                    eventType = "读写空闲";
+                    break;
+            }
+            //这里已经可以知道浏览器所处的空闲是何种空闲，可以执行对应的处理逻辑了
+            System.out.println(ctx.channel().remoteAddress() + "--超时时间--" + eventType);
+            System.out.println("服务器做相应处理..");
+
+            //如果发生空闲，我们关闭通道
+            // ctx.channel().close();
         }
+
     }
 
     //    服务端处理客户端websocket请求的核心方法

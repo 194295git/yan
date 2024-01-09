@@ -7,8 +7,11 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @创建人 rose
@@ -42,6 +45,11 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
     @Autowired
     NettyWebSocketHandler nettyWebSocketHandler;
 
+    //单位是秒
+    private int READER_IDLE_TIME = 15;
+    private int  WRITER_IDLE_TIME = 25;
+
+    private int ALL_IDLE_TIME = 40;
     @Override
     protected void initChannel(SocketChannel e) throws Exception {
         e.pipeline().addLast("http-codec", new HttpServerCodec()) //http编解码
@@ -62,6 +70,10 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
                     .addLast("nettyWebSocketParamHandler",nettyWebSocketParamHandler)
                     .addLast("protocolHandler",new WebSocketServerProtocolHandler("/websocket"))
 //                    .addLast("nettyWebSocketHandler",nettyWebSocketHandler)
+                    .addLast(new IdleStateHandler(READER_IDLE_TIME,
+                            WRITER_IDLE_TIME,
+                            ALL_IDLE_TIME,
+                            TimeUnit.SECONDS))
                     .addLast("base_handler",myWebSocketHandler)
                     .addLast("register_handler",registerHandler)
                     .addLast("single_message",singleMessageHandler)
