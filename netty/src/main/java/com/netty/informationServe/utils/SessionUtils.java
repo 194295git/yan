@@ -1,18 +1,29 @@
 package com.netty.informationServe.utils;
 
 import com.netty.common.domain.User;
+import com.rose.common.constant.RedisPrefix;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 所有的会话在这个里面进行管理
  * 这个里面添加退出的功能
  */
 @Slf4j
+@Component
 public class SessionUtils {
+
+
+	@Autowired
+	private RedisTemplate redisTemplate;
+
 	/**
 	 * userID 映射 连接channel
 	 */
@@ -62,6 +73,12 @@ public class SessionUtils {
 	 */
 	public static Channel getChannel(String openid) {
 		return userOpenidChannelMap.get(openid);
+	}
+
+	public  Boolean isOnline(String openid) {
+		String host = redisTemplate.opsForHash().get(RedisPrefix.PREFIX_CLIENT + openid,"host")+"";
+
+		return !host.equals("null");
 	}
 	/**
 	 * 绑定群聊Id  群聊channelGroup

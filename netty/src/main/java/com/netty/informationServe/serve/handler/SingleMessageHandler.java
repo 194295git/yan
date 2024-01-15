@@ -3,6 +3,7 @@ package com.netty.informationServe.serve.handler;
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
+import com.rose.common.constant.RedisPrefix;
 import com.rose.common.netty.Commond;
 import com.rose.common.mqutil.MqMessage;
 import com.netty.common.domain.User;
@@ -20,6 +21,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,10 +38,16 @@ import java.util.List;
 @Service
 @ChannelHandler.Sharable
 public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMessagePacket> {
+
     @Autowired
     MQUtils mqUtils;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Resource(name = "MQDispatchServiceImpl")
     private MessageDispatchService messageDispatchService;
+
     @Autowired
     private MessageService messageService;
 
@@ -50,12 +58,17 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         //从通道中获取用户token
         String token = channelHandlerContext.channel().attr(attributeKey).get();
 
-        Boolean onLine;
         String message = "";
         Channel toUserChannel = SessionUtils.getChannel(singleMessagePacket.getToUserId());
+
+        String channelId =singleMessagePacket.getToUserId();
+
+        String host = redisTemplate.opsForHash().get(RedisPrefix.PREFIX_CLIENT + channelId,"host")+"";
+        //如果get不到才算是离线
         //应该修改判断离线的方式
         log.info("SingleMessageHandler"+toUserChannel);
-        if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
+        if(!host.equals("null")){
+//        if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
             message = singleMessagePacket.getMessage();
             sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(),
                     Topic.OnLine,true,singleMessagePacket.getMsgid(),token);
@@ -75,12 +88,12 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
 //            log.info("SingleMessageHandler ======> 该用户不存在或者未登录");
 //            return;
 //        }
-        User toUser = SessionUtils.getUser(toUserChannel);
+//        User toUser = SessionUtils.getUser(toUserChannel);
         String fileType = singleMessagePacket.getFileType();
 //
         //使用mq发送替代直接发送
         messageService.execute(
-                createSendRequest(channelHandlerContext, message, toUser, fileType,singleMessagePacket.getMsgid()),
+                createSendRequest(channelHandlerContext, message, singleMessagePacket.getToUserId(), fileType,singleMessagePacket.getMsgid()),
                 Commond.SINGLE_MESSAGE
         );
         //这行重要的代码就先注释
@@ -94,12 +107,12 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
      * 生成mq需要的消息体
      * @param ctx
      * @param message
-     * @param toUser
+     * @param toUserOpenid
      * @param fileType
      * @param msgid
      * @return
      */
-    public SendRequest createSendRequest(ChannelHandlerContext ctx, String message, User toUser, String fileType, String msgid){
+    public SendRequest createSendRequest(ChannelHandlerContext ctx, String message, String toUserOpenid, String fileType, String msgid){
         User fromUser = SessionUtils.getUser(ctx.channel());
         JSONObject data = new JSONObject();
         data.put("type", Commond.SINGLE_MESSAGE_OTHER);
@@ -108,13 +121,13 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         params.put("message", message);
         params.put("fileType", fileType);
         params.put("fromUser", fromUser);
-        params.put("toUser", toUser);
+//        params.put("toUser", toUser);
         data.put("params", params);
 //        data.put("message",messageForSave);
 
         SendRequest req =  new SendRequest();
         List<String> toList = new ArrayList<String>();
-        toList.add(toUser.getOpenid());
+        toList.add(toUserOpenid);
         req.setTo(toList);
         req.setSendToAll(false);
         req.setMsg(data);
