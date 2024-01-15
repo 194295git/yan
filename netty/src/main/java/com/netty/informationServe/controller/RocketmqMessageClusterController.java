@@ -29,7 +29,7 @@ public class RocketmqMessageClusterController {
      * 目前这个接口是没有加上权限的，是可以随意调用的。需要处理一下吗；
      * 那就需要加上那个feign传递header的机制了；
      * 目前的netty 服务有nacos注册，有feign的接口调用。现在要加上shiro部分.相当安全了;
-     * 鉴权的部分也是需要去调用feign的。需要点时间去处理
+     * 鉴权的部分也是需要去调用feign的。需要点时间去处理(已经处理)
      * @param request
      * @return
      */

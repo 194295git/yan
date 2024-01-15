@@ -86,7 +86,10 @@
           <text class="mt-2 ml-2" @click="showAllMember()">查看成员</text>
         </div>
         <div class="scroll">
-          <list-scroll :scroll-data="recesiveAllMsg"  :scrollToEndFlag="scrollToEndFlag">
+          <list-scroll
+            :scroll-data="recesiveAllMsg"
+            :scrollToEndFlag="scrollToEndFlag"
+          >
             <div class="swiper-container">
               <div
                 class="content"
@@ -291,8 +294,21 @@ export default {
           console.log("【IM日志】 msg:A 维护消息进入队列");
           // Queue 推送队列消息
           //如果用户没有登录，则是不需要进行队列信息维护的
-          console.log("【IM日志】res.params.online", res.params.online, res.params.isretry);
-          if (res.params.online == true && res.params.isretry == false) {
+          console.log(
+            "【IM日志】res.params.online",
+            res.params.online,
+            res.params.isretry
+          );
+          console.log("【IM日志】res.params.online", res.params.online == true);
+          console.log(
+            "【IM日志】res.params.online",
+            res.params.isretry == "false"
+          );
+          console.log(
+            "【IM日志】res.params.online",
+            res.params.online == true && res.params.isretry == "false"
+          );
+          if (res.params.online == true && res.params.isretry == "false") {
             state.queue.offer(state.tempSendMsg);
             // 用户没有登录的时候使用 这个机制 登录了就不使用了 使用了timer机制
             //使用timer机制 检测队列里面是否存在ack，如果存在，则超时重发以及限制次数
@@ -302,7 +318,7 @@ export default {
               Toast("消息发送失败，请重新发送");
             }
           } else {
-            console.log("【IM日志】 接受消息者没有登录");
+            console.log("【IM日志】 接受消息者没有登录或者是重试消息 ");
           }
         }
         //收消息的情况，把消息推送上去
@@ -416,7 +432,7 @@ export default {
           from: "client",
           msgid: receive.messageId,
           fromUser: receive.msg.params.fromUser.openid,
-          toUser: receive.msg.params.toUser.openid,
+          toUser: receive.to[0],
         },
       };
       console.log(data);
@@ -455,7 +471,7 @@ export default {
           toMessageId: toUser.openid,
           message: content,
           fileType: 0,
-          isretry:false,
+          isretry: false,
         },
       };
       if (state.current == 2) {

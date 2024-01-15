@@ -46,7 +46,7 @@ export default class SocketService {
         return;
       }
       setTimeout(() => {
-        this.connect();
+        this.connect(localStorage.getItem("token"));
       }, 500 * this.connectRetryCount);
     };
     // 得到服务端发送过来的数据

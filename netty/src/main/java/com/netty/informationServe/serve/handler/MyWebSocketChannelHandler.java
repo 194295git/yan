@@ -46,10 +46,10 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
     NettyWebSocketHandler nettyWebSocketHandler;
 
     //单位是秒
-    private int READER_IDLE_TIME = 15;
-    private int  WRITER_IDLE_TIME = 25;
+    private int READER_IDLE_TIME = 120;
+    private int  WRITER_IDLE_TIME = 60;
 
-    private int ALL_IDLE_TIME = 40;
+    private int ALL_IDLE_TIME = 180;
     @Override
     protected void initChannel(SocketChannel e) throws Exception {
         e.pipeline().addLast("http-codec", new HttpServerCodec()) //http编解码
