@@ -65,6 +65,8 @@ public class AckPushSingleMessageHandler extends SimpleChannelInboundHandler<Pua
              */
 
             messageDispatchService.sendForUpdate("UPDATECHAT",msgid);
+            //需要删除
+            SessionUtils.cacheMsgidAndNumber.remove(singleMessagePacket.getWebsocketMessage().getMessageId());
 
 
         } else {
