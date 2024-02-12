@@ -61,13 +61,13 @@ spring:
           alg_round:
             type: ROUND_ROBIN
 
-  rocketmq:
-    name-server: 192.168.56.20:9876
-    producer-send-msg-timeout: 3000
-    producer:
-      shutdown:
-        enable: false
-    producer-group-name: consumeNetty
+#  rocketmq:
+#    name-server: 192.168.56.20:9876
+#    producer-send-msg-timeout: 3000
+#    producer:
+#      shutdown:
+#        enable: false
+#    producer-group-name: consumeNetty
 
   redis:
     host: 192.168.56.20
@@ -86,7 +86,8 @@ spring:
     listener:
       simple:
         acknowledge-mode: manual
-
+#rocketmq:
+#  name-server: 192.168.56.20:9876
 
 mybatis-plus:
   mapper-locations: classpath*:com/rose/yaj/mapper/xml/*Mapper.xml
@@ -109,11 +110,11 @@ server:
     context-path: /
 
 
-#rocketmq:
-#  name-server: 192.168.56.20:9876
-#  producer:
-#    group: Netty-group
-#    sendMessageTimeout: 300000
+rocketmq:
+  name-server: 192.168.56.20:9876
+  producer:
+    group: Netty-group
+    sendMessageTimeout: 300000
 
 
 

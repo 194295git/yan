@@ -48,7 +48,9 @@ public interface Commond {
     //私聊响应
     Byte SINGLE_MESSAGE_ACK_RESPONSE = 16;
 
-    //私聊响应
+    /**
+     * 原先的这个需要改造成推送消息.
+     */
     Byte SINGLE_MESSAGE_ACK_FIRST = 18;
 
 

@@ -265,7 +265,7 @@ export default {
       if (temp != undefined) {
         if (temp.params.msgid == msgid) {
           //还没有收到消息代表需要重发消息。
-          state.tempSendMsg.parmas.isretry = true;
+          state.tempSendMsg.parmas.isretry = 'true';
           state.socketServe.send(state.tempSendMsg);
           throw new Error("消息队列还存在消息");
         }
@@ -321,7 +321,7 @@ export default {
             console.log("【IM日志】 接受消息者没有登录或者是重试消息 ");
           }
         }
-        //收消息的情况，把消息推送上去
+        //收消息的情况，把消息推送上去,并且ack 客户端b的ack
         if (res.type === imconstant.SINGLE_MESSAGE_OTHER) {
           state.recesiveAllMsg.push({
             type: "receive",
@@ -431,7 +431,7 @@ export default {
         params: {
           from: "client",
           msgid: receive.messageId,
-          fromUser: receive.msg.params.fromUser.openid,
+          fromUser: receive.msg.params.openid,
           toUser: receive.to[0],
         },
       };

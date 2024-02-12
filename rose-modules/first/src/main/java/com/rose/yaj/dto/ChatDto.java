@@ -1,8 +1,5 @@
 package com.rose.yaj.dto;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -25,7 +22,7 @@ public class ChatDto {
     //新加的group
     private Boolean group;
 
-
+    private String msgId;
 
     @Data
     public static class MqChat{

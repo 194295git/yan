@@ -21,9 +21,26 @@ public class YanUserChat {
 
     private String toOpenid;
 
+    /**
+     * 消息的内容
+     */
     private String content;
 
+    /**
+     * 判断用户当前状态.
+     */
+    private String status;
+
+    /**
+     * 后续会改成status来完成状消息的已读等.
+     */
     private Integer isRead;
+
+    /**
+     * 后续会改成status来完成状消息的已读等.
+     */
+    @TableField("msg_id")
+    private String msgId;
 
     //新加群聊功能
     @TableField("`group`")

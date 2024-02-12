@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
 import com.netty.common.domain.User;
 import com.rose.common.netty.Commond;
-import com.netty.informationServe.protocol.packet.AckSingleMessagePacket;
+import com.netty.informationServe.protocol.packet.PuahSingleMessagePacket;
 import com.netty.informationServe.service.MessageService;
 import com.netty.informationServe.service.messagedispatch.MessageDispatchService;
 import com.netty.informationServe.utils.SessionUtils;
@@ -29,7 +29,7 @@ import java.util.List;
 @Slf4j
 @Service
 @ChannelHandler.Sharable
-public class AckSingleMessageHandler extends SimpleChannelInboundHandler<AckSingleMessagePacket> {
+public class AckPushSingleMessageHandler extends SimpleChannelInboundHandler<PuahSingleMessagePacket> {
     @Autowired
     MQUtils mqUtils;
 
@@ -42,25 +42,31 @@ public class AckSingleMessageHandler extends SimpleChannelInboundHandler<AckSing
     private MessageService messageService;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, AckSingleMessagePacket singleMessagePacket) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, PuahSingleMessagePacket singleMessagePacket) throws Exception {
 
-        Boolean onLine;
+
         String message = "";
         Channel toUserChannel = SessionUtils.getChannel(singleMessagePacket.getWebsocketMessage().getFrom());
         log.info("AclSingleMessageHandler"+toUserChannel);
         if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
-            //在线的话直接ack消息发送
             message = singleMessagePacket.getMessage();
             User toUser = SessionUtils.getUser(toUserChannel);
             String fileType = singleMessagePacket.getFileType();
             String msgid = singleMessagePacket.getWebsocketMessage().getMessageId();
-            //使用mq发送替代直接发送
-            messageService.execute(
-                    createSendRequest(channelHandlerContext, message, toUser, fileType,msgid),
-                    Commond.SINGLE_MESSAGE_ACK_RESPONSE
+            /**
+             * 发送完消息后还需要更改消息状态，投递给mq异步批量处理更改消息状态
+             * 有一个消息id就可以了 这块需要考虑消息最终一致性问题.。
+             * 是不是需要结合定时任务来刷盘
+             * 感觉一秒钟查一次数据库还是有点多,并且后期还需要使用推送mq的方式来进行消息推送，太麻烦了。
+             * 还是使用每个服务器自己进行推送吧。下线了也推送不过去，正好还省事。记录一下谁 消息 次数；
+             *
+             *
+             *
+             */
 
-            );
-            log.info(/*singleMessagePacket.getToUserId() + */"发送了消息给" + singleMessagePacket.getToUserId() + "：" + singleMessagePacket.getMessage());
+            messageDispatchService.sendForUpdate("UPDATECHAT",msgid);
+
+
         } else {
 //            message = singleMessagePacket.getMessage();
             log.info("AclSingleMessageHandler ======> 该用户不存在或者未登录");

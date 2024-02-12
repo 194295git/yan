@@ -17,7 +17,7 @@
         <module>rose-modules/file</module>
 
         <module>netty</module>
-        <module>nettytest</module>
+<!--        <module>nettytest</module>-->
         <module>rose-modules/loginUser</module>
         <module>rose-modules/fileTest</module>
         <module>common_core/common_shrio</module>

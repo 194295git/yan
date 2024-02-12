@@ -1,6 +1,7 @@
 package com.netty.informationServe.utils;
 
 import com.netty.common.domain.User;
+import com.rose.common.base.WebsocketMessage;
 import com.rose.common.constant.RedisPrefix;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,6 +31,31 @@ public class SessionUtils {
 	 */
 
 	public static Map<String, Channel> userOpenidChannelMap = new ConcurrentHashMap<>();
+
+	/**
+	 *
+	 */
+	public static Map<String, Map<String, Object>> cacheMsgidAndNumber = new ConcurrentHashMap<>();
+
+	/**
+	 * 每次调用这个的msgid每次进行加1，然后调用三次,重复三次之后则客户端不再进行重试，改为拉取消息.
+	 * @param channel
+	 * @param msgid
+	 */
+	public static void bindMsgidAndNumber(String channel, WebsocketMessage msgid){
+		//判断存不存在number键，不存在则为1，存在则加1
+		if (cacheMsgidAndNumber.containsKey(channel)){
+			Map<String, Object> map = cacheMsgidAndNumber.get(channel);
+			map.put("number",((Integer)map.get("number"))+1);
+		}else{
+			//如果存在的话则使用number1
+			final Map  temp = new HashMap<>();
+			temp.put("number",1);
+			temp.put("msgid",msgid);
+			cacheMsgidAndNumber.put(channel,temp);
+		}
+
+	}
 	
 	/**
 	 * groupId ---> channelgroup 群聊ID和群聊ChannelGroup映射

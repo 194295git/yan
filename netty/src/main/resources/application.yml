@@ -12,13 +12,7 @@ spring:
       discovery:
         ip: 192.168.56.1
         server-addr: 192.168.56.20:8848
-  rocketmq:
-    name-server: 192.168.56.20:9876
-    producer-send-msg-timeout: 3000
-    producer:
-      shutdown:
-        enable: false
-    producer-group-name: ${spring.application.name}-127-0-0-1-${server.port}
+
   redis:
     host: 192.168.56.20
     port: 6379
@@ -39,7 +33,13 @@ spring:
 server:
   port: 8084
 
-
+rocketmq:
+  name-server: 192.168.56.20:9876
+  producer:
+    group: testProducerGroup
+  consumer:
+    topic: websocket192-168-56-1-8084
+    group: group192-168-56-1-8084
 #rocketmq:
 #  name-server: 192.168.56.10:9876
 #  producer:

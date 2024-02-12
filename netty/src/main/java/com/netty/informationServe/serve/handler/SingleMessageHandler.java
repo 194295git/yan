@@ -3,21 +3,22 @@ package com.netty.informationServe.serve.handler;
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
-import com.rose.common.constant.RedisPrefix;
-import com.rose.common.netty.Commond;
-import com.rose.common.mqutil.MqMessage;
 import com.netty.common.domain.User;
-import com.netty.informationServe.service.messagedispatch.MessageDispatchService;
-import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.protocol.packet.SingleMessagePacket;
 import com.netty.informationServe.service.MessageService;
+import com.netty.informationServe.service.messagedispatch.MessageDispatchService;
 import com.netty.informationServe.utils.SessionUtils;
+import com.rose.common.constant.RedisPrefix;
+import com.rose.common.mqutil.MqMessage;
+import com.rose.common.mqutil.SendRequest;
 import com.rose.common.mqutil.Topic;
+import com.rose.common.netty.Commond;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +43,8 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
 
     @Autowired
     MQUtils mqUtils;
+    @Autowired
+    SessionUtils sessionUtils;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -70,15 +74,29 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         if(!host.equals("null")){
 //        if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
             message = singleMessagePacket.getMessage();
-            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(),
+            sendMessage("SAVECHAT",channelHandlerContext,message, singleMessagePacket.getToUserId(),
                     Topic.OnLine,true,singleMessagePacket.getMsgid(),token);
         } else {
             message = singleMessagePacket.getMessage();
-            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(),
+            sendMessage("SAVECHAT",channelHandlerContext,message, singleMessagePacket.getToUserId(),
                     Topic.OffLine,true, singleMessagePacket.getMsgid(),token);
             log.info("SingleMessageHandler ======> 该用户不存在或者未登录");
-            return;
+            /**
+             * 更改这块逻辑，变动为将消息投递到mq后返回ack; 将return注释      return;
+             */
+
         }
+        /**
+         * 投递消息成功后返回ack消息.
+         */
+        Boolean isOnline = sessionUtils.isOnline(singleMessagePacket.getToUserId());
+        ByteBuf buf = getByteBuf(channelHandlerContext,
+                singleMessagePacket.getMessage(),
+                singleMessagePacket.getMsgid(),isOnline,
+                singleMessagePacket.getIsretry()
+        );
+        TextWebSocketFrame tws = new TextWebSocketFrame(buf);
+        channelHandlerContext.writeAndFlush(tws);
 //        if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
 //            message = singleMessagePacket.getMessage();
 //            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OnLine,true);
@@ -91,16 +109,17 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
 //        User toUser = SessionUtils.getUser(toUserChannel);
         String fileType = singleMessagePacket.getFileType();
 //
-        //使用mq发送替代直接发送
-        messageService.execute(
-                createSendRequest(channelHandlerContext, message, singleMessagePacket.getToUserId(), fileType,singleMessagePacket.getMsgid()),
-                Commond.SINGLE_MESSAGE
-        );
-        //这行重要的代码就先注释
-//        ByteBuf buf = getByteBuf(channelHandlerContext, message, toUser, fileType);
-//        toUserChannel.writeAndFlush(new TextWebSocketFrame(buf));
 
-        log.info(/*singleMessagePacket.getToUserId() + */"发送了消息给" + singleMessagePacket.getToUserId() + "：" + singleMessagePacket.getMessage());
+        /**
+         * 推送消息将改为落库成功后推送消息.
+         *   //使用mq发送替代直接发送
+         *         messageService.execute(
+         *                 createSendRequest(channelHandlerContext, message, singleMessagePacket.getToUserId(), fileType,singleMessagePacket.getMsgid()),
+         *                 Commond.SINGLE_MESSAGE
+         *         );
+         *         log.info("发送了消息给" + singleMessagePacket.getToUserId() + "：" + singleMessagePacket.getMessage());
+         */
+
     }
 
     /**
@@ -134,25 +153,36 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         req.setUniqueMsgid(msgid);
         return req;
     }
-    public ByteBuf getByteBuf(ChannelHandlerContext ctx, String message, User toUser, String fileType) {
+
+    /**
+     * 创建投递消息成功的ack消息
+     * @param ctx
+     * @param message
+     * @param msgid
+     * @param toUserChannel
+     * @param isretry
+     * @return
+     */
+    public ByteBuf getByteBuf(ChannelHandlerContext ctx, String message, String msgid, Boolean toUserChannel, String isretry) {
         ByteBuf byteBuf = ctx.alloc().buffer();
         User fromUser = SessionUtils.getUser(ctx.channel());
         JSONObject data = new JSONObject();
-        data.put("type", 2);
+        data.put("type", Commond.SINGLE_MESSAGE_ACK_RESPONSE);
         data.put("status", 200);
         JSONObject params = new JSONObject();
         params.put("message", message);
-        params.put("fileType", fileType);
-        params.put("fromUser", fromUser);
-        params.put("toUser", toUser);
-
+        params.put("date", new Date().toString());
+        params.put("msgid",msgid);
+        params.put("online",toUserChannel);
+        //是否重传的消息
+        params.put("isretry",isretry);
         data.put("params", params);
         byte []bytes = data.toJSONString().getBytes(Charset.forName("utf-8"));
         byteBuf.writeBytes(bytes);
         return byteBuf;
     }
 
-    public void sendMessage(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type, String msgid,String token) {
+    public void sendMessage(String topic ,ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type, String msgid,String token) {
         MqMessage messageMQ = new MqMessage();
         messageMQ.setFromId(SessionUtils.getUser(ctx.channel()).getOpenid());
         messageMQ.setToId(toUser);
@@ -162,7 +192,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         messageMQ.setState(type);
         messageMQ.setMsgid(msgid);
         messageMQ.setToken(token);
-        messageDispatchService.sendForSave(messageMQ);
+        messageDispatchService.sendForSave(topic,messageMQ);
 //        return messageMQ;
 
 //        mqUtils.MessageSend(Topic.OnLineTopic,messageMQ);

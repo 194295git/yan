@@ -18,9 +18,11 @@ import java.util.stream.Collectors;
 @Service
 public class YanUserChatServiceImpl extends ServiceImpl<YanUserChatMapper, YanUserChat> implements YanUserChatService {
 
-   @Autowired
-   YanUserService yanUserService;
+    @Autowired
+    YanUserService yanUserService;
 
+    @Autowired
+    YanUserChatMapper  yanUserChatMapper;
     @Override
     public void saveChat(String openid, ChatDto chatDto,Integer rs) {
         YanUserChat yanUserChat = new YanUserChat();
@@ -28,7 +30,19 @@ public class YanUserChatServiceImpl extends ServiceImpl<YanUserChatMapper, YanUs
         BeanUtils.copyProperties(chatDto,yanUserChat);
         yanUserChat.setUserOpenid(openid);
         yanUserChat.setIsRead(rs);
+        yanUserChat.setStatus("send");
+        yanUserChat.setMsgId(chatDto.getMsgId());
         this.save(yanUserChat);
+    }
+
+    /**
+     * 批量的更新消息的状态
+     * @param chat
+     * @return
+     */
+    @Override
+    public int updateChatByMsgid(List<String> chat) {
+        return yanUserChatMapper.updateBatch(chat);
     }
 
     @Override
