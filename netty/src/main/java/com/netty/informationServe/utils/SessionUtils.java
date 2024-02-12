@@ -52,7 +52,8 @@ public class SessionUtils {
 			final Map  temp = new HashMap<>();
 			temp.put("number",1);
 			temp.put("msgid",msgid);
-			cacheMsgidAndNumber.put(channel,temp);
+			temp.put("channel",channel);
+			cacheMsgidAndNumber.put(msgid.getMessageId(),temp);
 		}
 
 	}

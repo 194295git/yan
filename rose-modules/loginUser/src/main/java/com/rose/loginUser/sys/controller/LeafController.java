@@ -37,6 +37,10 @@ public class LeafController {
 //        set.add(RedisPrefix.LEAF_PERFIX ,leafno);
         SetOperations<String, String> opsForSet = stringRedisTemplate.opsForSet();
         Long add = opsForSet.add(RedisPrefix.LEAF_PERFIX, leafno);//往集合添加元素
+        /**
+         * 设置一个10分钟的有效期
+         */
+//        stringRedisTemplate.expire(RedisPrefix.LEAF_PERFIX,600, TimeUnit.SECONDS);
 //        Long remove = opsForSet.remove("set_1", "C");//删除元素
 //        String set_1 = opsForSet.pop("set_1");//随机弹出 set 中的一个元素
 

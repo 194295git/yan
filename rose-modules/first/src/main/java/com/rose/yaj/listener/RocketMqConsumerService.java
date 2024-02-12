@@ -22,6 +22,7 @@ import org.apache.rocketmq.spring.core.RocketMQPushConsumerLifecycleListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -43,7 +44,22 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    /**
+     * 幂等的方法,判断list存不存在。存在的话直接删除，下次进来就不存在了。
+     * @param token
+     * @return
+     */
+    public boolean executeOperation(String token) {
+        // Lua脚本
+        String script = "if redis.call('sismember', KEYS[1], ARGV[1]) == 1 then return redis.call('srem', KEYS[1], ARGV[1]) else return 0 end";
+        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>(script, Long.class);
 
+        // 执行Lua脚本
+        Long result = stringRedisTemplate.execute(redisScript, Collections.singletonList(RedisPrefix.LEAF_PERFIX), token);
+
+        // 根据Lua脚本执行结果判断操作是否执行
+        return result != null && result > 0;
+    }
     @Override
     public void onMessage(String o) {
         String mqmsg =o;
@@ -59,47 +75,34 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
             //将msgid存储进去，方便后续进行update
             chatDto.setMsgId(message1.getMsgid());
             SetOperations<String, String> opsForSet = stringRedisTemplate.opsForSet();
-            Boolean member = opsForSet.isMember(RedisPrefix.LEAF_PERFIX, message1.getMsgid());
-            if(member){
-                Long remove = opsForSet.remove(RedisPrefix.LEAF_PERFIX, message1.getMsgid());//删除元素
-
-                //使用lua 表达式 防止同时多个请求进来；
-//            String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
-//            Long res = redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(key), orderToken);
+//            Boolean member = opsForSet.isMember(RedisPrefix.LEAF_PERFIX, message1.getMsgid());
+            if( executeOperation(message1.getMsgid())){
+//                Long remove = opsForSet.remove(RedisPrefix.LEAF_PERFIX, message1.getMsgid());//删除元
                 if (message1.getState() !=null){
                     if(message1.getType().equals("onLine")){
+                        /**
+                         * 用户在线需要去推送一下
+                         */
                         yanUserChatService.saveChat(message1.getFromId(),chatDto,1);
+                        SendRequest send = buildSendRequest(message1);
+                        //设置过滤应该有的token
+                        RoseFeignConfig.token.set(message1.getToken());
+                        nettyMqFeign.send(send);
                     }else {
+                        /**
+                         * 离线消息直接落库就链路就结束了
+                         */
                         yanUserChatService.saveChat(message1.getFromId(),chatDto,0);
                     }
                 }
-            }
 
+            }
             /**
              * 这个地方需要更改为异步推送消息,原本计划在消息落库后给用户a推送消息落库的成功消息，更改为投递ack则直接回复ack
              * 目前这个地方需要根据离线在线状态 推送用户b消息；
              *
              */
-            //在线离是需要ack一下的； 构造一下请求，然后开始发送
-            // 前端目前不是特别篇需要处理离线消息的ack 是百里离线消息需要再发一次
-            SendRequest send = new SendRequest();
-            JSONObject data = new JSONObject();
-            data.put("type", Commond.SINGLE_MESSAGE_OTHER);
-            data.put("status", 200);
 
-            JSONObject params = new JSONObject();
-            params.put("message", message1.getInfoContent());
-            params.put("openid",message1.getFromId());
-            data.put("params",params);
-            List to = new ArrayList<String>();
-            to.add(message1.getToId());
-            send.setTo(to);
-            send.setMsg(data);
-            send.setUniqueMsgid(message1.getMsgid());
-            send.setSendToAll(false);
-            //设置过滤应该有的token
-            RoseFeignConfig.token.set(message1.getToken());
-            nettyMqFeign.send(send);
 
         }catch (Exception e){
             //失败的话需要把redis的这个消息还回去.
@@ -111,6 +114,26 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
         }
 
     }
+
+    private SendRequest buildSendRequest(MqMessage message1) {
+        SendRequest send = new SendRequest();
+        JSONObject data = new JSONObject();
+        data.put("type", Commond.SINGLE_MESSAGE_OTHER);
+        data.put("status", 200);
+
+        JSONObject params = new JSONObject();
+        params.put("message", message1.getInfoContent());
+        params.put("openid",message1.getFromId());
+        data.put("params",params);
+        List to = new ArrayList<String>();
+        to.add(message1.getToId());
+        send.setTo(to);
+        send.setMsg(data);
+        send.setUniqueMsgid(message1.getMsgid());
+        send.setSendToAll(false);
+        return send;
+    }
+
     /**
      * 消费rocketmq的消息，通过channel管道来完成消息的推送
      * 使用返回值 ConsumeStatus的情况下可以确定是不是    ConsumeStatus.CONSUME_SUCCESS;
@@ -119,74 +142,7 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
      * @param msg
      * @return
      */
-//    @Override
-    public boolean  consumeMsg(/*RocketMqContent content,*/ MessageExt msg) {
-        String mqmsg = new String(msg.getBody());
-        log.info("RocketMqConsumerService=====消费消息:"+mqmsg);
-        //消息内容
-
-        MqMessage message1 = JSON.parseObject(mqmsg, MqMessage.class);
-        try {
-
-
-            ChatDto chatDto = new ChatDto();
-            chatDto.setContent(message1.getInfoContent());
-            chatDto.setToOpenid(message1.getToId());
-            chatDto.setGroup(message1.getState());
-
-            SetOperations<String, String> opsForSet = stringRedisTemplate.opsForSet();
-            Boolean member = opsForSet.isMember(RedisPrefix.LEAF_PERFIX, message1.getMsgid());
-            if(member){
-                Long remove = opsForSet.remove(RedisPrefix.LEAF_PERFIX, message1.getMsgid());//删除元素
-
-                //使用lua 表达式 防止同时多个请求进来；
-//            String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
-//            Long res = redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(key), orderToken);
-                if (message1.getState() !=null){
-                    if(message1.getType().equals("onLine")){
-                        yanUserChatService.saveChat(message1.getFromId(),chatDto,1);
-                    }else {
-                        yanUserChatService.saveChat(message1.getFromId(),chatDto,0);
-                    }
-                }
-            }
-
-            /**
-             * 这个地方需要更改为异步推送消息,原本计划在消息落库后给用户a推送消息落库的成功消息，更改为投递ack则直接回复ack
-             * 目前这个地方需要根据离线在线状态 推送用户b消息；
-             *
-             */
-            //在线离是需要ack一下的； 构造一下请求，然后开始发送
-            // 前端目前不是特别篇需要处理离线消息的ack 是百里离线消息需要再发一次
-            SendRequest send = new SendRequest();
-            JSONObject data = new JSONObject();
-            data.put("type", Commond.SINGLE_MESSAGE_OTHER);
-            data.put("status", 200);
-
-            JSONObject params = new JSONObject();
-            params.put("message", message1.getInfoContent());
-            params.put("openid",message1.getFromId());
-            data.put("params",params);
-            List to = new ArrayList<String>();
-            to.add(message1.getToId());
-            send.setTo(to);
-            send.setMsg(data);
-            send.setUniqueMsgid(message1.getMsgid());
-            send.setSendToAll(false);
-            //设置过滤应该有的token
-            RoseFeignConfig.token.set(message1.getToken());
-            nettyMqFeign.send(send);
-
-            return true;
-        }catch (Exception e){
-            //失败的话需要把redis的这个消息还回去.
-            SetOperations<String, String> opsForSet = stringRedisTemplate.opsForSet();
-            Long add = opsForSet.add(RedisPrefix.LEAF_PERFIX,  message1.getMsgid());//往集合添加元素
-            log.error("consumeMsg 消费mq消息失败.",e);
-        }
-        return false;
-    }
-
+//
     //构造推送消息体
     private WebsocketMessage getMessage(String channelId, SendRequest request, MessageExt msg) {
         WebsocketMessage websocketMsg = new WebsocketMessage(
