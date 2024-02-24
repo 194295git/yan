@@ -265,7 +265,8 @@ export default {
       if (temp != undefined) {
         if (temp.params.msgid == msgid) {
           //还没有收到消息代表需要重发消息。
-          state.tempSendMsg.parmas.isretry = 'true';
+          console.log(" state.tempSendMsg.", state.tempSendMsg)
+          // state.tempSendMsg.parmas.isretry = 'true';
           state.socketServe.send(state.tempSendMsg);
           throw new Error("消息队列还存在消息");
         }
@@ -295,18 +296,10 @@ export default {
           // Queue 推送队列消息
           //如果用户没有登录，则是不需要进行队列信息维护的
           console.log(
-            "【IM日志】res.params.online",
-            res.params.online,
+            "【IM日志】res.params.online 是否在线",
+            res.params.online
+            ,"是否重试",
             res.params.isretry
-          );
-          console.log("【IM日志】res.params.online", res.params.online == true);
-          console.log(
-            "【IM日志】res.params.online",
-            res.params.isretry == "false"
-          );
-          console.log(
-            "【IM日志】res.params.online",
-            res.params.online == true && res.params.isretry == "false"
           );
           if (res.params.online == true && res.params.isretry == "false") {
             state.queue.offer(state.tempSendMsg);
@@ -329,8 +322,8 @@ export default {
           });
           singleAck(JSON.parse(msg.data));
         }
-
-        if (res.type === imconstant.SINGLE_MESSAGE_ACK_OTHERCLIENT) {
+        //当收到消息的时候则删除队列里面的消息，停止重试
+        if (res.type === imconstant.SINGLE_MESSAGE_ACK_RESPONSE) {
           //代表客户端a成功的把消息发送了出去
           state.queue.poll();
           console.log(
@@ -474,6 +467,17 @@ export default {
           isretry: false,
         },
       };
+      let data2 = {
+        // 1代表着私聊的意思
+        type: 1,
+        params: {
+          msgid: no.content,
+          toMessageId: toUser.openid,
+          message: content,
+          fileType: 0,
+          isretry: true,
+        },
+      };
       if (state.current == 2) {
         data = {
           type: 9,
@@ -485,7 +489,7 @@ export default {
         };
       }
       console.log(data);
-      state.tempSendMsg = data;
+      state.tempSendMsg = data2;
       state.socketServe.send(data);
       state.recesiveAllMsg.push({
         type: "self",
