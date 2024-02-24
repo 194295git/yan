@@ -106,8 +106,8 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
 
         }catch (Exception e){
             //失败的话需要把redis的这个消息还回去.
-            SetOperations<String, String> opsForSet = stringRedisTemplate.opsForSet();
-            Long add = opsForSet.add(RedisPrefix.LEAF_PERFIX,  message1.getMsgid());//往集合添加元素
+//            SetOperations<String, String> opsForSet = stringRedisTemplate.opsForSet();
+//            Long add = opsForSet.add(RedisPrefix.LEAF_PERFIX,  message1.getMsgid());//往集合添加元素
             log.error("consumeMsg 消费mq消息失败.",e);
             // 处理失败，抛出异常，消息会根据重试策略稍后重新消费
             throw new RuntimeException("处理消息时发生错误，消息将被重新消费。");

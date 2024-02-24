@@ -14,7 +14,6 @@ import com.rose.common.mqutil.SendRequest;
 import com.rose.common.mqutil.Topic;
 import com.rose.common.netty.Commond;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -63,14 +62,13 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         String token = channelHandlerContext.channel().attr(attributeKey).get();
 
         String message = "";
-        Channel toUserChannel = SessionUtils.getChannel(singleMessagePacket.getToUserId());
-
+        //分布式情况下不能根据touserChannel来判断是否离线应该注释
+//        Channel toUserChannel = SessionUtils.getChannel(singleMessagePacket.getToUserId());
+//        //应该修改判断离线的方式
+//        log.info("SingleMessageHandler"+toUserChannel);
         String channelId =singleMessagePacket.getToUserId();
-
         String host = redisTemplate.opsForHash().get(RedisPrefix.PREFIX_CLIENT + channelId,"host")+"";
         //如果get不到才算是离线
-        //应该修改判断离线的方式
-        log.info("SingleMessageHandler"+toUserChannel);
         if(!host.equals("null")){
 //        if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
             message = singleMessagePacket.getMessage();
@@ -97,18 +95,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         );
         TextWebSocketFrame tws = new TextWebSocketFrame(buf);
         channelHandlerContext.writeAndFlush(tws);
-//        if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
-//            message = singleMessagePacket.getMessage();
-//            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OnLine,true);
-//        } else {
-//            message = singleMessagePacket.getMessage();
-//            sendMessage(channelHandlerContext,message, singleMessagePacket.getToUserId(), Topic.OffLine,true);
-//            log.info("SingleMessageHandler ======> 该用户不存在或者未登录");
-//            return;
-//        }
-//        User toUser = SessionUtils.getUser(toUserChannel);
-        String fileType = singleMessagePacket.getFileType();
-//
+
 
         /**
          * 推送消息将改为落库成功后推送消息.
