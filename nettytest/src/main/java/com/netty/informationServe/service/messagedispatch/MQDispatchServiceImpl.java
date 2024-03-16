@@ -1,11 +1,11 @@
 package com.netty.informationServe.service.messagedispatch;
 
 import com.alibaba.fastjson.JSONObject;
-import com.rose.common.mqutil.MqMessage;
-import com.rose.common.constant.NettyConstants;
-import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.config.RocketMQConfig;
 import com.rose.common.base.WebsocketMessage;
+import com.rose.common.constant.NettyConstants;
+import com.rose.common.mqutil.MqMessage;
+import com.rose.common.mqutil.SendRequest;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.DefaultRocketMqProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.Message;

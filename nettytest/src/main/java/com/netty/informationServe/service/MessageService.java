@@ -1,9 +1,9 @@
 package com.netty.informationServe.service;
 
-import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.service.messagedispatch.MessageDispatchService;
 import com.netty.informationServe.utils.ServiceException;
 import com.rose.common.constant.RedisPrefix;
+import com.rose.common.mqutil.SendRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.*;
 
 /**
  * 推送消息处理类

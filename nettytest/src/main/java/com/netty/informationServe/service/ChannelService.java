@@ -2,12 +2,12 @@ package com.netty.informationServe.service;
 
 
 import com.alibaba.fastjson.JSON;
-import com.rose.common.netty.AttrConstants;
 import com.netty.common.entity.Client;
 import com.netty.informationServe.task.UpdateRedisChannelActiveTimeTask;
 import com.netty.informationServe.utils.Nettyutil;
 import com.netty.informationServe.utils.SessionUtils;
 import com.rose.common.constant.RedisPrefix;
+import com.rose.common.netty.AttrConstants;
 import com.rose.common.utils.DateUtils;
 import com.rose.common.utils.ObjUtils;
 import io.netty.channel.Channel;

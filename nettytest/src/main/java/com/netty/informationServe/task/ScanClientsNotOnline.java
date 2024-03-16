@@ -1,10 +1,10 @@
 package com.netty.informationServe.task;
 
-import com.rose.common.netty.AttrConstants;
 import com.netty.informationServe.service.ChannelService;
 import com.netty.informationServe.utils.Nettyutil;
 import com.netty.informationServe.utils.SessionUtils;
 import com.rose.common.constant.RedisPrefix;
+import com.rose.common.netty.AttrConstants;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

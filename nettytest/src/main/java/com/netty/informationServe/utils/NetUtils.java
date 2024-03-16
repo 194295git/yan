@@ -20,8 +20,9 @@ package com.netty.informationServe.utils;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
+import java.net.Inet6Address;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
