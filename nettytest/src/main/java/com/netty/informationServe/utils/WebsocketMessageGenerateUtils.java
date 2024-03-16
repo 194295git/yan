@@ -1,10 +1,10 @@
 package com.netty.informationServe.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.rose.common.netty.AttrConstants;
 import com.netty.common.constants.MessageConstants;
 import com.rose.common.base.WebsocketMessage;
 import com.rose.common.constant.WebsocketConstants;
+import com.rose.common.netty.AttrConstants;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 

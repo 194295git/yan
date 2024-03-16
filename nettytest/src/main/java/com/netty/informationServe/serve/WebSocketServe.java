@@ -7,7 +7,6 @@ import com.netty.informationServe.serve.handler.MyWebSocketChannelHandler;
 import com.netty.informationServe.utils.Nettyutil;
 import com.rose.common.constant.RedisPrefix;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
