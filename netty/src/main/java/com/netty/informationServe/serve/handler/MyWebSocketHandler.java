@@ -64,23 +64,25 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
      */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        //检查用户openid
+        AttributeKey<String> openid = AttributeKey.valueOf("openid");
+        //从通道中获取用户openid
+        String openid2 = ctx.channel().attr(openid).get();
+        log.info("MyWebSocketHandler.userEventTriggered=>"+openid2);
+
+
         if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete) {
             //协议握手成功完成
-            log.info("NettyWebSocketHandler.userEventTriggered --> : 协议握手成功完成");
+            log.info("MyWebSocketHandler.userEventTriggered --> : 协议握手成功完成");
             //检查用户token
             AttributeKey<String> attributeKey = AttributeKey.valueOf("token");
             //从通道中获取用户token
             String token = ctx.channel().attr(attributeKey).get();
-            log.info("NettyWebSocketHandler.userEventTriggered"+token);
+
+
             RoseFeignConfig.token.set(token);
             GenericResponse auth = nettyMqFeign.getAuth();
             //先使用一个接口吧。后续添加个人有哪些权限的时候在做改进
-            //校验token逻辑
-            //......
-//            if(1 == 2) {
-//                //如果token校验不通过，发送连接关闭的消息给客户端，设置自定义code和msg用来区分下服务器是因为token不对才导致关闭
-//
-//            }
             if (auth.getStatusCode() == 200){
                 //token校验通过
                 log.info("token校验通过");
@@ -89,12 +91,6 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
             }
         }
 //        //通过判断IdleStateEvent的状态来实现自己的读空闲，写空闲，读写空闲处理逻辑
-//        if (evt instanceof IdleStateEvent && ((IdleStateEvent) evt).state() == IdleState.READER_IDLE) {
-//            //读空闲，关闭通道
-//            log.info("NettyWebSocketHandler.userEventTriggered --> : 读空闲，关闭通道");
-//            ctx.close();
-//        }
-
         if(evt instanceof IdleStateEvent) {
             //将  evt 向下转型 IdleStateEvent
             IdleStateEvent event = (IdleStateEvent) evt;
@@ -102,8 +98,12 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
             switch (event.state()) {
                 case READER_IDLE:
                     eventType = "读空闲";
-//                    ctx.channel().close();
-                    //关闭通道，并且清除所有的redis
+                    channelService.remove(openid2);
+                    System.out.println(ctx.channel().remoteAddress() + "--超时时间--" + eventType);
+                    System.out.println("服务器做相应处理..");
+                    ctx.channel().close();
+
+                    //关闭通道，并且清除所有的redis信息
                     break;
                 case WRITER_IDLE:
                     eventType = "写空闲";
@@ -113,11 +113,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                     break;
             }
             //这里已经可以知道浏览器所处的空闲是何种空闲，可以执行对应的处理逻辑了
-            System.out.println(ctx.channel().remoteAddress() + "--超时时间--" + eventType);
-            System.out.println("服务器做相应处理..");
 
-            //如果发生空闲，我们关闭通道
-            // ctx.channel().close();
         }
 
     }
@@ -140,13 +136,12 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         if(frame instanceof CloseWebSocketFrame) {
             ctx.channel().close();
         }
-
-//        判断是否时ping消息
+        //        判断是否时ping消息
         if(frame instanceof PingWebSocketFrame) {
             ctx.channel().write(new PongWebSocketFrame(frame.content().retain()));
         }
 
-////        判断是否是二进制消息，如果是二进制消息，就抛出异常
+        //      判断是否是二进制消息，如果是二进制消息，就抛出异常
 //        if(!(frame instanceof BinaryWebSocketFrame)) {
 //            System.out.println("目前我们不支持二进制消息");
 //            throw new RuntimeException(this.getClass().getName() + ":不支持消息");
@@ -154,13 +149,8 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
 
         TextWebSocketFrame textWebSocketFrame = (TextWebSocketFrame) frame;
         ByteBuf bytebuf = textWebSocketFrame.content();
-//从content中写入缓冲区
         String content = bytebuf.toString(Charset.forName("utf-8"));
-        logger.info(content);
         JSONObject jsonObject = JSONObject.parseObject(content);
-//将json字符串转变为json对象
-        logger.info(content);
-//从json对象中按属性取值
         Byte type = jsonObject.getByte("type");
         JSONObject parmas = jsonObject.getJSONObject("params");
         Packet packet = null;
@@ -218,7 +208,13 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 groupMessageRequestPacket.setFileType(parmas.getString("fileType"));
                 packet = groupMessageRequestPacket;
                 break;
-            //心跳检测 暂未添加
+            case 20:
+                ByteBuf buf = createPongByteBuf(ctx);
+                 TextWebSocketFrame tws = new TextWebSocketFrame(buf);
+                ctx.writeAndFlush(tws);
+                log.info("收到了ping");
+                break;
+
             default:
                 break;
         }
@@ -240,7 +236,6 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
             }
 
         }
-
 //
 //        //返回给client b的回应
 //        if(type.equals(Commond.SINGLE_MESSAGE_ACK)){
@@ -248,10 +243,9 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
 //            TextWebSocketFrame tws = new TextWebSocketFrame(buf);
 //            ctx.writeAndFlush(tws);
 //        }
-
-//        log.info(packet.getCommand());
-
-        ctx.fireChannelRead(packet);
+        if(packet!= null){
+            ctx.fireChannelRead(packet);
+        }
     }
 
     //客户端与服务端创建连接
@@ -324,6 +318,18 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         return byteBuf;
     }
 
+    public ByteBuf createPongByteBuf(ChannelHandlerContext ctx) {
+        ByteBuf byteBuf = ctx.alloc().buffer();
+
+        JSONObject data = new JSONObject();
+        JSONObject params = new JSONObject();
+        params.put("type", "pong");
+        params.put("date", new Date().toString());
+        data.put("params", params);
+        byte []bytes = data.toJSONString().getBytes(Charset.forName("utf-8"));
+        byteBuf.writeBytes(bytes);
+        return byteBuf;
+    }
 
     //构造推送消息体
     private WebsocketMessage getMessage(String channelId, SendRequest request, MessageExt msg) {

@@ -81,7 +81,6 @@ export default {
     }
   },
   createChat(state, chatInfo) {
-    console.log("createChat", chatInfo);
     let chat = null;
     chatInfo.group
     let type = chatInfo.group=='1' ? "PRIVATE":"GROUP" ;
@@ -98,7 +97,6 @@ export default {
       atAll: false,
     };
     state.chats.unshift(chat);
-    console.log("createChat", state.chats);
   },
   
   moveTop(state, idx) {
@@ -134,7 +132,6 @@ export default {
    * @param {*} msgInfo 当前消息
    */
   insertMessage(state, msgInfo) {
-    console.log("insertMessage",msgInfo)
       state.privateMsgMaxId = msgInfo.msgId;
       state.groupMsgMaxId = msgInfo.msgId;
     // 如果是已存在消息，则覆盖旧的消息数据

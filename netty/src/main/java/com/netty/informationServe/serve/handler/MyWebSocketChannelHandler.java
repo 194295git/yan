@@ -42,8 +42,7 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
 
     @Autowired
     NettyWebSocketParamHandler nettyWebSocketParamHandler;
-    @Autowired
-    NettyWebSocketHandler nettyWebSocketHandler;
+
 
     //单位是秒
     private int READER_IDLE_TIME = 120;
@@ -69,7 +68,6 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
                  */
                     .addLast("nettyWebSocketParamHandler",nettyWebSocketParamHandler)
                     .addLast("protocolHandler",new WebSocketServerProtocolHandler("/websocket"))
-//                    .addLast("nettyWebSocketHandler",nettyWebSocketHandler)
                     .addLast(new IdleStateHandler(READER_IDLE_TIME,
                             WRITER_IDLE_TIME,
                             ALL_IDLE_TIME,
