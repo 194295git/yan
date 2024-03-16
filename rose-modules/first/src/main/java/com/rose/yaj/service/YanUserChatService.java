@@ -17,8 +17,19 @@ public interface YanUserChatService extends IService<YanUserChat> {
 
     int updateChatByMsgid(List<String> chat);
 
+    /**
+     * 获取除自己以外的所有成员.
+     * @param openid
+     * @return
+     */
+    List<String> getGroupMember(String openid);
 
     List<ChatDto.PageChat> listByOpenid(String openid,String toOpenid);
+
+
+    List<ChatDto.PageChat> listByOpenidAll(String openid,String msgid);
+
+
 
     List<ChatDto.PageChat> listByOpenid2(String openid, String toGroup);
 }

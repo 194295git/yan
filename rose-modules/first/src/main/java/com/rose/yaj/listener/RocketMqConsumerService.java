@@ -11,8 +11,10 @@ import com.rose.common.netty.Commond;
 import com.rose.common.utils.UUIDUtils;
 import com.rose.yaj.config.RoseFeignConfig;
 import com.rose.yaj.dto.ChatDto;
+import com.rose.yaj.dto.UserDto;
 import com.rose.yaj.feign.NettyMqFeign;
 import com.rose.yaj.service.YanUserChatService;
+import com.rose.yaj.service.YanUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.common.message.MessageExt;
@@ -37,6 +39,8 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
 
     @Autowired
     YanUserChatService yanUserChatService;
+    @Autowired
+    YanUserService yanUserService;
 
     @Autowired
     NettyMqFeign nettyMqFeign;
@@ -78,16 +82,26 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
 //            Boolean member = opsForSet.isMember(RedisPrefix.LEAF_PERFIX, message1.getMsgid());
             if( executeOperation(message1.getMsgid())){
 //                Long remove = opsForSet.remove(RedisPrefix.LEAF_PERFIX, message1.getMsgid());//删除元
-                if (message1.getState() !=null){
+                if (message1.getState() !=null  ){
                     if(message1.getType().equals("onLine")){
                         /**
-                         * 用户在线需要去推送一下
+                         * 用户在线需要去推送一下，群聊的话需要找一下需要推送的人。单聊的话报文里面有
                          */
                         yanUserChatService.saveChat(message1.getFromId(),chatDto,1);
-                        SendRequest send = buildSendRequest(message1);
-                        //设置过滤应该有的token
-                        RoseFeignConfig.token.set(message1.getToken());
-                        nettyMqFeign.send(send);
+                        if (message1.getState()){
+
+                            SendRequest send = buildSendRequest(message1);
+                            //设置过滤应该有的token
+                            RoseFeignConfig.token.set(message1.getToken());
+                            nettyMqFeign.send(send);
+                        }else{
+                            //群聊
+                            SendRequest send = buildSendRequestGroup(message1);
+                            //设置过滤应该有的token
+                            RoseFeignConfig.token.set(message1.getToken());
+                            nettyMqFeign.send(send);
+                        }
+
                     }else {
                         /**
                          * 离线消息直接落库就链路就结束了
@@ -123,6 +137,7 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
 
         JSONObject params = new JSONObject();
         params.put("message", message1.getInfoContent());
+        params.put("msgId", message1.getMsgid());
         params.put("openid",message1.getFromId());
         data.put("params",params);
         List to = new ArrayList<String>();
@@ -134,6 +149,35 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
         return send;
     }
 
+    /**
+     * 查询一下所有的用户,可以缓存从这个地方优化。群聊人员不要从报文那里传递过来.
+     * @param message1
+     * @return
+     */
+    private SendRequest buildSendRequestGroup(MqMessage message1) {
+        List<UserDto.EyeUser>  userlist  = yanUserService.queryEyeUser(message1.getFromId());
+        SendRequest send = new SendRequest();
+        JSONObject data = new JSONObject();
+        data.put("type", Commond.SINGLE_MESSAGE_OTHER);
+        data.put("status", 200);
+
+        JSONObject params = new JSONObject();
+        params.put("message", message1.getInfoContent());
+        params.put("msgId", message1.getMsgid());
+        params.put("openid",message1.getFromId());
+        data.put("params",params);
+        List to = new ArrayList<String>();
+        //这个地方查出关注的用户 然后去推送消息.
+        for (UserDto.EyeUser item :userlist){
+            to.add(item.getOpenid());
+        }
+
+        send.setTo(to);
+        send.setMsg(data);
+        send.setUniqueMsgid(message1.getMsgid());
+        send.setSendToAll(false);
+        return send;
+    }
     /**
      * 消费rocketmq的消息，通过channel管道来完成消息的推送
      * 使用返回值 ConsumeStatus的情况下可以确定是不是    ConsumeStatus.CONSUME_SUCCESS;

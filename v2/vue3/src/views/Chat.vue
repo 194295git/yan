@@ -88,6 +88,7 @@ import {
   getAllGroup,
   getGroupOpenid,
 } from "@/service/chat";
+
 import { getUserInfoMe } from "@/service/user";
 import { useStore } from "vuex";
 import { getLocal } from "@/common/js/utils";
@@ -110,11 +111,9 @@ export default {
       //复制来的
       keyword: "搜索好友",
       email: "",
-      // 确保websocket是打开状态
       toUser: {},
       toGroup: {},
       content: "",
-      mini: "mini",
       //关于重连的需要的
       timeout: 40000, // 30s
       groups: [],
@@ -145,6 +144,8 @@ export default {
       // console.log(store.state.userInfo)
     };
     const init = async () => {
+          //建立连接
+
       // Toast.loading({ message: "加载中...", forbidClick: true });
       const data = await queryEyeUser();
       console.log(data);
@@ -154,10 +155,18 @@ export default {
       state.groups = res.content;
       console.log(res);
       // state.list = data;
-
+      
       //向后端发送注册的消息
       // sendRegisterData();
       // Toast.clear();
+
+      //初始化map
+      store.commit("initChat");
+      
+      //根据store里面的id拉取消息，写到action里面
+      // 调用 pullOffline action
+      await store.dispatch('pullOffline');
+
     };
 
     const goBack = () => {
@@ -168,6 +177,11 @@ export default {
       router.push({ path: r, query: query || {} });
     };
 
+    /**
+     * @description: 跳转到聊天详情页
+     * @param {*} index
+     * @return {*}
+     */
     const changeToUser = async (index) => {
       state.email = state.userlist[index].email;
       state.toUser = state.userlist[index];
@@ -182,10 +196,16 @@ export default {
           openid: openid,
         },
       });
-    };
+    };  
+    // //监听一下聊天页面的情况.
+    // const recesiveAllMsg =computed(() => store.state.chat);
+
+
     const changeToGroup = async (index) => {
       state.toGroup = state.groups[index];
       state.current = 2;
+      //切换的时候把群id存一份.
+      store.commit("setGroupId",state.toGroup.groupId);
       const res = await getGroupOpenid(state.toGroup.groupId);
       //向后端注册群聊
       

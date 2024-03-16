@@ -6,14 +6,13 @@ import com.netty.common.config.MQUtils;
 import com.netty.common.domain.User;
 import com.netty.informationServe.protocol.packet.GroupMessagePacket;
 import com.netty.informationServe.service.MessageService;
+import com.netty.informationServe.service.messagedispatch.MessageDispatchService;
 import com.netty.informationServe.utils.SessionUtils;
 import com.rose.common.mqutil.MqMessage;
 import com.rose.common.mqutil.SendRequest;
 import com.rose.common.mqutil.Topic;
-import com.rose.common.netty.Commond;
 import com.rose.common.to.mq.Message2;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -23,8 +22,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,6 +41,8 @@ public class GroupMessageHandler extends SimpleChannelInboundHandler<GroupMessag
     private MessageService messageService;
     @Autowired
     MQUtils mqUtils;
+    @Resource(name = "MQDispatchServiceImpl")
+    private MessageDispatchService messageDispatchService;
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, GroupMessagePacket groupMessagePacket) throws Exception {
@@ -50,22 +51,13 @@ public class GroupMessageHandler extends SimpleChannelInboundHandler<GroupMessag
         String fileType = groupMessagePacket.getFileType();
         ChannelGroup channelGroup = SessionUtils.getChannelGroup(groupId);
         log.info(" GroupMessageHandler channelGroup"+channelGroup);
-        List<String> nameList = new ArrayList<>();
-        User userself = SessionUtils.getUser(channelHandlerContext.channel());
-        for (Channel channel : channelGroup) {
-            User user = SessionUtils.getUser(channel);
-            if (!user.getOpenid().equals(userself.getOpenid())){
-                nameList.add(user.getOpenid());
-            }
 
-        }
+        sendMessage(channelHandlerContext,groupMessagePacket.getMessage(),groupId.toString(),Topic.OnLine,false,groupMessagePacket.getMsgid());
 
-        sendMessage(channelHandlerContext,groupMessagePacket.getMessage(),groupId.toString(),Topic.OnLine,false);
-
-        messageService.execute(
-                createSendRequest(channelHandlerContext, groupId, groupMessagePacket.getMessage(), userself, fileType, nameList),
-                Commond.GROUP_MESSAGE_RESPONSE
-        );
+//        messageService.execute(
+//                createSendRequest(channelHandlerContext, groupId, groupMessagePacket.getMessage(), userself, fileType, nameList),
+//                Commond.GROUP_MESSAGE_RESPONSE
+//        );
 //        if (channelGroup != null) {
 //            User user = SessionUtils.getUser(channelHandlerContext.channel());
 //            ByteBuf byteBuf = getByteBuf(channelHandlerContext, groupId, groupMessagePacket.getMessage(), user, fileType, nameList);
@@ -114,15 +106,24 @@ public class GroupMessageHandler extends SimpleChannelInboundHandler<GroupMessag
         return byteBuf;
     }
 
-    public void sendMessage(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type) {
+    /**
+     *
+     * @param ctx
+     * @param message
+     * @param toUser
+     * @param state
+     * @param type false 是0  true 是1  用于区分是不是群聊
+     */
+    public void sendMessage(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type,String msgid) {
         MqMessage messageMQ = new MqMessage();
         messageMQ.setFromId(SessionUtils.getUser(ctx.channel()).getOpenid());
         messageMQ.setToId(toUser);
+        messageMQ.setMsgid(msgid);
         messageMQ.setType(state);
         messageMQ.setInfoContent(message);
         messageMQ.setTime(new DateTime().toString());
         messageMQ.setState(type);
-
+        messageDispatchService.sendForSave("SAVECHAT",messageMQ);
         Message2 message2 = new Message2();
         BeanUtils.copyProperties(messageMQ,message2);
         mqUtils.MessageSend2(message2);

@@ -17,6 +17,11 @@ export function getAllGroup() {
 export function getGroupOpenid(params) {
   return apiFirstGet('/yaj/yan-group/getGroupOpenid?id='+params);
 }
+
+
+export function getChatContentAll(params) {
+  return apiFirstGet('/yaj/yan-user/getChatContentAll?msgid='+params);
+}
 export function getGroupContent(params) {
   return apiFirstGet('/yaj/yan-group/getGroupContent?toGroup='+params);
 }

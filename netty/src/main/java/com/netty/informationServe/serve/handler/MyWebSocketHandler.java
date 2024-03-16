@@ -72,10 +72,6 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
             //从通道中获取用户token
             String token = ctx.channel().attr(attributeKey).get();
             log.info("NettyWebSocketHandler.userEventTriggered"+token);
-//            if (token.equals("undefined")){
-//                ctx.writeAndFlush(new CloseWebSocketFrame(400, "token 无效")).addListener(ChannelFutureListener.CLOSE);
-//            }
-//            ctx.fireChannelRead();
             RoseFeignConfig.token.set(token);
             GenericResponse auth = nettyMqFeign.getAuth();
             //先使用一个接口吧。后续添加个人有哪些权限的时候在做改进
@@ -100,13 +96,14 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
 //        }
 
         if(evt instanceof IdleStateEvent) {
-
             //将  evt 向下转型 IdleStateEvent
             IdleStateEvent event = (IdleStateEvent) evt;
             String eventType = null;
             switch (event.state()) {
                 case READER_IDLE:
                     eventType = "读空闲";
+//                    ctx.channel().close();
+                    //关闭通道，并且清除所有的redis
                     break;
                 case WRITER_IDLE:
                     eventType = "写空闲";
@@ -215,6 +212,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
             // 群聊消息
             case 9:
                 GroupMessagePacket groupMessageRequestPacket = new GroupMessagePacket();
+                groupMessageRequestPacket.setMsgid(parmas.getString("msgid"));
                 groupMessageRequestPacket.setMessage(parmas.getString("message"));
                 groupMessageRequestPacket.setToGroupId(parmas.getInteger("toMessageId"));
                 groupMessageRequestPacket.setFileType(parmas.getString("fileType"));
@@ -230,7 +228,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
          */
 //                返回应答消息
 //        获取客户端向服务端发送的消息
-        if(type.equals(Commond.SINGLE_MESSAGE)||type.equals(Commond.GROUP_MESSAGE)){
+        if(type.equals(Commond.SINGLE_MESSAGE)){
             if(parmas.getString("isretry").equals("false")){
                 ByteBuf buf = getByteBuf(ctx,
                         parmas.getString("message"),

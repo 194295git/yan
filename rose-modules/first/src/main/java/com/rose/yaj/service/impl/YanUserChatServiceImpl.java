@@ -46,6 +46,11 @@ public class YanUserChatServiceImpl extends ServiceImpl<YanUserChatMapper, YanUs
     }
 
     @Override
+    public List<String> getGroupMember(String openid) {
+        return null;
+    }
+
+    @Override
     public List<ChatDto.PageChat> listByOpenid(String openid,String toOpenid) {
         List<ChatDto.PageChat> pageChatOne = this.listByOpenid(openid, toOpenid, 1);
         List<ChatDto.PageChat> pageChatZero = this.listByOpenid(openid, toOpenid, 0);
@@ -60,6 +65,11 @@ public class YanUserChatServiceImpl extends ServiceImpl<YanUserChatMapper, YanUs
                 .eq("to_openid",openid)
                 .eq("user_openid",toOpenid));
         return pageChatOne;
+    }
+
+    @Override
+    public List<ChatDto.PageChat> listByOpenidAll(String openid, String msgid) {
+        return yanUserChatMapper.listByOpenidAll(openid,msgid);
     }
 
     @Override
