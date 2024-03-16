@@ -45,7 +45,9 @@ public class NettyWebSocketParamHandler extends SimpleChannelInboundHandler<Full
         Map<CharSequence, CharSequence> queryMap = UrlBuilder.ofHttp(uri).getQuery().getQueryMap();
         //将参数放入通道中传递下去
         AttributeKey<String> attributeKey = AttributeKey.valueOf("token");
+        AttributeKey<String> openid = AttributeKey.valueOf("openid");
         ctx.channel().attr(attributeKey).setIfAbsent(queryMap.get("token").toString());
+        ctx.channel().attr(openid).setIfAbsent(queryMap.get("openid").toString());
         request.setUri(URLUtil.getPath(uri));
         ctx.fireChannelRead(request.retain());
     }

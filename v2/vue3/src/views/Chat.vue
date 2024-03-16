@@ -88,7 +88,7 @@ import {
   getAllGroup,
   getGroupOpenid,
 } from "@/service/chat";
-
+import SocketService from "@/common/js/websocket";
 import { getUserInfoMe } from "@/service/user";
 import { useStore } from "vuex";
 import { getLocal } from "@/common/js/utils";
@@ -119,6 +119,14 @@ export default {
       groups: [],
     });
 
+    //建立连接
+    const initConnect = () => {
+      console.log("initConnect",store.state.userInfo);
+      SocketService.Instance.connect(localStorage.getItem("token"),store.state.userInfo.openid);
+      state.socketServe = SocketService.Instance;
+      state.socketServe.registerCallBack("callback1", state.socketServe);
+    };
+
     onMounted(() => {
       getToken();
       init();
@@ -126,11 +134,11 @@ export default {
 
     const getToken = async () => {
       const token = getLocal("token");
-      console.log(token==undefined ?"token为空":"token不为空");
       if (token) {
         // 
         await getUserInfo ();  
         state.userInfo = store.state.userInfo;
+        initConnect();
         return;
       } else {
         router.push({ path: "/login" });
@@ -138,10 +146,8 @@ export default {
     };
     const getUserInfo = async () => {
       const res = await getUserInfoMe();
-      // console.log("==========getUserInfo")
-      // console.log(res.content)
+
       store.commit("setUserInfo", res.content);
-      // console.log(store.state.userInfo)
     };
     const init = async () => {
           //建立连接

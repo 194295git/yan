@@ -318,7 +318,7 @@ export default {
         msgId: res.params.msgId,
         otherOpenid: res.params.openid,
         avatarUrl: null,
-        group:'1',
+        group: "1",
         createTime: new Date().getTime(),
         targetId: res.params.openid,
       };
@@ -329,6 +329,29 @@ export default {
         content: res.params.message,
       });
       singleAck(JSON.parse(msg.data));
+    };
+
+    const solveGroupMessage = async (res) => {
+      const avatar = getAvatarUrl(res.params.fromUser.openid);
+      avatar.then((result) => {
+        console.log(result);
+        // state.recesiveAllMsg.push({
+        //   type: "receive",
+        //   content: res.params.message,
+        //   avatarUrl: result,
+        // });
+        const commitdata = {
+          type: "receive",
+          content: res.params.message,
+          msgId: res.params.msgId,
+          otherOpenid: res.params.fromUser.openid,
+          avatarUrl: result,
+          createTime: new Date().getTime(),
+          targetId: route.query.groupId,
+        };
+
+        store.commit("insertMessage", commitdata);
+      });
     };
     onMounted(() => {
       getToken();
@@ -341,7 +364,8 @@ export default {
             ? JSON.parse(msg.data)
             : JSON.parse(msg.data).msg;
         console.log(res);
-        if (res.type === 0) {
+        if (res.type === 0 || res.type == "pong") {
+          console.log(res.type);
           return;
         }
 
@@ -363,28 +387,7 @@ export default {
         }
         //群聊收消息
         if (res.type === 10) {
-          const avatar = getAvatarUrl(res.params.fromUser.openid);
-          avatar.then((result) => {
-            console.log(result);
-            // state.recesiveAllMsg.push({
-            //   type: "receive",
-            //   content: res.params.message,
-            //   avatarUrl: result,
-            // });
-            const commitdata = {
-              type: "receive",
-              content: res.params.message,
-              msgId: res.params.msgId,
-              otherOpenid: res.params.fromUser.openid,
-              avatarUrl: result,
-              createTime: new Date().getTime(),
-              targetId: route.query.groupId,
-            };
-
-            store.commit("insertMessage", commitdata);
-          });
-          // console.log(avatar)
-          //  这里写个接口去获取头像res.params.fromUser.openid
+          solveGroupMessage(res);
         }
       };
     });
@@ -442,15 +445,6 @@ export default {
       sendRegisterData();
       // [before 原来这个地方是向后端拉取消息，现在改在chat页面拉取 ]
     };
-
-    //建立连接
-    const initConnect = () => {
-      SocketService.Instance.connect(localStorage.getItem("token"));
-      state.socketServe = SocketService.Instance;
-      state.socketServe.registerCallBack("callback1", state.socketServe);
-    };
-    //在setup声明周期执行这个函数
-    initConnect();
 
     //发送注册的数据
     const sendRegisterData = () => {
@@ -549,7 +543,7 @@ export default {
         msgId: no.content,
         otherOpenid: toUser.openid,
         avatarUrl: null,
-        group:'1',
+        group: "1",
         createTime: new Date().getTime(),
         targetId: toUser.openid,
       };
@@ -584,11 +578,11 @@ export default {
         avatarUrl: state.userInfo.avatarUrl,
         createTime: new Date().getTime(),
         targetId: route.query.groupId,
-        group: '0',
+        group: "0",
       };
-      console.log(" sendMsgGroup commitdata",commitdata)
+      console.log(" sendMsgGroup commitdata", commitdata);
       store.commit("insertMessage", commitdata);
-     state.content = "";
+      state.content = "";
     };
 
     return {

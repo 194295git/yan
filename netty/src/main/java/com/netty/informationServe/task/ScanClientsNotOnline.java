@@ -37,7 +37,10 @@ public class ScanClientsNotOnline {
 
     private static Long now = null;
 
-    @Scheduled(fixedRate=60000)
+    /**
+     * 600秒走一趟吧；
+     */
+    @Scheduled(fixedRate=600000)
     private void execute() {
         Long startTime = System.currentTimeMillis();
         log.info("过期客户端扫描任务开启...");
