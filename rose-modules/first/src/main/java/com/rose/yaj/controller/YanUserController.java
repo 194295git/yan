@@ -122,6 +122,17 @@ public class YanUserController {
         return GenericResponse.response(ServiceError.NORMAL,yanUserChat);
     }
 
+    @ApiOperation("获取所有的聊天内容，拉取消息")
+    @GetMapping("/getChatContentAll")
+    public GenericResponse getChatContentAll(
+            @RequestParam("msgid") String msgid,
+            HttpServletRequest request) throws IOException {
+        String openid = Util.fromRequestToOpenid(request);
+
+        List<ChatDto.PageChat> yanUserChat = yanUserChatService.listByOpenidAll(openid,msgid);
+        return GenericResponse.response(ServiceError.NORMAL,yanUserChat);
+    }
+
 
     @ApiOperation("完善用户详细信息")
     @PostMapping("/addInfo")

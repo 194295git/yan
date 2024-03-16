@@ -10,11 +10,11 @@
           <text class="mt-2 ml-2" @click="changeCur()">返回</text>
         </div>
         <div class="scroll">
-          <list-scroll :scroll-data="recesiveAllMsg">
+          <list-scroll :scroll-data="computedChats.messages">
             <div class="swiper-container">
               <div
                 class="content"
-                v-for="(item, index) in recesiveAllMsg"
+                v-for="(item, index) in computedChats.messages"
                 :key="index"
               >
                 <div class="d-felx justify-start " v-if="item.type === 'self'">
@@ -76,7 +76,7 @@
         </div>
       </div>
     </div>
-
+    <!-- 群聊开始 -->
     <div>
       <div v-if="current == 2" class="box2 mt-2">
         <div class="box2">
@@ -86,25 +86,22 @@
           <text class="mt-2 ml-2" @click="showAllMember()">查看成员</text>
         </div>
         <div class="scroll">
-          <list-scroll
-            :scroll-data="recesiveAllMsg"
-            :scrollToEndFlag="scrollToEndFlag"
-          >
+          <list-scroll :scroll-data="computedChats.messages">
             <div class="swiper-container">
               <div
                 class="content"
-                v-for="(item, index) in recesiveAllMsg"
+                v-for="(item, index) in computedChats.messages"
                 :key="index"
               >
                 <!-- self -->
                 <div class="d-felx justify-start " v-if="item.type === 'self'">
                   <div style="display: flex;">
-                    <van-image
+                    <!-- <van-image
                       width="35px"
                       height="35px"
                       fit="cover"
                       :src="userInfo.avatarUrl"
-                    />
+                    /> -->
                     <div class="font-18 content1">
                       <text>{{ item.content }}</text>
                     </div>
@@ -119,12 +116,12 @@
                     <text>{{ item.content }}</text>
                   </div>
                   <div class="">
-                    <van-image
+                    <!-- <van-image
                       width="35px"
                       height="35px"
                       fit="cover"
-                      :src="item.avatarUrl"
-                    />
+                      :src="http"
+                    /> -->
                   </div>
                 </div>
               </div>
@@ -149,7 +146,7 @@
               style="background-color: aqua;"
               :size="mini"
               type="default"
-              @click="sendMsg2()"
+              @click="sendMsgGroup()"
             >
               发送
             </button>
@@ -197,9 +194,7 @@ import navBarChat from "@/components/NavBarChat";
 import sHeader from "@/components/SimpleHeader";
 import {
   queryEyeUser,
-  getChatContent,
   getAllGroup,
-  getGroupContent,
   getAvatarUrlByOpenid,
   getGroupMemberDetail,
 } from "@/service/chat";
@@ -208,6 +203,7 @@ import SocketService from "@/common/js/websocket";
 import Queue from "@/common/js/queue";
 import * as imconstant from "@/common/js/imconstant";
 import { useStore } from "vuex";
+import { computed } from "vue";
 import { getLocal, retry } from "@/common/js/utils";
 export default {
   components: {
@@ -232,26 +228,20 @@ export default {
       userInfo: {},
       current: route.query.current,
       //复制来的
-      keyword: "搜索好友",
       email: route.query.email,
-      socketTask: null,
-      // 确保websocket是打开状态
-      is_open_socket: false,
       toUser: {},
       toGroup: {},
       content: "",
       mini: "mini",
-      //关于重连的需要的
-      timeout: 40000, // 30s
-      timeoutObj: null,
       groups: [],
       openid: route.query.openid,
       groupId: route.query.groupId,
       //用于消息重试时候的消息
       tempSendMsg: {},
     });
-
-    //重试的函数，判断消息队列里面有没有消息，有消息的话需要重新发送一下
+    /**
+     * 重试的函数，判断消息队列里面有没有消息，有消息的话需要重新发送一下
+     */
     const fetchDataFn = function(msgid) {
       //检测队列的msgid 和发送消息的msgid 一不一样。不一样的话需要重新发送消息；
       console.log("【IM日志 重试机制】type为 -1时候收到的mgsid", msgid);
@@ -265,7 +255,7 @@ export default {
       if (temp != undefined) {
         if (temp.params.msgid == msgid) {
           //还没有收到消息代表需要重发消息。
-          console.log(" state.tempSendMsg.", state.tempSendMsg)
+          console.log(" state.tempSendMsg.", state.tempSendMsg);
           // state.tempSendMsg.parmas.isretry = 'true';
           state.socketServe.send(state.tempSendMsg);
           throw new Error("消息队列还存在消息");
@@ -275,6 +265,71 @@ export default {
       return "ok";
     };
 
+    // 创建一个计算属性，该属性基于其他响应式状态计算值
+    const computedChats = computed(() => {
+      let chat = null;
+      console.log("computedChats route.query.groupId", route.query.groupId);
+      if (state.current == 1) {
+        chat = {
+          targetId: state.toUser.openid,
+        };
+      } else {
+        chat = {
+          // targetId: state.toUser.openid,
+          targetId: state.groupId,
+        };
+      }
+      const idx = store.getters.findChatIdx(chat);
+      if (idx == null || idx == undefined) {
+        return [];
+      }
+      if (
+        store.state.chats[idx] == null ||
+        store.state.chats[idx] == undefined
+      ) {
+        return [];
+      }
+      console.log("computedChats idx", idx);
+      console.log("computedChats 寻找成功啦", store.state.chats[idx]);
+      return store.state.chats[idx];
+    });
+    const solveSINGLE_MESSAGE_RESPONSE = async (res) => {
+      //发送消息成功的时候将自己这条消息维护进如队列。
+      console.log("【IM日志】 msg:A 维护消息进入队列");
+      if (res.params.online == true && res.params.isretry == "false") {
+        state.queue.offer(state.tempSendMsg);
+        // 用户没有登录的时候使用 这个机制 登录了就不使用了 使用了timer机制
+        //使用timer机制 检测队列里面是否存在ack，如果存在，则超时重发以及限制次数
+        const result = await retry(fetchDataFn, 3, 1000, res.params.msgid);
+        //三次之后消息还没有发送成功 提示消息发送失败
+        if (result == false) {
+          Toast("消息发送失败，请重新发送");
+        }
+      } else {
+        console.log("【IM日志】 接受消息者没有登录或者是重试消息 ");
+      }
+    };
+    const solveSINGLE_MESSAGE_OTHER = async (res, msg) => {
+      console.log("【IM日志】imconstant.SINGLE_MESSAGE_OTHER", res);
+
+      const commitdata = {
+        type: "receive",
+        content: res.params.message,
+        msgId: res.params.msgId,
+        otherOpenid: res.params.openid,
+        avatarUrl: null,
+        group:'1',
+        createTime: new Date().getTime(),
+        targetId: res.params.openid,
+      };
+
+      store.commit("insertMessage", commitdata);
+      state.recesiveAllMsg.push({
+        type: "receive",
+        content: res.params.message,
+      });
+      singleAck(JSON.parse(msg.data));
+    };
     onMounted(() => {
       getToken();
       init();
@@ -289,38 +344,13 @@ export default {
         if (res.type === 0) {
           return;
         }
-        // msg:A 收消息的情况，把消息推送上去
+
         if (res.type === imconstant.SINGLE_MESSAGE_RESPONSE) {
-          //发送消息成功的时候将自己这条消息维护进如队列。
-          console.log("【IM日志】 msg:A 维护消息进入队列");
-          // Queue 推送队列消息
-          //如果用户没有登录，则是不需要进行队列信息维护的
-          console.log(
-            "【IM日志】res.params.online 是否在线",
-            res.params.online
-            ,"是否重试",
-            res.params.isretry
-          );
-          if (res.params.online == true && res.params.isretry == "false") {
-            state.queue.offer(state.tempSendMsg);
-            // 用户没有登录的时候使用 这个机制 登录了就不使用了 使用了timer机制
-            //使用timer机制 检测队列里面是否存在ack，如果存在，则超时重发以及限制次数
-            const result = await retry(fetchDataFn, 3, 1000, res.params.msgid);
-            //三次之后消息还没有发送成功 提示消息发送失败
-            if (result == false) {
-              Toast("消息发送失败，请重新发送");
-            }
-          } else {
-            console.log("【IM日志】 接受消息者没有登录或者是重试消息 ");
-          }
+          solveSINGLE_MESSAGE_RESPONSE(res);
         }
         //收消息的情况，把消息推送上去,并且ack 客户端b的ack
         if (res.type === imconstant.SINGLE_MESSAGE_OTHER) {
-          state.recesiveAllMsg.push({
-            type: "receive",
-            content: res.params.message,
-          });
-          singleAck(JSON.parse(msg.data));
+          solveSINGLE_MESSAGE_OTHER(res, msg);
         }
         //当收到消息的时候则删除队列里面的消息，停止重试
         if (res.type === imconstant.SINGLE_MESSAGE_ACK_RESPONSE) {
@@ -336,11 +366,22 @@ export default {
           const avatar = getAvatarUrl(res.params.fromUser.openid);
           avatar.then((result) => {
             console.log(result);
-            state.recesiveAllMsg.push({
+            // state.recesiveAllMsg.push({
+            //   type: "receive",
+            //   content: res.params.message,
+            //   avatarUrl: result,
+            // });
+            const commitdata = {
               type: "receive",
               content: res.params.message,
+              msgId: res.params.msgId,
+              otherOpenid: res.params.fromUser.openid,
               avatarUrl: result,
-            });
+              createTime: new Date().getTime(),
+              targetId: route.query.groupId,
+            };
+
+            store.commit("insertMessage", commitdata);
           });
           // console.log(avatar)
           //  这里写个接口去获取头像res.params.fromUser.openid
@@ -363,6 +404,9 @@ export default {
       }
     };
 
+    /**
+     * 初始化方法
+     */
     const init = async () => {
       // Toast.loading({ message: "加载中...", forbidClick: true });
       const data = await queryEyeUser();
@@ -371,35 +415,42 @@ export default {
 
       state.toUser = store.state.toUser;
       console.log("【vuex】state.toUser", state.toUser);
-      const res = await getAllGroup();
-      state.groups = res.content;
-      //先注册自己到channel 里面
-      sendRegisterData();
-      if (state.current == 1) {
-        //单聊情况
-        //向后端发送注册的消息
-        const msgdata = await getChatContent(state.openid);
 
-        state.recesiveAllMsg = msgdata.content;
+      // 这个地方openchat 要判断一下群聊还是单聊
+      if (state.current == 1) {
+        const openChat = {
+          type: "PRIVATE",
+          targetId: state.toUser.openid,
+        };
+
+        store.commit("openChat", openChat);
+        store.commit("saveToStorage");
       }
       if (state.current == 2) {
-        state.socketServe.send(store.state.registerGroup);
-        console.log("发送群聊注册消息");
+        const res = await getAllGroup();
+        state.groups = res.content;
+        const openChat = {
+          type: "GROUP",
+          targetId: route.query.groupId,
+        };
 
-        //展现出所有的聊天内容
-        const group = await getGroupContent(state.groupId);
-        state.recesiveAllMsg = [];
-        state.recesiveAllMsg = group.content;
+        store.commit("openChat", openChat);
+        store.commit("saveToStorage");
       }
 
-      // Toast.clear();
+      //先注册自己到channel 里面
+      sendRegisterData();
+      // [before 原来这个地方是向后端拉取消息，现在改在chat页面拉取 ]
     };
 
     //建立连接
-
-    SocketService.Instance.connect(localStorage.getItem("token"));
-    state.socketServe = SocketService.Instance;
-    state.socketServe.registerCallBack("callback1", state.socketServe);
+    const initConnect = () => {
+      SocketService.Instance.connect(localStorage.getItem("token"));
+      state.socketServe = SocketService.Instance;
+      state.socketServe.registerCallBack("callback1", state.socketServe);
+    };
+    //在setup声明周期执行这个函数
+    initConnect();
 
     //发送注册的数据
     const sendRegisterData = () => {
@@ -485,12 +536,25 @@ export default {
             toMessageId: state.groupId,
             message: content,
             fileType: 0,
+            msgid: no.content,
           },
         };
       }
       console.log(data);
       state.tempSendMsg = data2;
       state.socketServe.send(data);
+      const commitdata = {
+        type: "self",
+        content: content,
+        msgId: no.content,
+        otherOpenid: toUser.openid,
+        avatarUrl: null,
+        group:'1',
+        createTime: new Date().getTime(),
+        targetId: toUser.openid,
+      };
+
+      store.commit("insertMessage", commitdata);
       state.recesiveAllMsg.push({
         type: "self",
         content: content,
@@ -498,8 +562,38 @@ export default {
       state.content = "";
     };
 
+    const sendMsgGroup = async () => {
+      const { content } = state;
+      const no = await getLeaf();
+
+      const data = {
+        type: 9,
+        params: {
+          toMessageId: state.groupId,
+          message: content,
+          fileType: 0,
+          msgid: no.content,
+        },
+      };
+      state.socketServe.send(data);
+      const commitdata = {
+        type: "self",
+        content: content,
+        msgId: no.content,
+        otherOpenid: route.query.groupId,
+        avatarUrl: state.userInfo.avatarUrl,
+        createTime: new Date().getTime(),
+        targetId: route.query.groupId,
+        group: '0',
+      };
+      console.log(" sendMsgGroup commitdata",commitdata)
+      store.commit("insertMessage", commitdata);
+     state.content = "";
+    };
+
     return {
       value,
+      computedChats,
       onSearch,
       onCancel,
       ...toRefs(state),
@@ -510,6 +604,7 @@ export default {
       showAllMember,
       sendMsg2,
       changeCurDiy,
+      sendMsgGroup,
     };
   },
 };

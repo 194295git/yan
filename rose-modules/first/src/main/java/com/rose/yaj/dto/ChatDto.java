@@ -35,13 +35,17 @@ public class ChatDto {
     public static class PageChat{
 
         private String type;
-
+        //是否是群聊
+        private String group;
         private String content;
+
+        private String msgId;
 
         private Date createTime;
 
         private String OtherOpenid;
 
         private String avatarUrl;
+        private String targetId;
     }
 }

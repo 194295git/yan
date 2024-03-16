@@ -9,4 +9,32 @@
             #{id}
         </foreach>
     </update>
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.rose.yaj.dto.ChatDto$PageChat" id="yanChatDto">
+        <result property="type" column="stype"/>
+        <result property="content" column="content"/>
+        <result property="msgId" column="msg_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="OtherOpenid" column="to_openid"/>
+        <result property="targetId" column="targetId"/>
+        <result property="group" column="sgroup"/>
+    </resultMap>
+
+    <select id="listByOpenidAll" resultMap="yanChatDto">
+        SELECT to_openid ,sgroup, targetId,t.stype,t.to_openid,t.content,t.create_time,t.msg_id
+        FROM (
+            SELECT  `group` as  sgroup ,to_openid 	as targetId,  'self' as stype , to_openid, content, create_time, msg_id
+            FROM yan_im_user_chat
+            WHERE user_openid = #{userId}
+
+            UNION
+
+            SELECT `group` as  sgroup ,user_openid as	targetId, 'receive' as stype , to_openid, content, create_time, msg_id
+            FROM yan_im_user_chat
+            WHERE to_openid = #{userId}
+        ) t
+        WHERE t.msg_id > #{minMsgId}
+        ORDER BY t.msg_id, t.create_time
+    </select>
 </mapper>
