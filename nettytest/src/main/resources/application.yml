@@ -1,0 +1,61 @@
+hostip: 192.168.56.1
+
+netty:
+  application:
+    name: nettyChatServe
+# 应用名称
+spring:
+  application:
+    name: chatServe
+  cloud:
+    nacos:
+      discovery:
+        ip: 192.168.56.1
+        server-addr: 192.168.56.20:8848
+  rocketmq:
+    name-server: 192.168.56.20:9876
+    producer-send-msg-timeout: 3000
+    producer:
+      shutdown:
+        enable: false
+    producer-group-name: ${spring.application.name}-127-0-0-1-${server.port}
+  redis:
+    host: 192.168.56.20
+    port: 6379
+  rabbitmq:
+    host: 192.168.56.20
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-confirms: true
+    publisher-returns: true
+    template:
+      mandatory: true
+    listener:
+      simple:
+        acknowledge-mode: manual
+# 应用服务 WEB 访问端口
+server:
+  port: 8085
+
+
+#rocketmq:
+#  name-server: 192.168.56.10:9876
+#  producer:
+#    group: Netty-group
+#    sendMessageTimeout: 300000
+myRabbitmq:
+  queue: yan-queue
+  exchange: yan-exchange
+  routeKey: yan
+  MQConfig:
+    # 聊天发送消息队列
+    queues: yan.netty.queue
+    routingKey: netty
+    exchange: yan-exchange
+  PushConfig:
+    # 推送消息队列
+    queues: yan.push.queue
+    routingKey: push
+    exchange: yan-push
