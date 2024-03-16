@@ -10,18 +10,17 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>rose-modules/first</module>
+
         <module>gateway</module>
+        <module>netty</module>
         <module>common_core/common</module>
         <module>common_core/leaf-core</module>
-        <module>rose-modules/file</module>
-
-        <module>netty</module>
 <!--        <module>nettytest</module>-->
+        <module>common_core/common_shrio</module>
+        <module>rose-modules/first</module>
+        <module>rose-modules/file</module>
         <module>rose-modules/loginUser</module>
         <module>rose-modules/fileTest</module>
-        <module>common_core/common_shrio</module>
-        <module>common_core</module>
         <module>rose-modules/devops</module>
         <module>rose-modules/database</module>
         <module>rose-modules/database_mq</module>
