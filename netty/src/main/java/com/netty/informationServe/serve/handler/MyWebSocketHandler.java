@@ -99,8 +99,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 case READER_IDLE:
                     eventType = "读空闲";
                     channelService.remove(openid2);
-                    System.out.println(ctx.channel().remoteAddress() + "--超时时间--" + eventType);
-                    System.out.println("服务器做相应处理..");
+                    log.info(ctx.channel().remoteAddress() + "--超时时间--" + eventType);
                     ctx.channel().close();
 
                     //关闭通道，并且清除所有的redis信息
