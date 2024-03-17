@@ -184,13 +184,14 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 messageRequestPacket.setToUserId(parmas.getString("toMessageId"));
                 messageRequestPacket.setFileType(parmas.getString("fileType"));
                 messageRequestPacket.setMsgid(parmas.getString("msgid"));
+                messageRequestPacket.setIsretry(parmas.getString("isretry"));
                 toUserChannel= sessionUtils.isOnline(messageRequestPacket.getToUserId());
 
                 packet = messageRequestPacket;
                 break;
             // 单聊ack
             case 15:
-                AckSingleMessagePacket ackmessageRequestPacket = new AckSingleMessagePacket();
+                PuahSingleMessagePacket ackmessageRequestPacket = new PuahSingleMessagePacket();
                 WebsocketMessage websocketMessage= new  WebsocketMessage();
                 websocketMessage.setFrom("client");
                 websocketMessage.setMessageId(parmas.getString("msgid"));
@@ -224,23 +225,28 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 break;
         }
 
+        /**
+         * 单聊或者群聊ack逻辑的变更.
+         */
         //        返回应答消息
 //        获取客户端向服务端发送的消息
-        if(type.equals(Commond.SINGLE_MESSAGE)||type.equals(Commond.GROUP_MESSAGE)){
-            ByteBuf buf = getByteBuf(ctx,
-                    parmas.getString("message"),
-                    parmas.getString("msgid"),toUserChannel,
-                    parmas.getString("isretry")
-            );
-            TextWebSocketFrame tws = new TextWebSocketFrame(buf);
-            ctx.writeAndFlush(tws);
-        }
-        //返回给client b的回应
-        if(type.equals(Commond.SINGLE_MESSAGE_ACK)){
-            ByteBuf buf = getByteBufAck(ctx, parmas.getString("msgid"));
-            TextWebSocketFrame tws = new TextWebSocketFrame(buf);
-            ctx.writeAndFlush(tws);
-        }
+//        if(type.equals(Commond.SINGLE_MESSAGE)||type.equals(Commond.GROUP_MESSAGE)){
+//            ByteBuf buf = getByteBuf(ctx,
+//                    parmas.getString("message"),
+//                    parmas.getString("msgid"),toUserChannel,
+//                    parmas.getString("isretry")
+//            );
+//            TextWebSocketFrame tws = new TextWebSocketFrame(buf);
+//            ctx.writeAndFlush(tws);
+//        }
+
+//
+//        //返回给client b的回应
+//        if(type.equals(Commond.SINGLE_MESSAGE_ACK)){
+//            ByteBuf buf = getByteBufAck(ctx, parmas.getString("msgid"));
+//            TextWebSocketFrame tws = new TextWebSocketFrame(buf);
+//            ctx.writeAndFlush(tws);
+//        }
 
 //        log.info(packet.getCommand());
 

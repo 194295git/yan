@@ -1,17 +1,16 @@
 package com.netty.informationServe.service.messagedispatch;
 
 import com.alibaba.fastjson.JSONObject;
-import com.rose.common.mqutil.MqMessage;
-import com.rose.common.constant.NettyConstants;
-import com.rose.common.mqutil.SendRequest;
 import com.netty.informationServe.config.RocketMQConfig;
 import com.rose.common.base.WebsocketMessage;
-import io.github.rhwayfun.springboot.rocketmq.starter.common.DefaultRocketMqProducer;
+import com.rose.common.constant.NettyConstants;
+import com.rose.common.mqutil.MqMessage;
+import com.rose.common.mqutil.SendRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * 基于MQ的形式，分发消息给对应客户端所在的websocket服务器所订阅的topic
@@ -21,17 +20,34 @@ import javax.annotation.Resource;
 @Slf4j
 public class MQDispatchServiceImpl implements MessageDispatchService {
 
-    @Resource
-    private DefaultRocketMqProducer producer;
+
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     @Override
     public void send(String instants, SendRequest request) {
-        producer.sendMsg(getInstants(instants,  request));
+//        producer.sendMsg(getInstants(instants,  request));
+        String topic = RocketMQConfig.getWebsocketTopic(instants);
+        rocketMQTemplate.convertAndSend(topic, request);
     }
 
     @Override
-    public void sendForSave( MqMessage request) {
-        producer.sendMsg(getInstantsSaveDB(request));
+    public void sendForSave(String topic ,MqMessage request) {
+//        producer.sendMsg(getInstantsSaveDB(request));
+//        rocketMQTemplate.convertAndSend(instants, request);
+        rocketMQTemplate.convertAndSend(topic, request);
+//        Set notExist = messageService.execute(request, Commond.HTTP_REQUEST);
+    }
+
+    /**
+     * 传递给mq里面一个msgid
+     * @param topic
+     * @param msgid
+     */
+    @Override
+    public void sendForUpdate(String topic, String msgid) {
+        rocketMQTemplate.convertAndSend(topic, msgid);
     }
 
     @Override

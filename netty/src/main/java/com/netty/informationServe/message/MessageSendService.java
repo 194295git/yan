@@ -40,6 +40,9 @@ public class MessageSendService {
         //2.发起对客户端的推送(websocket消息)
         channel.writeAndFlush(generateMessage(wsMessage));
         //3.记录推送日志
+        log.info("MessageSendService 推送消息为"+generateMessage(wsMessage));
+        //4.记录消息
+        SessionUtils.bindMsgidAndNumber(channelId,wsMessage);
 
     }
 

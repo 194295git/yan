@@ -36,12 +36,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!--rocketmq依赖-->
-        <dependency>
-            <groupId>io.github.rhwayfun</groupId>
-            <artifactId>spring-boot-rocketmq-starter</artifactId>
-            <version>0.0.3.RELEASE</version>
-        </dependency>
+        <!--rocketmq依赖 去除掉这个依赖-->
+<!--        <dependency>-->
+<!--            <groupId>io.github.rhwayfun</groupId>-->
+<!--            <artifactId>spring-boot-rocketmq-starter</artifactId>-->
+<!--            <version>0.0.3.RELEASE</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>io.netty</groupId>
@@ -53,11 +53,11 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.6</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.apache.rocketmq</groupId>-->
-<!--            <artifactId>rocketmq-spring-boot-starter</artifactId>-->
-<!--            <version>2.1.1</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-spring-boot-starter</artifactId>
+            <version>2.1.1</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>

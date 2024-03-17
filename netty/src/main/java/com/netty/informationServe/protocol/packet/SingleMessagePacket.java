@@ -17,6 +17,16 @@ public class SingleMessagePacket extends Packet {
 
     private String msgid;
 
+    private String isretry;
+
+    public String getIsretry() {
+        return isretry;
+    }
+
+    public void setIsretry(String isretry) {
+        this.isretry = isretry;
+    }
+
     public String getMsgid() {
         return msgid;
     }

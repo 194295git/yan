@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rose.yaj.mapper.YanUserChatMapper">
-
+    <!--批量更新状态为收到-->
+    <update id="updateBatch">
+        update yan_im_user_chat
+        set status='receive' where msg_id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 </mapper>

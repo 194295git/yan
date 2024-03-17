@@ -1,5 +1,9 @@
 package com.netty.informationServe.utils;
 
+import com.rose.common.base.WebsocketMessage;
+import com.rose.common.mqutil.SendRequest;
+import com.rose.common.netty.AttrConstants;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,5 +31,22 @@ public class Nettyutil {
             log.info("获取当前地址失败");
         }
         return instanceid;
+    }
+
+    //构造推送消息体
+    public WebsocketMessage getMessage(String channelId, SendRequest request) {
+        Channel channel =SessionUtils.getChannel(channelId);
+        WebsocketMessage websocketMsg = new WebsocketMessage(
+                request.getRequestId(),
+                channel.attr(AttrConstants.sessionId).get(),
+                request.getUniqueMsgid(),
+                WebsocketMessage.MsgType.BUSSINESS.code,
+                new String[]{channelId},
+                request.getMsg(),
+                request.getFrom(),
+                0
+//                Integer.parseInt(msg.getUserProperty(NettyConstants.Trigger))
+        );
+        return websocketMsg;
     }
 }

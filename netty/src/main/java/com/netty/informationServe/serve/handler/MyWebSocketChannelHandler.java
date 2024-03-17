@@ -32,7 +32,7 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
     SingleMessageHandler singleMessageHandler;
 
     @Autowired
-    AckSingleMessageHandler ackSingleMessageHandler;
+    AckPushSingleMessageHandler ackSingleMessageHandler;
 
     @Autowired
     GroupMessageHandler groupMessageHandler;

@@ -9,7 +9,7 @@ import com.rose.common.base.WebsocketMessage;
  * @创建时间 2021/12/2
  * @描述
  */
-public class AckSingleMessagePacket extends Packet {
+public class PuahSingleMessagePacket extends Packet {
 
     private WebsocketMessage websocketMessage;
     private String toUserId;
