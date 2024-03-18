@@ -1,7 +1,8 @@
 # yanzhandaodi_back
 
 #### 介绍
-- 一个开源的springcloud项目。体验和尝试springcloud的各种功能。
+- YAN_IM，一个开源的分布式聊天服务。基于Netty构建的高性能websocket服务器。支持群聊单聊。
+支持消息可靠，消息防重，消息有序。同时基础架构有分布式权限，分布式唯一id，分布式websockt，分布式事务等常见的分布式技术。
 - 内容：抽象出cloud中使用到的常用技术。目标做一个低代码的组件平台。将流程，数据库操作，
 建模、docker运维、文件系统等抽象出来方便的调用。会定期提升代码质量。还有移动端uniapp的支持。
 目前重点在做netty模块。通过websocket构建消息推送系统以及IM相关功能。先完成简单的音视频推送，
@@ -32,10 +33,10 @@
 2. 聊天内容ack机制，然后未送达重试机制(重试三次，三次之后为失败)
 3. 设计websocket报文，保证消息的可靠性
 4. 支持分布式，支持gateway负载均衡，将netty服务端注册进入nacos
-5. 支持websocket授权功能（已经做了相关的截取参数以及改造前端vue）
-6. 接口引用redis设计成幂等 (todo)需要做一下lua表达式
-7. 会话管理(redis结合本地Map) 待完善
-8. 支持心跳功能(待完善)
+5. 支持websocket授权功能（已经做了相关的截取参数以及改造前端vue）(待改造成异步)
+6. 接口引用redis设计成幂等 ,lua表达式完成消息幂等
+7. 会话管理(redis结合本地Map) 
+8. 支持心跳功能，支持客户端断线重连
 9. 设置消息加密(待完善)
 
 
@@ -97,21 +98,6 @@
 6. jmeter测试集成(devops)
 7. 使用docker-compose(devops)
 
-
----8想要通过这个来孵化别的项目
-8.1 在文件模块 里面放上生成vue的基础文件  就是vue2 或者vue3 的基础框架
-8.2 完成一些基础表的建设。可以方便
-8.3 完善知识等模块
-8.4 流程相关还需要好长时间
-
-### 技术方面：
-需要解决的技术方面问题：
-
-1. 分布式情况下的session共享问题；(已解决)
-2. 分布式情况下的事务问题 计划使用seata，
-3. 分布式情况下shrio该如何使用才能让各个系统之间共享权限；(已解决)
-
-
 ### 与本项目相关技术的博文
 1. [sprinboot单体项目升级成springcloud项目【第一期】](https://blog.csdn.net/qq_21561833/article/details/127348148)
 2. [前端项目技术选型以及页面展示【第二期】](https://blog.csdn.net/qq_21561833/article/details/131676184)
@@ -119,13 +105,38 @@
 4.  devops  [给为服务添加运维模块 统一管理【第四期】](https://blog.csdn.net/qq_21561833/article/details/127821543)
 5.  database [微服务数据库模块【第五期】](https://blog.csdn.net/qq_21561833/article/details/131315983)  
 6.  netty  [netty与mq在项目中的使用【第六期】](https://blog.csdn.net/qq_21561833/article/details/131317748)   
-7.  common [common里面添加的常用依赖以及用途]()
-8. 项目质量提升计划(1.写文档 2.加注释3.取出不需要的import 4.去除不需要的maven )
+7. [分布式websocket即时通信(IM)系统构建指南【第七期】](https://blog.csdn.net/qq_21561833/article/details/135658862)
+8. [分布式websocket即时通信(IM)系统保证消息可靠性【第八期】](https://blog.csdn.net/qq_21561833/article/details/135681086)
+9. [分布式websocket IM聊天系统相关问题问答【第九期】](https://blog.csdn.net/qq_21561833/article/details/135734395)
+10. [什么？websocket也有权限！这个应该怎么做？【第十期】](https://blog.csdn.net/qq_21561833/article/details/135758402)
+11. [分布式ID是什么，以美团Leaf为例改造融入自己项目【第十一期】](https://blog.csdn.net/qq_21561833/article/details/135852852)
+12. [IM聊天系统为什么需要做消息幂等？如何使用Redis以及Lua脚本做消息幂等【第12期】](https://blog.csdn.net/qq_21561833/article/details/136104296)
+13. [微信发送一条消息经历哪些过程。企业微信以及钉钉的IM架构对比【第13期】](https://blog.csdn.net/qq_21561833/article/details/136102083)
+14. [微信群为什么上限是500人，IM设计系统中的群聊的设计难点【第14期】](https://blog.csdn.net/qq_21561833/article/details/136264878)
+15. [【分布式websocket】RocketMQ发送消息保证消息最终一致性需要做哪些处理？【第15期】](https://blog.csdn.net/qq_21561833/article/details/136389095)
+
+16. [【分布式websocket】群聊中的各种难点以及解决推拉结合【第16期】](https://blog.csdn.net/qq_21561833/article/details/136445874)
+
+17. [【分布式webscoket】未读消息如何设计？解决缓存与数据库数据一致性！推送未读消息流程【第17期】](https://blog.csdn.net/qq_21561833/article/details/136447741)
+
+18. [IM系统客户端消息存储在手机电脑浏览器分别存储在什么地方?对消息加密策略？如何保证服务端消息和客户端消息一致性【第18期】](https://blog.csdn.net/qq_21561833/article/details/136535333)
          
 
 如果有什么问题留言联系我。qq:1942951600
 
-### 演示图
+### 演示图第二版
+<table>
+    <tr>
+        <td><img src="https://edu-renyun.oss-cn-beijing.aliyuncs.com/2024/03/18/734dbb00990d4dab868d8e9f96e98383用户界面.png"/></td>
+        <td><img src="https://edu-renyun.oss-cn-beijing.aliyuncs.com/2024/03/18/08b870cb78cb431f94e96e76d5db293a聊天框详细内容.png"/></td>
+    </tr>
+    <tr>
+        <td><img src="https://edu-renyun.oss-cn-beijing.aliyuncs.com/2024/03/18/8d45fa5387024645b2ffbe307a9d16ea详情页.png"/></td>
+        <td><img src="https://edu-renyun.oss-cn-beijing.aliyuncs.com/2024/03/18/dd6a2b5f2adb4d508811eb67de555404me.png"/></td>
+    </tr>
+</table>
+
+### 演示图第一版
 
 <table>
     <tr>

@@ -45,7 +45,7 @@ public class MyWebSocketChannelHandler extends ChannelInitializer<SocketChannel>
 
 
     //单位是秒
-    private int READER_IDLE_TIME = 120;
+    private int READER_IDLE_TIME = 60;
     private int  WRITER_IDLE_TIME = 60;
 
     private int ALL_IDLE_TIME = 180;
