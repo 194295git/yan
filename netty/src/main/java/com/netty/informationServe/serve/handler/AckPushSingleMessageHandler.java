@@ -53,16 +53,7 @@ public class AckPushSingleMessageHandler extends SimpleChannelInboundHandler<Pua
             User toUser = SessionUtils.getUser(toUserChannel);
             String fileType = singleMessagePacket.getFileType();
             String msgid = singleMessagePacket.getWebsocketMessage().getMessageId();
-            /**
-             * 发送完消息后还需要更改消息状态，投递给mq异步批量处理更改消息状态
-             * 有一个消息id就可以了 这块需要考虑消息最终一致性问题.。
-             * 是不是需要结合定时任务来刷盘
-             * 感觉一秒钟查一次数据库还是有点多,并且后期还需要使用推送mq的方式来进行消息推送，太麻烦了。
-             * 还是使用每个服务器自己进行推送吧。下线了也推送不过去，正好还省事。记录一下谁 消息 次数；
-             *
-             *
-             *
-             */
+
 
             messageDispatchService.sendForUpdate("UPDATECHAT",msgid);
             //需要删除
