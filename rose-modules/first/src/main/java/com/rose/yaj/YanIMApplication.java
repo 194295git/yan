@@ -5,12 +5,9 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 
@@ -21,14 +18,14 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @MapperScan("com.rose.yaj.mapper")
 @ComponentScan(basePackages = {"com.rose"})
-public class DemoApplication extends SpringBootServletInitializer {
+public class YanIMApplication extends SpringBootServletInitializer {
 
     //    @Override
 //    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 //        return builder.sources(Application.class);
 //    }
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(YanIMApplication.class, args);
     }
 
 

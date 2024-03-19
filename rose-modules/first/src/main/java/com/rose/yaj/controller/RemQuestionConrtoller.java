@@ -41,16 +41,10 @@ public class RemQuestionConrtoller {
         String majorId = "1,2,3,";
         String[] split = major_id.split(",");
 
-
-
         QueryWrapper<YanMajorQuestion> wrapper = new QueryWrapper<>();
-
-        // todo  接下来做的是把question和type提取出来就可以了 然后以R形式返回
 
         wrapper.in("major_id", Arrays.asList(split));
         List<YanMajorQuestion> item = yanMajorQuestionService.list(wrapper);
-        System.out.println(item);
-
 
         List<String> questionList = new ArrayList<>();
         for (YanMajorQuestion yanMajorQuestion : item) {
@@ -68,9 +62,6 @@ public class RemQuestionConrtoller {
             test1.add(split1[0]);
             test2.add(split1[1]);
         }
-        System.out.println(test1);
-        System.out.println(test2);
-
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("question",test1);
         data.put("type",test2);
