@@ -25,8 +25,26 @@
                       fit="cover"
                       :src="userInfo.avatarUrl"
                     />
-                    <div class="font-18 content1">
-                      <text>{{ item.content }}</text>
+                    <div
+                      class="font-18 content1"
+                      @mousedown.prevent="startPress"
+                      @mouseup="stopPress"
+                      @mouseleave="stopPress"
+                    >
+                      <div
+                        ref="contentArea"
+                        v-html="decodeCodeToEmoji(item.content)"
+                      ></div>
+                    </div>
+                    <div
+                      class="context-menu"
+                      v-if="isContextMenuVisible"
+                      @click.self="hideContextMenu"
+                    >
+                      <!-- 这里放置你的菜单项，例如：引用、收藏、制作表情包等 -->
+                      <button @click="quoteMessage">引用消息</button>
+                      <button @click="collectMessage">收藏</button>
+                      <button @click="makeSticker">制作表情包</button>
                     </div>
                   </div>
                 </div>
@@ -35,7 +53,7 @@
                   v-if="item.type === 'receive'"
                 >
                   <div class="font-18 content2">
-                    <text>{{ item.content }}</text>
+                    <div v-html="decodeCodeToEmoji(item.content)"></div>
                   </div>
                   <div class="">
                     <van-image
@@ -50,9 +68,7 @@
             </div>
           </list-scroll>
         </div>
-        <div
-          class="boxS d-flex justify-space-between align-centers send-msg mt-4"
-        >
+        <div class="d-flex justify-space-between align-centers">
           <!-- 可以使用 CellGroup 作为容器 -->
           <div style="height:10px">
             <van-cell-group inset>
@@ -72,6 +88,48 @@
             >
               发送
             </button>
+          </div>
+        </div>
+        <!-- 底部表情包 -->
+        <div class="nav-bar-chat ">
+          <ul class="nav-list">
+            <div class="nav-list-item">
+              <span @click="toggleEmojiPanel">😉</span>
+            </div>
+            <div class="nav-list-item">
+              <span @click="toggleEmojiPanel">拍摄</span>
+            </div>
+            <div class="nav-list-item">
+              <span @click="toggleEmojiPanel">图片</span>
+            </div>
+            <div class="nav-list-item">
+              <span @click="toggleEmojiPanel">文件</span>
+            </div>
+            <div class="nav-list-item">
+              <span @click="toggleEmojiPanel">语音</span>
+            </div>
+            <div class="nav-list-item">
+              <span @click="toggleEmojiPanel">视频</span>
+            </div>
+          </ul>
+          <div v-if="showEmojiPanel" class="emoji-panel">
+            <van-grid column-num="5">
+              <van-grid-item
+                v-for="(emoji, index) in emojis"
+                :key="index"
+                @click="addEmoji(emoji)"
+              >
+                <van-image
+                  v-if="emoji.src"
+                  width="35px"
+                  height="35px"
+                  fit="cover"
+                  :src="emoji.src"
+                />
+                <div v-if="!emoji.src">{{ emoji.name }}</div>
+                <!-- <img :src="emoji.src" :alt="emoji.name" class="emoji-img" /> -->
+              </van-grid-item>
+            </van-grid>
           </div>
         </div>
       </div>
@@ -181,7 +239,15 @@
     </div>
 
     <!-- <div @click="sendData()">发送数据</div> -->
-    <nav-bar-chat></nav-bar-chat>
+    <!-- <nav-bar-chat-chat></nav-bar-chat-chat> -->
+    <!-- <router-link class="nav-list-item active" to="chat">
+      <i class="nbicon nblvsefenkaicankaoxianban-1"></i>
+      <span>拍摄</span>
+    </router-link>
+    <router-link class="nav-list-item" to="info">
+      <i class="nbicon nbfenlei"></i>
+      <span>相册</span>
+    </router-link> -->
   </div>
 </template>
 
@@ -190,7 +256,6 @@ import listScroll from "@/components/ListScroll";
 import { reactive, onMounted, toRefs, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { Toast } from "vant";
-import navBarChat from "@/components/NavBarChat";
 import sHeader from "@/components/SimpleHeader";
 import {
   queryEyeUser,
@@ -209,7 +274,6 @@ export default {
   components: {
     sHeader,
     listScroll,
-    navBarChat,
   },
   setup() {
     const value = ref("");
@@ -220,6 +284,48 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const state = reactive({
+      //长按事件
+      pressTimer: null,
+      isContextMenuVisible: false,
+      longPressDuration: 1000, // 设定长按时间阈值（毫秒）
+      currentLongPressedItem: null,
+      //表情包
+      showEmojiPanel: false, // 控制表情包面板的显示
+      emojis: [
+        { id: "1", type: "base", name: "📩" },
+        { id: "2", type: "base", name: "🎉" },
+        { id: "3", type: "base", name: "👉" },
+        { id: "4", type: "base", name: "😉" },
+        { id: "5", type: "base", name: "💙" },
+        { id: "6", type: "base", name: "🍉" },
+        { id: "7", type: "base", name: "🌙" },
+        { id: "8", type: "base", name: "🕙" },
+        { id: "9", type: "base", name: "🍅" },
+        { id: "10", type: "base", name: "🐑" },
+        { id: "11", type: "base", name: "🔱" },
+        { id: "12", type: "base", name: "🎱" },
+        { id: "131", type: "base", name: "⚡" },
+        { id: "14", type: "base", name: "💺" },
+        { id: "15", type: "base", name: " 👇 " },
+        {
+          id: "16",
+          type: "pic",
+          name: " 头像 ",
+          src:
+            "https://edu-renyun.oss-cn-beijing.aliyuncs.com/2021/07/26/a10016be5a4348a885bc79bb7bf78ad4logo1.png",
+          encode: "[emoji:avatar]",
+        },
+        {
+          id: "17",
+          type: "pic",
+          name: " 头像 2",
+          src:
+            "https://edu-renyun.oss-cn-beijing.aliyuncs.com/2021/07/26/0ea48cb529e54573ae791ffbde3fcd9fu=2095913610,1514262792&fm=26&gp=0.jpg",
+          encode: "[emoji:avatar2]",
+        },
+
+        // 更多表情...
+      ],
       memberBaseDetail: [],
       userlist: [],
       queue: new Queue(),
@@ -239,6 +345,59 @@ export default {
       //用于消息重试时候的消息
       tempSendMsg: {},
     });
+    const startPress = function(event) {
+      console.log("startPress")
+      clearTimeout(state.pressTimer);
+      state.pressTimer = setTimeout(() => {
+        showContextMenu(event, this.item);
+      }, state.longPressDuration);
+    };
+    const stopPress = function() {
+      clearTimeout(this.pressTimer);
+      hideContextMenu();
+    };
+    const showContextMenu = function(event, item) {
+      state.isContextMenuVisible = true;
+      state.currentLongPressedItem = item;
+      // 设置context menu的位置
+      const rect = this.$refs.contentArea.getBoundingClientRect();
+      this.contextMenuTop = event.clientY - rect.top + window.pageYOffset;
+      this.contextMenuLeft = event.clientX - rect.left + window.pageXOffset;
+    };
+    const hideContextMenu = function() {
+      state.isContextMenuVisible = false;
+    };
+    //切换表情面板
+    const toggleEmojiPanel = function() {
+      state.showEmojiPanel = !state.showEmojiPanel; // 切换表情面板的显示状态
+    };
+    //添加表情
+    const addEmoji = function(emoji) {
+      if (emoji.type == "pic") {
+        state.content += emoji.encode;
+      } else {
+        state.content += emoji.name;
+      }
+      // 简化处理，实际应用中可能需要特殊处理
+      state.showEmojiPanel = false; // 选择表情后关闭面板
+    };
+    // 将特定编码转换为<img>标签用于显示
+    const decodeCodeToEmoji = function(message) {
+      const avatarRegex = /\[emoji:avatar(\d+)?\]/g;
+      let match;
+      const avatars = state.emojis;
+      while ((match = avatarRegex.exec(message)) !== null) {
+        // const avatarIndex = match[1]; // 获取头像编号 // 获取头像自定义标识符（"avatar" 或 "avatar2"）
+        const avatar = avatars.find((a) => a.encode === match[0]); // 查找对应的头像信息
+        if (avatar) {
+          message = message.replace(
+            match[0],
+            `<img src="${avatar.src}"   style="width: 25px; height: 25px; border-radius: 50%;" alt="${avatar.name}" />`
+          );
+        }
+      }
+      return message;
+    };
     /**
      * 重试的函数，判断消息队列里面有没有消息，有消息的话需要重新发送一下
      */
@@ -354,6 +513,7 @@ export default {
       });
     };
     onMounted(() => {
+      decodeCodeToEmoji("[emoji:avatar]321321");
       getToken();
       init();
       //收到消息后更新前端数据
@@ -599,6 +759,15 @@ export default {
       sendMsg2,
       changeCurDiy,
       sendMsgGroup,
+      toggleEmojiPanel,
+      addEmoji,
+      decodeCodeToEmoji,
+      stopPress,
+      startPress,
+      hideContextMenu,
+      showContextMenu,
+
+
     };
   },
 };
@@ -618,6 +787,9 @@ export default {
   background-color: white;
   margin-left: 4px;
   max-width: 73vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .content2 {
@@ -629,7 +801,7 @@ export default {
 }
 
 .send-msg {
-  position: fixed;
+  // position: fixed;
 }
 
 .notify-item {
@@ -668,5 +840,43 @@ export default {
 }
 .send {
   background-color: aqua;
+}
+@import "../common/style/mixin";
+.nav-bar-chat {
+  left: 0;
+  bottom: 0;
+  height: 10px;
+  width: 100%;
+  padding: 5px 0;
+  background: #f0f4f3;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  .nav-list {
+    width: 100%;
+    .fj();
+    flex-direction: row;
+    padding: 0;
+    .nav-list-item {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      text-align: center;
+      color: #666;
+      &.router-link-active {
+        color: @primary;
+      }
+      i {
+        text-align: center;
+        font-size: 22px;
+      }
+      span {
+        font-size: 12px;
+      }
+      .van-icon-shopping-cart-o {
+        margin: 0 auto;
+        margin-bottom: 2px;
+      }
+    }
+  }
 }
 </style>
