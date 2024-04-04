@@ -54,5 +54,14 @@ export function apiLoginUserPost(url,params){
 export function apiLoginUserGet(url,params){
   return axios.get('/api/loginUser'+url, params);
 }
-export default {axios,apiFirstPost,apiFirstGet,apiLoginUserPost,apiLoginUserGet}
+export function apiFileUploadPost(url,params){
+  const config = {
+    headers: {
+      'Content-Type': 'multipart/form-data', // 通常不需要手动设置，由浏览器自动处理
+    },
+  };
+
+  return axios.post('/api/file'+url, params,config);
+}
+export default {axios,apiFirstPost,apiFirstGet,apiLoginUserPost,apiLoginUserGet,apiFileUploadPost}
 
