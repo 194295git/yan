@@ -17,53 +17,7 @@
                 v-for="(item, index) in computedChats.messages"
                 :key="index"
               >
-                <div class="d-felx justify-start " v-if="item.type === 'self'">
-                  <div style="display: flex;">
-                    <van-image
-                      width="35px"
-                      height="35px"
-                      fit="cover"
-                      :src="userInfo.avatarUrl"
-                    />
-                    <div
-                      class="font-18 content1"
-                      @mousedown.prevent="startPress"
-                      @mouseup="stopPress"
-                      @mouseleave="stopPress"
-                    >
-                      <div
-                        ref="contentArea"
-                        v-html="decodeCodeToEmoji(item.content)"
-                      ></div>
-                    </div>
-                    <div
-                      class="context-menu"
-                      v-if="isContextMenuVisible"
-                      @click.self="hideContextMenu"
-                    >
-                      <!-- 这里放置你的菜单项，例如：引用、收藏、制作表情包等 -->
-                      <button @click="quoteMessage">引用消息</button>
-                      <button @click="collectMessage">收藏</button>
-                      <button @click="makeSticker">制作表情包</button>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style="display: flex; justify-content: flex-end;"
-                  v-if="item.type === 'receive'"
-                >
-                  <div class="font-18 content2">
-                    <div v-html="decodeCodeToEmoji(item.content)"></div>
-                  </div>
-                  <div class="">
-                    <van-image
-                      width="35px"
-                      height="35px"
-                      fit="cover"
-                      :src="toUser.avatarUrl"
-                    />
-                  </div>
-                </div>
+              <chat-message-item  :toUser="toUser"   :emojis="emojis" :item="item"  :userInfo="userInfo" />
               </div>
             </div>
           </list-scroll>
@@ -106,31 +60,15 @@
               <span @click="toggleEmojiPanel">文件</span>
             </div>
             <div class="nav-list-item">
-              <span @click="toggleEmojiPanel">语音</span>
+              <span @click="toggleVoice">语音</span>
             </div>
             <div class="nav-list-item">
               <span @click="toggleEmojiPanel">视频</span>
             </div>
           </ul>
-          <div v-if="showEmojiPanel" class="emoji-panel">
-            <van-grid column-num="5">
-              <van-grid-item
-                v-for="(emoji, index) in emojis"
-                :key="index"
-                @click="addEmoji(emoji)"
-              >
-                <van-image
-                  v-if="emoji.src"
-                  width="35px"
-                  height="35px"
-                  fit="cover"
-                  :src="emoji.src"
-                />
-                <div v-if="!emoji.src">{{ emoji.name }}</div>
-                <!-- <img :src="emoji.src" :alt="emoji.name" class="emoji-img" /> -->
-              </van-grid-item>
-            </van-grid>
-          </div>
+          <!-- 表情表以及聊天室 -->
+          <chat-Emotion  :emojis="emojis" v-if="showEmojiPanel"  @add-emoji="addEmoji" />
+          <chat-Voice  v-if="showVoice"   @send="addEmoji" />
         </div>
       </div>
     </div>
@@ -253,10 +191,14 @@
 
 <script>
 import listScroll from "@/components/ListScroll";
+
 import { reactive, onMounted, toRefs, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { Toast } from "vant";
 import sHeader from "@/components/SimpleHeader";
+import chatEmotion from "@/components/chat/ChatEmotion";
+import chatVoice from "@/components/chat/ChatVoice";
+import ChatMessageItem from "@/components/chat/ChatMessageItem";
 import {
   queryEyeUser,
   getAllGroup,
@@ -274,6 +216,9 @@ export default {
   components: {
     sHeader,
     listScroll,
+    chatEmotion,
+    chatVoice,
+    ChatMessageItem
   },
   setup() {
     const value = ref("");
@@ -284,13 +229,11 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const state = reactive({
-      //长按事件
-      pressTimer: null,
-      isContextMenuVisible: false,
-      longPressDuration: 1000, // 设定长按时间阈值（毫秒）
-      currentLongPressedItem: null,
+
       //表情包
       showEmojiPanel: false, // 控制表情包面板的显示
+      //显示语音通话
+      showVoice: false,
       emojis: [
         { id: "1", type: "base", name: "📩" },
         { id: "2", type: "base", name: "🎉" },
@@ -345,32 +288,17 @@ export default {
       //用于消息重试时候的消息
       tempSendMsg: {},
     });
-    const startPress = function(event) {
-      console.log("startPress")
-      clearTimeout(state.pressTimer);
-      state.pressTimer = setTimeout(() => {
-        showContextMenu(event, this.item);
-      }, state.longPressDuration);
-    };
-    const stopPress = function() {
-      clearTimeout(this.pressTimer);
-      hideContextMenu();
-    };
-    const showContextMenu = function(event, item) {
-      state.isContextMenuVisible = true;
-      state.currentLongPressedItem = item;
-      // 设置context menu的位置
-      const rect = this.$refs.contentArea.getBoundingClientRect();
-      this.contextMenuTop = event.clientY - rect.top + window.pageYOffset;
-      this.contextMenuLeft = event.clientX - rect.left + window.pageXOffset;
-    };
-    const hideContextMenu = function() {
-      state.isContextMenuVisible = false;
-    };
+   
     //切换表情面板
     const toggleEmojiPanel = function() {
       state.showEmojiPanel = !state.showEmojiPanel; // 切换表情面板的显示状态
     };
+    //切换语音面板
+    const toggleVoice = function() {
+      console.log("toggleVoice");
+      state.showVoice = !state.showVoice; // 切换表情面板的显示状态
+    };
+
     //添加表情
     const addEmoji = function(emoji) {
       if (emoji.type == "pic") {
@@ -381,23 +309,7 @@ export default {
       // 简化处理，实际应用中可能需要特殊处理
       state.showEmojiPanel = false; // 选择表情后关闭面板
     };
-    // 将特定编码转换为<img>标签用于显示
-    const decodeCodeToEmoji = function(message) {
-      const avatarRegex = /\[emoji:avatar(\d+)?\]/g;
-      let match;
-      const avatars = state.emojis;
-      while ((match = avatarRegex.exec(message)) !== null) {
-        // const avatarIndex = match[1]; // 获取头像编号 // 获取头像自定义标识符（"avatar" 或 "avatar2"）
-        const avatar = avatars.find((a) => a.encode === match[0]); // 查找对应的头像信息
-        if (avatar) {
-          message = message.replace(
-            match[0],
-            `<img src="${avatar.src}"   style="width: 25px; height: 25px; border-radius: 50%;" alt="${avatar.name}" />`
-          );
-        }
-      }
-      return message;
-    };
+   
     /**
      * 重试的函数，判断消息队列里面有没有消息，有消息的话需要重新发送一下
      */
@@ -513,7 +425,7 @@ export default {
       });
     };
     onMounted(() => {
-      decodeCodeToEmoji("[emoji:avatar]321321");
+      // decodeCodeToEmoji("[emoji:avatar]321321");
       getToken();
       init();
       //收到消息后更新前端数据
@@ -745,6 +657,7 @@ export default {
       state.content = "";
     };
 
+
     return {
       value,
       computedChats,
@@ -761,13 +674,10 @@ export default {
       sendMsgGroup,
       toggleEmojiPanel,
       addEmoji,
-      decodeCodeToEmoji,
-      stopPress,
-      startPress,
-      hideContextMenu,
-      showContextMenu,
-
-
+      // decodeCodeToEmoji,
+    
+      toggleVoice,
+    
     };
   },
 };

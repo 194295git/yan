@@ -12,6 +12,7 @@
     "axios": "^0.20.0",
     "better-scroll": "^2.4.2",
     "core-js": "^3.6.5",
+    "js-audio-recorder": "^1.0.7",
     "js-md5": "^0.7.3",
     "lib-flexible": "^0.3.2",
     "pushstate-server": "^3.1.0",
