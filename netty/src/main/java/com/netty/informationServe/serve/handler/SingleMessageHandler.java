@@ -73,11 +73,11 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
 //        if (toUserChannel != null && SessionUtils.hasLogin(toUserChannel)) {
             message = singleMessagePacket.getMessage();
             sendMessage("SAVECHAT",channelHandlerContext,message, singleMessagePacket.getToUserId(),
-                    Topic.OnLine,true,singleMessagePacket.getMsgid(),token);
+                    Topic.OnLine,true,singleMessagePacket.getMsgid(),token,singleMessagePacket.gettType());
         } else {
             message = singleMessagePacket.getMessage();
             sendMessage("SAVECHAT",channelHandlerContext,message, singleMessagePacket.getToUserId(),
-                    Topic.OffLine,true, singleMessagePacket.getMsgid(),token);
+                    Topic.OffLine,true, singleMessagePacket.getMsgid(),token,singleMessagePacket.gettType());
             log.info("SingleMessageHandler ======> 该用户不存在或者未登录");
             /**
              * 更改这块逻辑，变动为将消息投递到mq后返回ack; 将return注释      return;
@@ -169,7 +169,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         return byteBuf;
     }
 
-    public void sendMessage(String topic ,ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type, String msgid,String token) {
+    public void sendMessage(String topic ,ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type, String msgid,String token,String ttype) {
         MqMessage messageMQ = new MqMessage();
         messageMQ.setFromId(SessionUtils.getUser(ctx.channel()).getOpenid());
         messageMQ.setToId(toUser);
@@ -179,6 +179,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         messageMQ.setState(type);
         messageMQ.setMsgid(msgid);
         messageMQ.setToken(token);
+        messageMQ.settTpye(ttype);
         messageDispatchService.sendForSave(topic,messageMQ);
 //        return messageMQ;
 

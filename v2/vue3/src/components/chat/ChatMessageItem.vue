@@ -5,15 +5,42 @@
         width="35px"
         height="35px"
         fit="cover"
-        :src="userInfo.avatarUrl"
+        :src="item.avatarUrl"
       />
+      <!-- ttype 1 文本 2 语音 -->
       <div
+        v-if="item.ttype === '1'"
         class="font-18 content1"
         @mousedown.prevent="startPress"
         @mouseup="stopPress"
         @mouseleave="stopPress"
       >
         <div ref="contentArea" v-html="decodeCodeToEmoji(item.content)"></div>
+      </div>
+      <div
+        v-if="item.ttype === '5'"
+        class="font-18 content1"
+        @mousedown.prevent="startPress"
+        @mouseup="stopPress"
+        @mouseleave="stopPress"
+      >
+        
+        <audio
+          style="height: 30px;width: 250px;"
+          controls
+          :src="item.content"
+          @click="onPlayVoice(item.content)"
+        ></audio>
+      </div>
+      <div
+        v-if="item.ttype === '3'"
+        class="font-18 content1"
+        @mousedown.prevent="startPress"
+        @mouseup="stopPress"
+        @mouseleave="stopPress"
+      >
+        
+       <img style="height: 200px;width: 150px;" :src="item.content">
       </div>
       <div
         class="context-menu"
@@ -39,7 +66,7 @@
         width="35px"
         height="35px"
         fit="cover"
-        :src="toUser.avatarUrl"
+        :src="item.avatarUrl"
       />
     </div>
   </div>
@@ -58,7 +85,7 @@ export default {
       type: Object,
       required: true,
     },
-     toUser: {
+    toUser: {
       type: Object,
       required: true,
     },
@@ -68,15 +95,29 @@ export default {
     },
   },
 
+  methods: {},
   setup(props) {
-    
     const state = reactive({
+      //播放语音
+      audio: null,
       //长按事件
       pressTimer: null,
       isContextMenuVisible: false,
       longPressDuration: 1000, // 设定长按时间阈值（毫秒）
       currentLongPressedItem: null,
     });
+
+    const onPlayVoice = function(src) {
+      if (!state.audio) {
+        state.audio = new Audio();
+      }
+      state.audio.src = src;
+      state.audio.play();
+      // 注意：这里不应直接赋值字符串，而是应维护一个单独的状态变量表示播放状态
+      // 假设有一个名为 `playStatus` 的状态变量
+      // state.playStatus = "RUNNING";
+    };
+
     const startPress = function(event) {
       console.log("startPress");
       clearTimeout(state.pressTimer);
@@ -99,7 +140,7 @@ export default {
     const hideContextMenu = function() {
       state.isContextMenuVisible = false;
     };
- // 将特定编码转换为<img>标签用于显示
+    // 将特定编码转换为<img>标签用于显示
     const decodeCodeToEmoji = function(message) {
       const avatarRegex = /\[emoji:avatar(\d+)?\]/g;
       let match;
@@ -118,14 +159,39 @@ export default {
     };
     return {
       ...toRefs(state),
-decodeCodeToEmoji,
+      decodeCodeToEmoji,
       stopPress,
       startPress,
       hideContextMenu,
       showContextMenu,
+      onPlayVoice,
     };
   },
 };
 </script>
 
-<style></style>
+<style>
+
+.content {
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
+.content1 {
+  padding: 2px 6px;
+  border-radius: 5px;
+  background-color: white;
+  margin-left: 4px;
+  max-width: 73vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content2 {
+  padding: 2px 6px;
+  margin-right: 4px;
+  border-radius: 5px;
+  max-width: 73vw;
+  background-color: #ffff88;
+}</style>

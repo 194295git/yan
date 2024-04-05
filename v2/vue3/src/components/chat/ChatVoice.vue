@@ -176,7 +176,7 @@ export default {
 //     "msg": "操作成功"
 // }
       if(rs.success){
-        //  this.$emit("send", data);
+         this.$emit("send", '5',rs.content);
         console.log("这块需要调用父类的方法 发送消息，然后前端消息体那块也是需要加上audio消息类型的")
       }
       // this.$http({

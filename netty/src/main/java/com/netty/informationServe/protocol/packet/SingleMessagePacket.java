@@ -19,6 +19,16 @@ public class SingleMessagePacket extends Packet {
 
     private String isretry;
 
+    public String gettType() {
+        return tType;
+    }
+
+    public void settType(String tType) {
+        this.tType = tType;
+    }
+
+    private String tType;
+
     public String getIsretry() {
         return isretry;
     }

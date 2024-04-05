@@ -78,6 +78,7 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
             chatDto.setGroup(message1.getState());
             //将msgid存储进去，方便后续进行update
             chatDto.setMsgId(message1.getMsgid());
+            chatDto.setTType(message1.gettTpye());
             SetOperations<String, String> opsForSet = stringRedisTemplate.opsForSet();
 //            Boolean member = opsForSet.isMember(RedisPrefix.LEAF_PERFIX, message1.getMsgid());
             if( executeOperation(message1.getMsgid())){

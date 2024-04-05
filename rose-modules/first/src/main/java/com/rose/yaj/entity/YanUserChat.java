@@ -42,6 +42,11 @@ public class YanUserChat {
     @TableField("msg_id")
     private String msgId;
 
+
+    @TableField("t_type")
+    private String tType;
+
+
     //新加群聊功能
     @TableField("`group`")
     private Boolean group;

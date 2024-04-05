@@ -171,6 +171,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 messageRequestPacket.setFileType(parmas.getString("fileType"));
                 messageRequestPacket.setMsgid(parmas.getString("msgid"));
                 messageRequestPacket.setIsretry(parmas.getString("isretry"));
+                messageRequestPacket.settType(parmas.getString("fileType"));
                 toUserChannel= sessionUtils.isOnline(messageRequestPacket.getToUserId());
 
                 packet = messageRequestPacket;

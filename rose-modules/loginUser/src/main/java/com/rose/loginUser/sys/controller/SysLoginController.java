@@ -18,6 +18,7 @@ import com.rose.common.utils.CommonUser;
 import com.rose.common.utils.JwtTokenUtil;
 import com.rose.loginUser.sys.entity.SysUserEntity;
 import com.rose.loginUser.sys.feign.FirstLoginFeign;
+import com.rose.loginUser.sys.feign.dto.RegisterFeign;
 import com.rose.loginUser.sys.form.SysLoginForm;
 import com.rose.loginUser.sys.form.SysRegisterForm;
 import com.rose.loginUser.sys.service.ShiroService;
@@ -39,6 +40,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -123,24 +125,24 @@ public class SysLoginController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
-//	@ApiOperation("使用邮箱和密码注册")
-////	@PostMapping("/sys/registByWeb")
-////	public GenericResponse registByWeb(@RequestBody SysRegisterForm dto) throws Exception {
-//////		String uuid = UUID.randomUUID().toString() +new Random().nextInt();
-//////		SysUserPermission sysUserEntity = new SysUserPermission();
-//////		sysUserEntity.setPassword(dto.getPassword());
-//////		sysUserEntity.setUsername(dto.getUsername());
-//////		sysUserEntity.setOpenid(uuid);
-//////		sysUserService.saveUser(sysUserEntity);
-//////		//还需要调用first服务，给器存入一个openid来唯一关联；目前感觉这样设计合适。可以说兼容两套系统
-//////		//2023-1-22得出结论这块是需要待优化的。先更新一下数据库吧。然后区分角色和功能。
-//////		//最起码这些角色隶属于普通基本模块的角色。
-//////		RegisterFeign registerFeign = new RegisterFeign();
-//////		registerFeign.setOpenid(uuid);
-//////		registerFeign.setUsername(dto.getUsername());
-//////		firstLoginFeign.registByOpenid(registerFeign);
-//////		return GenericResponse.response(ServiceError.NORMAL);
-////	}
+	@ApiOperation("使用邮箱和密码注册")
+	@PostMapping("/sys/registByWeb")
+	public GenericResponse registByWeb(@RequestBody SysRegisterForm dto) throws Exception {
+		String uuid = UUID.randomUUID().toString() +new Random().nextInt();
+		SysUserEntity sysUserEntity = new SysUserEntity();
+		sysUserEntity.setPassword(dto.getPassword());
+		sysUserEntity.setUsername(dto.getUsername());
+		sysUserEntity.setOpenid(uuid);
+		sysUserService.saveUser(sysUserEntity);
+		//还需要调用first服务，给器存入一个openid来唯一关联；目前感觉这样设计合适。可以说兼容两套系统
+		//2023-1-22得出结论这块是需要待优化的。先更新一下数据库吧。然后区分角色和功能。
+		//最起码这些角色隶属于普通基本模块的角色。
+		RegisterFeign registerFeign = new RegisterFeign();
+		registerFeign.setOpenid(uuid);
+		registerFeign.setUsername(dto.getUsername());
+		firstLoginFeign.registByOpenid(registerFeign);
+		return GenericResponse.response(ServiceError.NORMAL);
+	}
 
 	/**
 	 * 验证码

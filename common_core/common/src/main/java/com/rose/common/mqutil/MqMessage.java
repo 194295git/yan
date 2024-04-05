@@ -21,6 +21,17 @@ public class MqMessage {
     // 消息状态 在线或离线 1为私聊 0为群聊
     private Boolean state;
 
+    public String gettTpye() {
+        return tTpye;
+    }
+
+    public void settTpye(String tTpye) {
+        this.tTpye = tTpye;
+    }
+
+    private String tTpye;
+
+
     public String getToken() {
         return token;
     }
