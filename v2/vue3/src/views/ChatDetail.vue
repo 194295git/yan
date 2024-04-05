@@ -17,7 +17,12 @@
                 v-for="(item, index) in computedChats.messages"
                 :key="index"
               >
-              <chat-message-item  :toUser="toUser"   :emojis="emojis" :item="item"  :userInfo="userInfo" />
+                <chat-message-item
+                  :toUser="toUser"
+                  :emojis="emojis"
+                  :item="item"
+                  :userInfo="userInfo"
+                />
               </div>
             </div>
           </list-scroll>
@@ -38,7 +43,7 @@
               style="background-color: aqua;"
               :size="mini"
               type="default"
-              @click="sendMsg2()"
+              @click="sendMsg2('1')"
             >
               发送
             </button>
@@ -47,28 +52,47 @@
         <!-- 底部表情包 -->
         <div class="nav-bar-chat ">
           <ul class="nav-list">
-            <div class="nav-list-item">
-              <span @click="toggleEmojiPanel">😉</span>
+            <div class="nav-list-item" @click="toggleEmojiPanel">
+              <van-icon name="like" />
+              <span>表情</span>
             </div>
             <div class="nav-list-item">
-              <span @click="toggleEmojiPanel">拍摄</span>
+              <van-icon name="video" />
+              <span @click="toggleCapture">拍摄</span>
             </div>
             <div class="nav-list-item">
-              <span @click="toggleEmojiPanel">图片</span>
+              <van-icon name="photo" /><span @click="toggleCapture">图片</span>
             </div>
             <div class="nav-list-item">
-              <span @click="toggleEmojiPanel">文件</span>
+              <van-icon name="column" />
+              <span @click="toggleCapture">文件</span>
             </div>
             <div class="nav-list-item">
-              <span @click="toggleVoice">语音</span>
-            </div>
-            <div class="nav-list-item">
-              <span @click="toggleEmojiPanel">视频</span>
+              <van-icon name="audio" /><span @click="toggleVoice">语音</span>
             </div>
           </ul>
           <!-- 表情表以及聊天室 -->
-          <chat-Emotion  :emojis="emojis" v-if="showEmojiPanel"  @add-emoji="addEmoji" />
-          <chat-Voice  v-if="showVoice"   @send="addEmoji" />
+          <chat-Emotion
+            style="margin: 10px auto;
+            display: flex;
+            justify-content: center;"
+            :emojis="emojis"
+            v-if="showEmojiPanel"
+            @add-emoji="addEmoji"
+          />
+          <!-- 语音 -->
+          <chat-Voice   style="margin: 10px auto;
+            display: flex;
+            justify-content: center;"
+         v-if="showVoice" @send="sendVoice" />
+          <!-- 文件上传 -->
+          <chat-upload
+            style="margin: 10px auto;
+            display: flex;
+            justify-content: center;"
+            v-if="showCapture"
+            @send="sendVoice"
+          />
         </div>
       </div>
     </div>
@@ -198,6 +222,7 @@ import { Toast } from "vant";
 import sHeader from "@/components/SimpleHeader";
 import chatEmotion from "@/components/chat/ChatEmotion";
 import chatVoice from "@/components/chat/ChatVoice";
+import chatUpload from "@/components/chat/ChatUpload";
 import ChatMessageItem from "@/components/chat/ChatMessageItem";
 import {
   queryEyeUser,
@@ -212,13 +237,15 @@ import * as imconstant from "@/common/js/imconstant";
 import { useStore } from "vuex";
 import { computed } from "vue";
 import { getLocal, retry } from "@/common/js/utils";
+import { EMOJIS } from "@/common/js/emoji";
 export default {
   components: {
     sHeader,
     listScroll,
     chatEmotion,
     chatVoice,
-    ChatMessageItem
+    ChatMessageItem,
+    chatUpload,
   },
   setup() {
     const value = ref("");
@@ -229,46 +256,12 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const state = reactive({
-
       //表情包
       showEmojiPanel: false, // 控制表情包面板的显示
       //显示语音通话
       showVoice: false,
-      emojis: [
-        { id: "1", type: "base", name: "📩" },
-        { id: "2", type: "base", name: "🎉" },
-        { id: "3", type: "base", name: "👉" },
-        { id: "4", type: "base", name: "😉" },
-        { id: "5", type: "base", name: "💙" },
-        { id: "6", type: "base", name: "🍉" },
-        { id: "7", type: "base", name: "🌙" },
-        { id: "8", type: "base", name: "🕙" },
-        { id: "9", type: "base", name: "🍅" },
-        { id: "10", type: "base", name: "🐑" },
-        { id: "11", type: "base", name: "🔱" },
-        { id: "12", type: "base", name: "🎱" },
-        { id: "131", type: "base", name: "⚡" },
-        { id: "14", type: "base", name: "💺" },
-        { id: "15", type: "base", name: " 👇 " },
-        {
-          id: "16",
-          type: "pic",
-          name: " 头像 ",
-          src:
-            "https://edu-renyun.oss-cn-beijing.aliyuncs.com/2021/07/26/a10016be5a4348a885bc79bb7bf78ad4logo1.png",
-          encode: "[emoji:avatar]",
-        },
-        {
-          id: "17",
-          type: "pic",
-          name: " 头像 2",
-          src:
-            "https://edu-renyun.oss-cn-beijing.aliyuncs.com/2021/07/26/0ea48cb529e54573ae791ffbde3fcd9fu=2095913610,1514262792&fm=26&gp=0.jpg",
-          encode: "[emoji:avatar2]",
-        },
-
-        // 更多表情...
-      ],
+      showCapture: false, //显示拍照
+      emojis: EMOJIS,
       memberBaseDetail: [],
       userlist: [],
       queue: new Queue(),
@@ -288,10 +281,15 @@ export default {
       //用于消息重试时候的消息
       tempSendMsg: {},
     });
-   
+
     //切换表情面板
     const toggleEmojiPanel = function() {
       state.showEmojiPanel = !state.showEmojiPanel; // 切换表情面板的显示状态
+    };
+    // toggleCapture
+    //切换拍摄面板
+    const toggleCapture = function() {
+      state.showCapture = !state.showCapture; // 切换表情面板的显示状态
     };
     //切换语音面板
     const toggleVoice = function() {
@@ -309,7 +307,7 @@ export default {
       // 简化处理，实际应用中可能需要特殊处理
       state.showEmojiPanel = false; // 选择表情后关闭面板
     };
-   
+
     /**
      * 重试的函数，判断消息队列里面有没有消息，有消息的话需要重新发送一下
      */
@@ -570,7 +568,7 @@ export default {
       console.log(429, memberDeatil.content);
       state.memberBaseDetail = memberDeatil.content;
     };
-    const sendMsg2 = async () => {
+    const sendMsg2 = async (ttype) => {
       const { content, toUser } = state;
       const no = await getLeaf();
       let data = {
@@ -580,7 +578,7 @@ export default {
           msgid: no.content,
           toMessageId: toUser.openid,
           message: content,
-          fileType: 0,
+          fileType: ttype,
           isretry: false,
         },
       };
@@ -591,7 +589,7 @@ export default {
           msgid: no.content,
           toMessageId: toUser.openid,
           message: content,
-          fileType: 0,
+          fileType: ttype,
           isretry: true,
         },
       };
@@ -601,16 +599,17 @@ export default {
           params: {
             toMessageId: state.groupId,
             message: content,
-            fileType: 0,
+            fileType: ttype,
             msgid: no.content,
           },
         };
       }
-      console.log(data);
+      console.log("发送sendmsg数据", data);
       state.tempSendMsg = data2;
       state.socketServe.send(data);
       const commitdata = {
         type: "self",
+        ttype: ttype,
         content: content,
         msgId: no.content,
         otherOpenid: toUser.openid,
@@ -627,7 +626,59 @@ export default {
       });
       state.content = "";
     };
-
+    const sendVoice = async (ttype, src) => {
+      console.log("是否走进来发送语音");
+      const { toUser } = state;
+      const no = await getLeaf();
+      let data = {
+        // 1代表着私聊的意思
+        type: 1,
+        params: {
+          msgid: no.content,
+          toMessageId: toUser.openid,
+          message: src,
+          fileType: ttype,
+          isretry: false,
+        },
+      };
+      let data2 = {
+        // 1代表着私聊的意思
+        type: 1,
+        params: {
+          msgid: no.content,
+          toMessageId: toUser.openid,
+          message: src,
+          fileType: ttype,
+          isretry: true,
+        },
+      };
+      if (state.current == 2) {
+        data = {
+          type: 9,
+          params: {
+            toMessageId: state.groupId,
+            message: src,
+            fileType: ttype,
+            msgid: no.content,
+          },
+        };
+      }
+      console.log("发送sendmsg数据", data);
+      state.tempSendMsg = data2;
+      state.socketServe.send(data);
+      const commitdata = {
+        type: "self",
+        ttype: ttype,
+        content: src,
+        msgId: no.content,
+        otherOpenid: toUser.openid,
+        avatarUrl: null,
+        group: "1",
+        createTime: new Date().getTime(),
+        targetId: toUser.openid,
+      };
+      store.commit("insertMessage", commitdata);
+    };
     const sendMsgGroup = async () => {
       const { content } = state;
       const no = await getLeaf();
@@ -657,7 +708,6 @@ export default {
       state.content = "";
     };
 
-
     return {
       value,
       computedChats,
@@ -670,14 +720,14 @@ export default {
       changeCur,
       showAllMember,
       sendMsg2,
+      sendVoice,
       changeCurDiy,
       sendMsgGroup,
       toggleEmojiPanel,
       addEmoji,
       // decodeCodeToEmoji,
-    
+      toggleCapture,
       toggleVoice,
-    
     };
   },
 };

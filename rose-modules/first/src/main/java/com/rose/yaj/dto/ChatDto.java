@@ -24,6 +24,8 @@ public class ChatDto {
 
     private String msgId;
 
+    private String tType;
+
     @Data
     public static class MqChat{
         private String openid;
@@ -33,6 +35,13 @@ public class ChatDto {
 
     @Data
     public static class PageChat{
+        /**
+         * 头像
+         */
+        private String avatarUrl;
+        //确定消息类型
+        private String ttype;
+        //确定消息是自己的还是别人的;
 
         private String type;
         //是否是群聊
@@ -45,7 +54,7 @@ public class ChatDto {
 
         private String OtherOpenid;
 
-        private String avatarUrl;
+
         private String targetId;
     }
 }
