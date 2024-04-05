@@ -207,6 +207,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 groupMessageRequestPacket.setMessage(parmas.getString("message"));
                 groupMessageRequestPacket.setToGroupId(parmas.getInteger("toMessageId"));
                 groupMessageRequestPacket.setFileType(parmas.getString("fileType"));
+                groupMessageRequestPacket.settType(parmas.getString("fileType"));
                 packet = groupMessageRequestPacket;
                 break;
             case 20:
