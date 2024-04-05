@@ -58,9 +58,51 @@
     style="display: flex; justify-content: flex-end;"
     v-if="item.type === 'receive'"
   >
-    <div class="font-18 content2">
-      <div v-html="decodeCodeToEmoji(item.content)"></div>
-    </div>
+    <!-- ttype 1 文本 2 语音 -->
+      <div
+        v-if="item.ttype === '1'"
+        class="font-18 content1"
+        @mousedown.prevent="startPress"
+        @mouseup="stopPress"
+        @mouseleave="stopPress"
+      >
+        <div ref="contentArea" v-html="decodeCodeToEmoji(item.content)"></div>
+      </div>
+      <div
+        v-if="item.ttype === '5'"
+        class="font-18 content1"
+        @mousedown.prevent="startPress"
+        @mouseup="stopPress"
+        @mouseleave="stopPress"
+      >
+        
+        <audio
+          style="height: 30px;width: 250px;"
+          controls
+          :src="item.content"
+          @click="onPlayVoice(item.content)"
+        ></audio>
+      </div>
+      <div
+        v-if="item.ttype === '3'"
+        class="font-18 content1"
+        @mousedown.prevent="startPress"
+        @mouseup="stopPress"
+        @mouseleave="stopPress"
+      >
+        
+       <img style="height: 200px;width: 150px;" :src="item.content">
+      </div>
+      <div
+        class="context-menu"
+        v-if="isContextMenuVisible"
+        @click.self="hideContextMenu"
+      >
+        <!-- 这里放置你的菜单项，例如：引用、收藏、制作表情包等 -->
+        <button @click="quoteMessage">引用消息</button>
+        <button @click="collectMessage">收藏</button>
+        <button @click="makeSticker">制作表情包</button>
+      </div>
     <div class="">
       <van-image
         width="35px"
@@ -81,14 +123,7 @@ export default {
       type: Object,
       required: true,
     },
-    userInfo: {
-      type: Object,
-      required: true,
-    },
-    toUser: {
-      type: Object,
-      required: true,
-    },
+   
     emojis: {
       type: Array,
       required: true,

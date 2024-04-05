@@ -13,7 +13,15 @@ public class GroupMessagePacket extends Packet {
     //但是我的groupId就是integer 所以这个地方就是Integer
     private Integer toGroupId;
 
+    public String gettType() {
+        return tType;
+    }
 
+    public void settType(String tType) {
+        this.tType = tType;
+    }
+
+    private String tType;
     private String msgid;
 
     public String getMsgid() {

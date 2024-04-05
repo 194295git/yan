@@ -220,7 +220,6 @@ export default {
 .container {
   font-size: 14rpx;
   /* height: 1200rpx; */
-  background: rgb(221, 175, 248);
   color: #000;
   /* border: 1px solid #000; */
 }
@@ -321,7 +320,6 @@ export default {
   padding: 5rpx 8rpx;
   font-size: 18rpx;
   height: 25px;
-  background: rgb(162, 114, 206);
 }
 
 
@@ -402,7 +400,6 @@ export default {
   flex: 1;
   text-align: center;
   /* border: 1px solid #000; */
-  background: rgb(197, 154, 238);
   border-radius: 9px;
   margin: 0px 5px;
   height: 20px
@@ -438,7 +435,6 @@ export default {
   padding: 4px 2px;
 }
 .user-box {
-  background: rgb(222, 183, 241);
   height: 100%;
 }
 .comment{

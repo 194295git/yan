@@ -3,11 +3,17 @@
     <s-header :name="'企聊聊'" :noback="true"></s-header>
 
     <div>
-      <div v-if="current == 1" class="box2 mt-2">
-        <div class="box2">
+      <div class="box2 mt-2">
+        <div v-if="current == 1" class="box2">
           <van-icon name="chat-o" @click="changeCur()" />
 
           <text class="mt-2 ml-2" @click="changeCur()">返回</text>
+        </div>
+        <div v-if="current == 2" class="box2">
+          <van-icon name="chat-o" @click="changeCur()" />
+
+          <text class="mt-2 ml-2" @click="changeCur()">返回</text>
+          <text class="mt-2 ml-2" @click="showAllMember()">查看成员</text>
         </div>
         <div class="scroll">
           <list-scroll :scroll-data="computedChats.messages">
@@ -17,12 +23,7 @@
                 v-for="(item, index) in computedChats.messages"
                 :key="index"
               >
-                <chat-message-item
-                  :toUser="toUser"
-                  :emojis="emojis"
-                  :item="item"
-                  :userInfo="userInfo"
-                />
+                <chat-message-item :emojis="emojis" :item="item" />
               </div>
             </div>
           </list-scroll>
@@ -38,12 +39,22 @@
               />
             </van-cell-group>
           </div>
-          <div class="mt-1 send">
+          <div v-if="current == 1" class="mt-1 send">
             <button
               style="background-color: aqua;"
               :size="mini"
               type="default"
               @click="sendMsg2('1')"
+            >
+              发送
+            </button>
+          </div>
+          <div v-if="current == 2" class="mt-1 send">
+            <button
+              style="background-color: aqua;"
+              :size="mini"
+              type="default"
+              @click="sendMsgGroup('1')"
             >
               发送
             </button>
@@ -81,10 +92,13 @@
             @add-emoji="addEmoji"
           />
           <!-- 语音 -->
-          <chat-Voice   style="margin: 10px auto;
+          <chat-Voice
+            style="margin: 10px auto;
             display: flex;
             justify-content: center;"
-         v-if="showVoice" @send="sendVoice" />
+            v-if="showVoice"
+            @send="sendVoice"
+          />
           <!-- 文件上传 -->
           <chat-upload
             style="margin: 10px auto;
@@ -96,85 +110,8 @@
         </div>
       </div>
     </div>
-    <!-- 群聊开始 -->
-    <div>
-      <div v-if="current == 2" class="box2 mt-2">
-        <div class="box2">
-          <van-icon name="chat-o" @click="changeCur()" />
-
-          <text class="mt-2 ml-2" @click="changeCur()">返回</text>
-          <text class="mt-2 ml-2" @click="showAllMember()">查看成员</text>
-        </div>
-        <div class="scroll">
-          <list-scroll :scroll-data="computedChats.messages">
-            <div class="swiper-container">
-              <div
-                class="content"
-                v-for="(item, index) in computedChats.messages"
-                :key="index"
-              >
-                <!-- self -->
-                <div class="d-felx justify-start " v-if="item.type === 'self'">
-                  <div style="display: flex;">
-                    <!-- <van-image
-                      width="35px"
-                      height="35px"
-                      fit="cover"
-                      :src="userInfo.avatarUrl"
-                    /> -->
-                    <div class="font-18 content1">
-                      <text>{{ item.content }}</text>
-                    </div>
-                  </div>
-                </div>
-                <!-- receive这边的消息 -->
-                <div
-                  style="display: flex; justify-content: flex-end;"
-                  v-if="item.type === 'receive'"
-                >
-                  <div class="font-18 content2">
-                    <text>{{ item.content }}</text>
-                  </div>
-                  <div class="">
-                    <!-- <van-image
-                      width="35px"
-                      height="35px"
-                      fit="cover"
-                      :src="http"
-                    /> -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </list-scroll>
-        </div>
-        <div
-          class="boxS d-flex justify-space-between align-centers send-msg mt-4"
-        >
-          <!-- 可以使用 CellGroup 作为容器 -->
-          <div style="height:10px">
-            <van-cell-group inset>
-              <van-field
-                v-model="content"
-                placeholder="请输入文本内容"
-                class="box-border-grey "
-              />
-            </van-cell-group>
-          </div>
-          <div class="mt-1 send">
-            <button
-              style="background-color: aqua;"
-              :size="mini"
-              type="default"
-              @click="sendMsgGroup()"
-            >
-              发送
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div>
+    <!-- 展示群聊成员页面 暂时隐藏吧 -->
+    <!-- <div>
       <div v-if="current == 3" class="box2 mt-2">
         <div @click="changeCurDiy(2)">返回</div>
         <div
@@ -198,25 +135,14 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- <div @click="sendData()">发送数据</div> -->
-    <!-- <nav-bar-chat-chat></nav-bar-chat-chat> -->
-    <!-- <router-link class="nav-list-item active" to="chat">
-      <i class="nbicon nblvsefenkaicankaoxianban-1"></i>
-      <span>拍摄</span>
-    </router-link>
-    <router-link class="nav-list-item" to="info">
-      <i class="nbicon nbfenlei"></i>
-      <span>相册</span>
-    </router-link> -->
+    </div> -->
   </div>
 </template>
 
 <script>
 import listScroll from "@/components/ListScroll";
 
-import { reactive, onMounted, toRefs, ref } from "vue";
+import { reactive, onMounted, toRefs } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { Toast } from "vant";
 import sHeader from "@/components/SimpleHeader";
@@ -248,7 +174,6 @@ export default {
     chatUpload,
   },
   setup() {
-    const value = ref("");
     const onSearch = (val) => Toast(val);
     const onCancel = () => Toast("取消");
 
@@ -568,43 +493,45 @@ export default {
       console.log(429, memberDeatil.content);
       state.memberBaseDetail = memberDeatil.content;
     };
-    const sendMsg2 = async (ttype) => {
+
+    /**
+     * 构造发送消息的请求体
+     */
+    const createData = (no, ttype, isretry, isvoice, url) => {
       const { content, toUser } = state;
-      const no = await getLeaf();
-      let data = {
-        // 1代表着私聊的意思
-        type: 1,
-        params: {
-          msgid: no.content,
-          toMessageId: toUser.openid,
-          message: content,
-          fileType: ttype,
-          isretry: false,
-        },
-      };
-      let data2 = {
-        // 1代表着私聊的意思
-        type: 1,
-        params: {
-          msgid: no.content,
-          toMessageId: toUser.openid,
-          message: content,
-          fileType: ttype,
-          isretry: true,
-        },
-      };
-      if (state.current == 2) {
-        data = {
-          type: 9,
-          params: {
-            toMessageId: state.groupId,
-            message: content,
-            fileType: ttype,
-            msgid: no.content,
-          },
-        };
+      let data = {};
+      let type = "";
+      if (state.current == 1) {
+        type = "1";
       }
-      console.log("发送sendmsg数据", data);
+      if (state.current == 2) {
+        type = "9";
+      }
+      data.type = type;
+      let params = {
+        msgid: no.content,
+        toMessageId: toUser.openid,
+        fileType: ttype,
+        ttype:ttype,
+        isretry: isretry,
+      };
+      if (isvoice) {
+        params.message = url;
+      } else {
+        params.message = content;
+      }
+      data.params = params;
+      return data;
+    };
+    /**
+     * 发送消息
+     */
+    const sendMsg2 = async (ttype) => {
+      const { content, toUser, userInfo } = state;
+      const no = await getLeaf();
+      let data = createData(no, ttype, false, false, "");
+      let data2 = createData(no, ttype, true, false, "");
+
       state.tempSendMsg = data2;
       state.socketServe.send(data);
       const commitdata = {
@@ -613,57 +540,25 @@ export default {
         content: content,
         msgId: no.content,
         otherOpenid: toUser.openid,
-        avatarUrl: null,
+        avatarUrl: userInfo.avatarUrl,
         group: "1",
         createTime: new Date().getTime(),
         targetId: toUser.openid,
       };
-
+      console.log("发送sendmsg数据", data);
       store.commit("insertMessage", commitdata);
-      state.recesiveAllMsg.push({
-        type: "self",
-        content: content,
-      });
       state.content = "";
     };
+    /*
+    * 发送语音
+     */
     const sendVoice = async (ttype, src) => {
       console.log("是否走进来发送语音");
       const { toUser } = state;
       const no = await getLeaf();
-      let data = {
-        // 1代表着私聊的意思
-        type: 1,
-        params: {
-          msgid: no.content,
-          toMessageId: toUser.openid,
-          message: src,
-          fileType: ttype,
-          isretry: false,
-        },
-      };
-      let data2 = {
-        // 1代表着私聊的意思
-        type: 1,
-        params: {
-          msgid: no.content,
-          toMessageId: toUser.openid,
-          message: src,
-          fileType: ttype,
-          isretry: true,
-        },
-      };
-      if (state.current == 2) {
-        data = {
-          type: 9,
-          params: {
-            toMessageId: state.groupId,
-            message: src,
-            fileType: ttype,
-            msgid: no.content,
-          },
-        };
-      }
-      console.log("发送sendmsg数据", data);
+      let data = createData(no, ttype, false, true, src);
+      let data2 = createData(no, ttype, true, true, src);
+      console.log("发送sendVoice数据", data);
       state.tempSendMsg = data2;
       state.socketServe.send(data);
       const commitdata = {
@@ -672,14 +567,14 @@ export default {
         content: src,
         msgId: no.content,
         otherOpenid: toUser.openid,
-        avatarUrl: null,
+        avatarUrl:  state.userInfo.avatarUrl,
         group: "1",
         createTime: new Date().getTime(),
         targetId: toUser.openid,
       };
       store.commit("insertMessage", commitdata);
     };
-    const sendMsgGroup = async () => {
+    const sendMsgGroup = async (ttype) => {
       const { content } = state;
       const no = await getLeaf();
 
@@ -688,13 +583,15 @@ export default {
         params: {
           toMessageId: state.groupId,
           message: content,
-          fileType: 0,
+          fileType: ttype,
           msgid: no.content,
         },
       };
+      console.log("sendMsgGroup", sendMsgGroup);
       state.socketServe.send(data);
       const commitdata = {
         type: "self",
+        ttype: ttype,
         content: content,
         msgId: no.content,
         otherOpenid: route.query.groupId,
@@ -709,7 +606,6 @@ export default {
     };
 
     return {
-      value,
       computedChats,
       onSearch,
       onCancel,
@@ -725,7 +621,6 @@ export default {
       sendMsgGroup,
       toggleEmojiPanel,
       addEmoji,
-      // decodeCodeToEmoji,
       toggleCapture,
       toggleVoice,
     };

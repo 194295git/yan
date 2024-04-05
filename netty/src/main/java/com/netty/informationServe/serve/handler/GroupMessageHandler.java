@@ -52,7 +52,8 @@ public class GroupMessageHandler extends SimpleChannelInboundHandler<GroupMessag
         ChannelGroup channelGroup = SessionUtils.getChannelGroup(groupId);
         log.info(" GroupMessageHandler channelGroup"+channelGroup);
 
-        sendMessage(channelHandlerContext,groupMessagePacket.getMessage(),groupId.toString(),Topic.OnLine,false,groupMessagePacket.getMsgid());
+        sendMessage(channelHandlerContext,groupMessagePacket.getMessage(),groupId.toString(),Topic.OnLine,false,groupMessagePacket.getMsgid(),
+                fileType);
 
 //        messageService.execute(
 //                createSendRequest(channelHandlerContext, groupId, groupMessagePacket.getMessage(), userself, fileType, nameList),
@@ -114,12 +115,13 @@ public class GroupMessageHandler extends SimpleChannelInboundHandler<GroupMessag
      * @param state
      * @param type false 是0  true 是1  用于区分是不是群聊
      */
-    public void sendMessage(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type,String msgid) {
+    public void sendMessage(ChannelHandlerContext ctx, String message, String toUser, String state, Boolean type,String msgid,String ttype) {
         MqMessage messageMQ = new MqMessage();
         messageMQ.setFromId(SessionUtils.getUser(ctx.channel()).getOpenid());
         messageMQ.setToId(toUser);
         messageMQ.setMsgid(msgid);
         messageMQ.setType(state);
+        messageMQ.settTpye(ttype);
         messageMQ.setInfoContent(message);
         messageMQ.setTime(new DateTime().toString());
         messageMQ.setState(type);

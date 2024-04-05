@@ -1,12 +1,3 @@
-<!--
- * 严肃声明：
- * 开源版本请务必保留此注释头信息，若删除我方将保留所有法律责任追究！
- * 本系统已申请软件著作权，受国家版权局知识产权以及国家计算机软件著作权保护！
- * 可正常分享和学习源码，不得用于违法犯罪活动，违者必究！
- * Copyright (c) 2020 陈尼克 all rights reserved.
- * 版权所有，侵权必究！
- *
--->
 
 <template>
   <div class="user-box">
@@ -178,7 +169,7 @@ export default {
 @import "../common/style/mixin";
 @import "../common/style/vuetify";
 .user-box {
-  background: rgb(222, 183, 241);
+
   height: 100%;
 }
 
@@ -242,7 +233,7 @@ export default {
 .question-item .que-follow .right {
   padding: 5px 26px;
   color: #ffffff;
-  background: #9932cc;
+
   font-size: 13px;
   margin: 0;
 }
@@ -262,7 +253,7 @@ export default {
   width: 150px;
   margin-right: 2px;
   border-radius: 9px;
-  background: rgb(151, 49, 202);
+
 }
 
 .write {
@@ -271,7 +262,7 @@ export default {
   width: 150px;
   margin-left: 2px;
   border-radius: 9px;
-  background: rgb(151, 49, 202);
+
 }
 
 .image {
@@ -290,7 +281,7 @@ export default {
 .answer-feed .feed-item .feed-content .answer-body {
   padding: 0;
   /*height: 10rpx;*/
-  font-size: 24rpx;
+  font-size: 14px;
   line-height: 28rpx;
   color: #5b5b5b;
 }
