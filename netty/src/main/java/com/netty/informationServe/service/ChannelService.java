@@ -90,6 +90,11 @@ public class ChannelService {
         return null;
     }
 
+    public String getChannelOpenid(Channel channel){
+       return channel.attr(AttrConstants.channelId).get();
+    }
+
+
     /**
      * 移除客户端
      * @param

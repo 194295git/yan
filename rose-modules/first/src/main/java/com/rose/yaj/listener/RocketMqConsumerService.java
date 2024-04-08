@@ -140,6 +140,7 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
         params.put("message", message1.getInfoContent());
         params.put("msgId", message1.getMsgid());
         params.put("openid",message1.getFromId());
+        params.put("ttype",message1.gettTpye());
         data.put("params",params);
         List to = new ArrayList<String>();
         to.add(message1.getToId());
@@ -166,6 +167,7 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
         params.put("message", message1.getInfoContent());
         params.put("msgId", message1.getMsgid());
         params.put("openid",message1.getFromId());
+        params.put("ttype",message1.gettTpye());
         data.put("params",params);
         List to = new ArrayList<String>();
         //这个地方查出关注的用户 然后去推送消息.

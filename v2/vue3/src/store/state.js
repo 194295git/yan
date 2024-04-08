@@ -7,6 +7,8 @@
  * 版权所有，侵权必究！
  */
 
+
+
 export default {
   cartCount: 0,
   to: '',
@@ -22,4 +24,5 @@ export default {
   chats: [],
   privateMsgMaxId: 0,
   groupId:'',
+  avatarMap:[],
 }

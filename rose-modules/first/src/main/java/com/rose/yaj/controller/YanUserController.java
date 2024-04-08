@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -155,6 +156,15 @@ public class YanUserController {
         String avatarUrlByOpenid = yanUserService.getAvatarUrlByOpenid(openid);
         return GenericResponse.response(ServiceError.NORMAL,avatarUrlByOpenid);
     }
+
+    @ApiOperation("获取所有头像信息")
+    @GetMapping("/getAvatarUrlAll")
+    public GenericResponse getAvatarUrlAll( ) throws IOException {
+
+        List<Map> rs = yanUserService.getAvatarUrlAll();
+        return GenericResponse.response(ServiceError.NORMAL,rs);
+    }
+
 
 
 
