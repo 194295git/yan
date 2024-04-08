@@ -46,11 +46,18 @@ public class MessageSendService {
 
     }
 
+    /**
+     * 通过controller接口进来的消息推送给前端.
+     * @param websocketMessage
+     * @return
+     */
     private TextWebSocketFrame generateMessage(WebsocketMessage websocketMessage){
         //设置推送的消息id
         if (StringUtils.isEmpty(websocketMessage.getMessageId())){
             websocketMessage.setMessageId(UUIDUtils.getUUID());
         }
+        //终于找到了统一报文格式的地方 这个地方获取到msg，前台就可以统一了，基本一个type 一个param
+//        return new TextWebSocketFrame(JSONObject.toJSONString(websocketMessage.getMsg()));
         return new TextWebSocketFrame(JSONObject.toJSONString(websocketMessage));
     }
 

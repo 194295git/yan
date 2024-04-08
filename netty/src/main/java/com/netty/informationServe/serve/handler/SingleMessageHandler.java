@@ -5,12 +5,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.netty.common.config.MQUtils;
 import com.netty.common.domain.User;
 import com.netty.informationServe.protocol.packet.SingleMessagePacket;
+import com.netty.informationServe.service.ChannelService;
 import com.netty.informationServe.service.MessageService;
 import com.netty.informationServe.service.messagedispatch.MessageDispatchService;
 import com.netty.informationServe.utils.SessionUtils;
 import com.rose.common.constant.RedisPrefix;
 import com.rose.common.mqutil.MqMessage;
-import com.rose.common.mqutil.SendRequest;
 import com.rose.common.mqutil.Topic;
 import com.rose.common.netty.Commond;
 import io.netty.buffer.ByteBuf;
@@ -26,9 +26,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @创建人 rose
@@ -44,7 +41,11 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
     MQUtils mqUtils;
     @Autowired
     SessionUtils sessionUtils;
-
+    /**
+     * 用于获取用户连接
+     */
+    @Autowired
+    ChannelService channelService;
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -109,37 +110,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
 
     }
 
-    /**
-     * 生成mq需要的消息体
-     * @param ctx
-     * @param message
-     * @param toUserOpenid
-     * @param fileType
-     * @param msgid
-     * @return
-     */
-    public SendRequest createSendRequest(ChannelHandlerContext ctx, String message, String toUserOpenid, String fileType, String msgid){
-        User fromUser = SessionUtils.getUser(ctx.channel());
-        JSONObject data = new JSONObject();
-        data.put("type", Commond.SINGLE_MESSAGE_OTHER);
-        data.put("status", 200);
-        JSONObject params = new JSONObject();
-        params.put("message", message);
-        params.put("fileType", fileType);
-        params.put("fromUser", fromUser);
-//        params.put("toUser", toUser);
-        data.put("params", params);
-//        data.put("message",messageForSave);
 
-        SendRequest req =  new SendRequest();
-        List<String> toList = new ArrayList<String>();
-        toList.add(toUserOpenid);
-        req.setTo(toList);
-        req.setSendToAll(false);
-        req.setMsg(data);
-        req.setUniqueMsgid(msgid);
-        return req;
-    }
 
     /**
      * 创建投递消息成功的ack消息
@@ -158,7 +129,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
         data.put("status", 200);
         JSONObject params = new JSONObject();
         params.put("message", message);
-        params.put("date", new Date().toString());
+        params.put("date", System.currentTimeMillis());
         params.put("msgid",msgid);
         params.put("online",toUserChannel);
         //是否重传的消息
