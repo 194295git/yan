@@ -12,13 +12,8 @@ import com.netty.informationServe.service.ChannelService;
 import com.netty.informationServe.utils.SessionUtils;
 import com.rose.common.base.GenericResponse;
 import com.rose.common.base.WebsocketMessage;
-import com.rose.common.constant.NettyConstants;
-import com.rose.common.mqutil.SendRequest;
-import com.rose.common.netty.AttrConstants;
 import com.rose.common.netty.Commond;
-import com.rose.common.utils.UUIDUtils;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -26,7 +21,6 @@ import io.netty.handler.codec.http.websocketx.*;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,6 +203,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 groupMessageRequestPacket.settType(parmas.getString("fileType"));
                 packet = groupMessageRequestPacket;
                 break;
+//           这个是ping包
             case 20:
                 ByteBuf buf = createPongByteBuf(ctx);
                  TextWebSocketFrame tws = new TextWebSocketFrame(buf);
@@ -237,7 +232,6 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
             }
 
         }
-//
 //        //返回给client b的回应
 //        if(type.equals(Commond.SINGLE_MESSAGE_ACK)){
 //            ByteBuf buf = getByteBufAck(ctx, parmas.getString("msgid"));
@@ -304,20 +298,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         return byteBuf;
     }
 
-    public ByteBuf getByteBufAck(ChannelHandlerContext ctx, String message) {
-        ByteBuf byteBuf = ctx.alloc().buffer();
-        User fromUser = SessionUtils.getUser(ctx.channel());
-        JSONObject data = new JSONObject();
-        data.put("type", Commond.SINGLE_MESSAGE_ACK_RESPONSE);
-        data.put("status", 200);
-        JSONObject params = new JSONObject();
-        params.put("message", message);
-        params.put("date", new Date().toString());
-        data.put("params", params);
-        byte []bytes = data.toJSONString().getBytes(Charset.forName("utf-8"));
-        byteBuf.writeBytes(bytes);
-        return byteBuf;
-    }
+
 
     public ByteBuf createPongByteBuf(ChannelHandlerContext ctx) {
         ByteBuf byteBuf = ctx.alloc().buffer();
@@ -332,20 +313,6 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         return byteBuf;
     }
 
-    //构造推送消息体
-    private WebsocketMessage getMessage(String channelId, SendRequest request, MessageExt msg) {
-        Channel channel =SessionUtils.getChannel(channelId);
-        WebsocketMessage websocketMsg = new WebsocketMessage(
-                request.getRequestId(),
-                channel.attr(AttrConstants.sessionId).get(),
-                UUIDUtils.getUUID(),
-                WebsocketMessage.MsgType.BUSSINESS.code,
-                new String[]{channelId},
-                request.getMsg(),
-                request.getFrom(),
-                Integer.parseInt(msg.getUserProperty(NettyConstants.Trigger))
-        );
-        return websocketMsg;
-    }
+
 
 }
