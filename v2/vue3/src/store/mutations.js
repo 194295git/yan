@@ -25,6 +25,14 @@ export default {
   setGroupId(state, res) {
     state.groupId = res || null;
   },
+  /**
+   * 设置头像回显
+   * @param {} state 
+   * @param {*} res 
+   */
+  setAvatarMap(state, res) {
+    state.avatarMap = res || null;
+  },
   
   setRegisterGroup(state, res) {
     state.registerGroup = res || null;

@@ -28,6 +28,11 @@ export function getGroupContent(params) {
 export function getAvatarUrlByOpenid(params) {
   return apiFirstGet('/yaj/yan-user/getAvatarUrlByOpenid?openid='+params);
 }
+export function getAvatarUrlALL() {
+  return apiFirstGet('/yaj/yan-user/getAvatarUrlAll');
+}
+
+
 export function getGroupMemberDetail(params) {
   return apiFirstGet('/yaj/yan-group/getGroupMemberDetail?id='+params);
 }

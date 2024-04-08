@@ -1,10 +1,11 @@
 package com.rose.yaj.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.rose.yaj.dto.UserDto;
 import com.rose.yaj.entity.YanUser;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -27,4 +28,10 @@ public interface YanUserService extends IService<YanUser> {
     void addInfo(String openid, UserDto.AddInfo addInfo);
 
     String getAvatarUrlByOpenid(String openid);
+
+    /**
+     * 获取所有的头像，然后存储到前端里面，然后进行计算和调用
+     * @return
+     */
+    List<Map> getAvatarUrlAll();
 }

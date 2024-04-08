@@ -1,18 +1,14 @@
 package com.rose.yaj.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rose.yaj.dto.UserDto;
 import com.rose.yaj.entity.YanUser;
 import com.rose.yaj.entity.YanUserChat;
 import com.rose.yaj.mapper.YanUserMapper;
 import com.rose.yaj.service.YanUserChatService;
 import com.rose.yaj.service.YanUserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rose.yaj.util.JwtTokenUtil;
-import com.rose.yaj.util.Util;
-import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
-import org.bouncycastle.crypto.tls.TlsRuntimeException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +32,9 @@ public class YanUserServiceImpl extends ServiceImpl<YanUserMapper, YanUser> impl
 
     @Autowired
     YanUserChatService yanUserChatService;
+
+    @Autowired
+    YanUserMapper yanUserMapperl;
     @Override
     public void changeLiveStatus(String openid,Integer alive) {
         YanUser yanUser = new YanUser();
@@ -139,5 +138,10 @@ public class YanUserServiceImpl extends ServiceImpl<YanUserMapper, YanUser> impl
 
 
 
+    }
+
+    @Override
+    public List<Map> getAvatarUrlAll() {
+        return yanUserMapperl.listAvatar();
     }
 }

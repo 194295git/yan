@@ -87,6 +87,7 @@ import {
   queryEyeUser,
   getAllGroup,
   getGroupOpenid,
+  getAvatarUrlALL
 } from "@/service/chat";
 import SocketService from "@/common/js/websocket";
 import { getUserInfoMe } from "@/service/user";
@@ -165,8 +166,9 @@ export default {
       //向后端发送注册的消息
       // sendRegisterData();
       // Toast.clear();
-
+      const avatarMap = await getAvatarUrlALL();
       //初始化map
+      store.commit("setAvatarMap", avatarMap.content);
       store.commit("initChat");
       
       //根据store里面的id拉取消息，写到action里面

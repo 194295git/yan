@@ -205,6 +205,8 @@ export default {
       groupId: route.query.groupId,
       //用于消息重试时候的消息
       tempSendMsg: {},
+      //暂存需要commit的数据
+      commitdata: {},
     });
 
     //切换表情面板
@@ -305,13 +307,25 @@ export default {
     };
     const solveSINGLE_MESSAGE_OTHER = async (res, msg) => {
       console.log("【IM日志】imconstant.SINGLE_MESSAGE_OTHER", res);
-
+      /**
+       * 需要去前端对比一下id
+       */
+      let avatardb = null;
+      const avatararray = store.state.avatarMap;
+      for (var i = 0; i < avatararray.length; i++) {
+        if (avatararray[i].openid == res.params.openid) {
+          console.log("avatararray[i].avatarUrl", avatararray[i].avatar_url);
+          avatardb = avatararray[i].avatar_url;
+        }
+      }
+      console.log("avatarMap", avatararray);
       const commitdata = {
         type: "receive",
         content: res.params.message,
         msgId: res.params.msgId,
         otherOpenid: res.params.openid,
-        avatarUrl: null,
+        ttype: res.params.ttype,
+        avatarUrl: avatardb,
         group: "1",
         createTime: new Date().getTime(),
         targetId: res.params.openid,
@@ -363,22 +377,27 @@ export default {
           console.log(res.type);
           return;
         }
-
+        //处理前端重试逻辑
         if (res.type === imconstant.SINGLE_MESSAGE_RESPONSE) {
           solveSINGLE_MESSAGE_RESPONSE(res);
         }
-        //收消息的情况，把消息推送上去,并且ack 客户端b的ack
+        //用户b收消息
         if (res.type === imconstant.SINGLE_MESSAGE_OTHER) {
           solveSINGLE_MESSAGE_OTHER(res, msg);
         }
-        //当收到消息的时候则删除队列里面的消息，停止重试
+        //当收到消息的时候则删除队列里面的消息，停止重试,插入消息
         if (res.type === imconstant.SINGLE_MESSAGE_ACK_RESPONSE) {
           //代表客户端a成功的把消息发送了出去
+          //收到ack的时候才需要把消息给放置到客户端，之前的有逻辑问题.
           state.queue.poll();
           console.log(
             "【IM日志】ack:N 成功收到了ack消息  队列中的消息已经被删除"
           );
           console.log("【IM日志 】ack:N消息队列里面的peek", state.queue.peek());
+
+          //是不能立即insert的，必须发送成功了之后才能insert todo
+          store.commit("insertMessage", state.commitdata);
+          state.content = "";
         }
         //群聊收消息
         if (res.type === 10) {
@@ -512,7 +531,7 @@ export default {
         msgid: no.content,
         toMessageId: toUser.openid,
         fileType: ttype,
-        ttype:ttype,
+        ttype: ttype,
         isretry: isretry,
       };
       if (isvoice) {
@@ -545,12 +564,10 @@ export default {
         createTime: new Date().getTime(),
         targetId: toUser.openid,
       };
-      console.log("发送sendmsg数据", data);
-      store.commit("insertMessage", commitdata);
-      state.content = "";
+      state.commitdata = commitdata;
     };
     /*
-    * 发送语音
+     * 发送语音
      */
     const sendVoice = async (ttype, src) => {
       console.log("是否走进来发送语音");
@@ -567,7 +584,7 @@ export default {
         content: src,
         msgId: no.content,
         otherOpenid: toUser.openid,
-        avatarUrl:  state.userInfo.avatarUrl,
+        avatarUrl: state.userInfo.avatarUrl,
         group: "1",
         createTime: new Date().getTime(),
         targetId: toUser.openid,
