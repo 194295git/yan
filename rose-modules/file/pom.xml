@@ -193,6 +193,19 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+        <!--   添加依赖     -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>2.0.40</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-core -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>5.8.21</version>
+        </dependency>
+
 
     </dependencies>
 
