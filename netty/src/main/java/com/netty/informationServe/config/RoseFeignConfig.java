@@ -45,6 +45,7 @@ public class RoseFeignConfig implements RequestInterceptor {
     //请求头携带token
     @Override
     public void apply(RequestTemplate requestTemplate) {
+        requestTemplate.header("Content-Type", "application/json");
         requestTemplate.header("token", token.get());
     }
 }
