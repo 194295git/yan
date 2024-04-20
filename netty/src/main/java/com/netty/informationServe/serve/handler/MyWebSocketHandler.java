@@ -8,12 +8,13 @@ import com.netty.informationServe.config.RoseFeignConfig;
 import com.netty.informationServe.feign.NettyMqFeign;
 import com.netty.informationServe.protocol.Packet;
 import com.netty.informationServe.protocol.packet.*;
+import com.netty.informationServe.service.AuthService;
 import com.netty.informationServe.service.ChannelService;
 import com.netty.informationServe.utils.SessionUtils;
-import com.rose.common.base.GenericResponse;
 import com.rose.common.base.WebsocketMessage;
 import com.rose.common.netty.Commond;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -30,6 +31,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @创建人 rose
@@ -47,8 +49,10 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
     @Autowired
     SessionUtils sessionUtils;
     @Autowired
-    NettyMqFeign nettyMqFeign;
+    AuthService authService;
 
+    @Autowired
+    private NettyMqFeign nettyMqFeign; // Feign客户端
     /**
      * 事件回调  在这个地方完成参数认证和授权.需要去调用一个接口去测试.
      *
@@ -73,16 +77,22 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
             //从通道中获取用户token
             String token = ctx.channel().attr(attributeKey).get();
 
-
+            ctx.channel().config().setAutoRead(false);
             RoseFeignConfig.token.set(token);
-            GenericResponse auth = nettyMqFeign.getAuth();
-            //先使用一个接口吧。后续添加个人有哪些权限的时候在做改进
-            if (auth.getStatusCode() == 200){
-                //token校验通过
-                log.info("token校验通过");
-            }else{
-//                ctx.writeAndFlush(new CloseWebSocketFrame(400, "token 无效")).addListener(ChannelFutureListener.CLOSE);
-            }
+
+//            GenericResponse rs = nettyMqFeign.getAuth();
+            CompletableFuture<Boolean> authenticateFuture = authService.authenticateAsync(token);
+
+            authenticateFuture.thenAccept(authResult -> {
+                log.info("token校验通过"+authResult);
+                if (authResult) {
+                    log.info("token校验通过");
+                } else {
+                    ctx.writeAndFlush(new CloseWebSocketFrame(400, "token 无效")).addListener(ChannelFutureListener.CLOSE);
+                }
+                ctx.channel().config().setAutoRead(true);
+
+            });
         }
 //        //通过判断IdleStateEvent的状态来实现自己的读空闲，写空闲，读写空闲处理逻辑
         if(evt instanceof IdleStateEvent) {
@@ -91,11 +101,9 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
             String eventType = null;
             switch (event.state()) {
                 case READER_IDLE:
-                    eventType = "读空闲";
-                    channelService.remove(openid2);
-                    System.out.println(ctx.channel().remoteAddress() + "--超时时间--" + eventType);
-                    System.out.println("服务器做相应处理..");
-                    ctx.channel().close();
+
+                    closeHeart(ctx, openid2);
+
 
                     //关闭通道，并且清除所有的redis信息
                     break;
@@ -110,6 +118,22 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
 
         }
 
+    }
+    private void closeHeart(ChannelHandlerContext ctx, String openid2) {
+        String eventType = "读空闲";
+
+        // 使用 CompletableFuture 异步执行清理逻辑
+        CompletableFuture<Void> cleanupFuture = CompletableFuture.runAsync(() -> {
+            channelService.remove(openid2);
+            log.info(ctx.channel().remoteAddress() + "--超时时间--" + eventType);
+        });
+
+        // 在清理逻辑完成后，异步关闭 Channel
+        cleanupFuture.whenComplete((__, ___) -> {
+            // 触发一个空的写操作，并在完成后关闭 Channel
+            ctx.writeAndFlush(new CloseWebSocketFrame(401, "心跳结束")).addListener(ChannelFutureListener.CLOSE);
+           
+        });
     }
 
     //    服务端处理客户端websocket请求的核心方法
@@ -248,7 +272,10 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         NettyConfig.group.add(ctx.channel());
-       log.info("channelActive客户端与服务端连接开启....");
+
+
+
+        log.info("channelActive客户端与服务端连接开启....");
     }
 
     //客户端与服务端断开连接
