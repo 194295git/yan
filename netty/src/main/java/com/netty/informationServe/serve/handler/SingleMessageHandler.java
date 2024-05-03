@@ -79,7 +79,7 @@ public class SingleMessageHandler extends SimpleChannelInboundHandler<SingleMess
             message = singleMessagePacket.getMessage();
             sendMessage("SAVECHAT",channelHandlerContext,message, singleMessagePacket.getToUserId(),
                     Topic.OffLine,true, singleMessagePacket.getMsgid(),token,singleMessagePacket.gettType());
-            log.info("SingleMessageHandler ======> 该用户不存在或者未登录");
+            log.info("SingleMessageHandler ======>"+singleMessagePacket.getToUserId()+" 该用户不存在或者未登录");
             /**
              * 更改这块逻辑，变动为将消息投递到mq后返回ack; 将return注释      return;
              */

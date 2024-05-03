@@ -40,6 +40,7 @@ public class MqMessage {
         this.token = token;
     }
 
+
     private String token;
 
 

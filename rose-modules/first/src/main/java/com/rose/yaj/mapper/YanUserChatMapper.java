@@ -6,10 +6,13 @@ import com.rose.yaj.entity.YanUserChat;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface YanUserChatMapper  extends BaseMapper<YanUserChat> {
 
     int updateBatch(List<String> itemIdList);
 
     List<ChatDto.PageChat> listByOpenidAll(@Param("userId") String userId, @Param("minMsgId") String minMsgId);
+
+    List<Map>  selectSendingAndFailing();
 }

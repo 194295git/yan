@@ -68,4 +68,9 @@
         ORDER BY t.msg_id, t.create_time
 
     </select>
+    <select  id="selectSendingAndFailing"  resultType="map">
+          select   chat.t_type ttype,  chat.user_openid fromId , chat.content  content , chat.to_openid  toId , chat.msg_id msgid
+            FROM yan_im_user_chat   chat
+            where chat.status = 'sending' or  chat.status = 'fail'
+    </select>
 </mapper>

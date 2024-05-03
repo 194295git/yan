@@ -13,7 +13,7 @@ public interface YanUserChatService extends IService<YanUserChat> {
      * @param chatDto
      * @param rs
      */
-    void saveChat(String openid, ChatDto chatDto,Integer rs);
+    void saveChat(String openid, ChatDto chatDto,Integer rs,String status);
 
     int updateChatByMsgid(List<String> chat);
 

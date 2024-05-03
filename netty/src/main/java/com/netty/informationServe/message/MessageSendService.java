@@ -40,7 +40,8 @@ public class MessageSendService {
         //2.发起对客户端的推送(websocket消息)
         channel.writeAndFlush(generateMessage(wsMessage));
         //3.记录推送日志
-        log.info("MessageSendService 推送消息为"+generateMessage(wsMessage));
+        // UnpooledByteBufAllocator$InstrumentedUnpooledUnsafeHeapByteBuf(ridx: 0, widx: 123, cap: 333)
+
         //4.记录消息
         SessionUtils.bindMsgidAndNumber(channelId,wsMessage);
 
@@ -57,8 +58,10 @@ public class MessageSendService {
             websocketMessage.setMessageId(UUIDUtils.getUUID());
         }
         //终于找到了统一报文格式的地方 这个地方获取到msg，前台就可以统一了，基本一个type 一个param
-//        return new TextWebSocketFrame(JSONObject.toJSONString(websocketMessage.getMsg()));
-        return new TextWebSocketFrame(JSONObject.toJSONString(websocketMessage));
+        //只返回msg消息消息体里面的重要消息.
+        log.info("MessageSendService 推送消息为"+JSONObject.toJSONString(websocketMessage.getMsg()));
+        return new TextWebSocketFrame(JSONObject.toJSONString(websocketMessage.getMsg()));
+//        return new TextWebSocketFrame(JSONObject.toJSONString(websocketMessage));
     }
 
     private boolean checkClient(Channel channel){

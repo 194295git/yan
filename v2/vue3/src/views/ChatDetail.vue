@@ -165,6 +165,9 @@ import { computed } from "vue";
 import { getLocal, retry } from "@/common/js/utils";
 import { EMOJIS } from "@/common/js/emoji";
 export default {
+  //使用如下代码暂时停用一下客户端重试逻辑.
+
+  /* eslint-disable no-unused-vars */
   components: {
     sHeader,
     listScroll,
@@ -305,7 +308,7 @@ export default {
         console.log("【IM日志】 接受消息者没有登录或者是重试消息 ");
       }
     };
-    const solveSINGLE_MESSAGE_OTHER = async (res, msg) => {
+    const solveSINGLE_MESSAGE_OTHER = async (res) => {
       console.log("【IM日志】imconstant.SINGLE_MESSAGE_OTHER", res);
       /**
        * 需要去前端对比一下id
@@ -319,6 +322,7 @@ export default {
         }
       }
       console.log("avatarMap", avatararray);
+      //创建前端消息存储.
       const commitdata = {
         type: "receive",
         content: res.params.message,
@@ -332,11 +336,8 @@ export default {
       };
 
       store.commit("insertMessage", commitdata);
-      state.recesiveAllMsg.push({
-        type: "receive",
-        content: res.params.message,
-      });
-      singleAck(JSON.parse(msg.data));
+  
+      singleAck(res);
     };
 
     const solveGroupMessage = async (res) => {
@@ -368,22 +369,28 @@ export default {
       //收到消息后更新前端数据
       state.socketServe.ws.onmessage = async (msg) => {
         console.log("【IM日志】从服务端获取到的原始数据", msg.data);
-        const res =
-          JSON.parse(msg.data).msg == undefined
-            ? JSON.parse(msg.data)
-            : JSON.parse(msg.data).msg;
-        console.log(res);
+        // const res =
+        //   JSON.parse(msg.data).msg == undefined
+        //     ? JSON.parse(msg.data)
+        //     : JSON.parse(msg.data).msg;
+        const res = JSON.parse(msg.data)
+         
+        console.log("收到服务端原始数据解析数据",res);
         if (res.type === 0 || res.type == "pong") {
           console.log(res.type);
           return;
         }
+
+
         //处理前端重试逻辑
         if (res.type === imconstant.SINGLE_MESSAGE_RESPONSE) {
-          solveSINGLE_MESSAGE_RESPONSE(res);
+          
+            // solveSINGLE_MESSAGE_RESPONSE(res);
+         
         }
         //用户b收消息
         if (res.type === imconstant.SINGLE_MESSAGE_OTHER) {
-          solveSINGLE_MESSAGE_OTHER(res, msg);
+          solveSINGLE_MESSAGE_OTHER(res);
         }
         //当收到消息的时候则删除队列里面的消息，停止重试,插入消息
         if (res.type === imconstant.SINGLE_MESSAGE_ACK_RESPONSE) {
@@ -455,36 +462,18 @@ export default {
         store.commit("saveToStorage");
       }
 
-      //先注册自己到channel 里面
-      sendRegisterData();
-      // [before 原来这个地方是向后端拉取消息，现在改在chat页面拉取 ]
     };
 
-    //发送注册的数据
-    const sendRegisterData = () => {
-      var data = {
-        type: imconstant.REGISTER,
-        params: {
-          openid: store.state.userInfo.openid,
-          userName: store.state.userInfo.email,
-          loginStatus: "1",
-        },
-      };
-      state.socketServe.send(data);
-      console.log("【IM日志】 发送注册数据", data);
-    };
-
+   
     //发送单聊ack
-    const singleAck = async (receive) => {
-      console.log("receive", receive);
+    const singleAck = async (res) => {
+      console.log("singleAck receive", res);
 
       var data = {
         type: 15,
         params: {
-          from: "client",
-          msgid: receive.messageId,
-          fromUser: receive.msg.params.openid,
-          toUser: receive.to[0],
+         
+          msgid: res.params.msgId,
         },
       };
       console.log(data);
@@ -629,7 +618,6 @@ export default {
       ...toRefs(state),
       goBack,
       goTo,
-      sendRegisterData,
       changeCur,
       showAllMember,
       sendMsg2,
