@@ -111,7 +111,6 @@ import { useRouter } from "vue-router";
 import listScroll from "@/components/ListScroll";
 // import swiper from '@/components/Swiper'
 import navBar from "@/components/NavBar";
-import { getData } from "@/service/home";
 import { getUserInfoMe } from "@/service/user";
 import { Toast } from "vant";
 import { useStore } from "vuex";
@@ -131,12 +130,7 @@ export default {
       timestamp: 0,
       to: "",
       index: "",
-      index_data: "", //高考时间
-      now_year: "", //当前年
-      now_month: "", //当前月
-      now_date: "", //当前日
-      now_day: "一", //当前星期
-      day_Differ: "342", //相差日
+
       i: 1,
       feed: [],
       url: "https://www.yanzhan.xyz/",
@@ -150,23 +144,12 @@ export default {
     });
 
     onMounted(async () => {
-      Toast.loading({
-        message: "加载中...",
-        forbidClick: true,
-      });
-
-      const data2 = await getData(1);
-
+      // Toast.loading({
+      //   message: "加载中...",
+      //   forbidClick: true,
+      // });
       state.loading = false;
-      state.feed = data2.content;
-      // 创建时间
-      let date = new Date();
-      state.now_year = date.getFullYear();
-      state.now_month = date.getMonth() + 1;
-      state.now_date = date.getDate();
-      //更新scroll
-
-      Toast.clear();
+      // Toast.clear();
       const token = getLocal("token");
       if (token) {
         await getUserInfo();
@@ -179,10 +162,7 @@ export default {
 
     const getUserInfo = async () => {
       const res = await getUserInfoMe();
-      // console.log("==========getUserInfo")
-      // console.log(res.content)
       store.commit("setUserInfo", res.content);
-      // console.log(store.state.userInfo)
     };
 
     nextTick(() => {
@@ -204,23 +184,7 @@ export default {
     const tips = () => {
       Toast("敬请期待");
     };
-    const getIndex = (index) => {
-      console.log(index);
-      store.commit("setQueQuestion", state.feed[index].question);
-      console.log(store.state.que);
-      var a = store.state.to;
-      console.log("======a=====");
-      console.log(a);
-      if (a == "que") {
-        router.push({
-          path: "/question",
-          query: { id: state.feed[index].questionId },
-        });
-      } else {
-        const answerId = state.feed[index].answerId;
-        router.push({ path: "/answer", query: { id: answerId } });
-      }
-    };
+    
     const bindQueTap = () => {
       store.commit("setToAsQue");
 
@@ -243,7 +207,6 @@ export default {
       ...toRefs(state),
       goToDetail,
       tips,
-      getIndex,
       bindQueTap,
       bindItemTap,
       open_01,

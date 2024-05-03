@@ -28,9 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -332,14 +330,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         ByteBuf byteBuf = ctx.alloc().buffer();
 
         JSONObject data = new JSONObject();
-        JSONObject params = new JSONObject();
-        params.put("type", "pong");
-        Date currentDate = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = formatter.format(currentDate);
-//        params.put("date", formattedDate);
-        //简单点，就先注释掉日期。
-        data.put("params", params);
+        data.put("type", "pong");
         byte []bytes = data.toJSONString().getBytes(Charset.forName("utf-8"));
         byteBuf.writeBytes(bytes);
         return byteBuf;

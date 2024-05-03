@@ -27,26 +27,6 @@ public class MessageController {
     YanUserChatService yanUserChatService;
 
 
-//    作者：诗圣_杜甫
-//    链接：https://juejin.cn/post/6844904138749247502
-//    来源：掘金
-//    著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-//    @ApiOperation("聊天核心方法 待改进")
-//    @PostMapping("/push")
-//    public GenericResponse pushToWeb(@RequestBody ChatDto chatDto,
-//                                            HttpServletRequest request) throws IOException {
-//
-//        String message = chatDto.getContent();
-//        String toUserId = chatDto.getEmail();
-//
-//        Integer rs = WebSocketServer.sendInfo(message, toUserId);
-//
-//        String openid = Util.fromRequestToOpenid(request);
-//        yanUserChatService.saveChat(openid,chatDto,rs);
-//
-//        return  GenericResponse.response(ServiceError.NORMAL,"消息已经成功发送");
-//    }
-
 
     @ApiOperation("保存聊天内容")
     @PostMapping("/saveChatContent")

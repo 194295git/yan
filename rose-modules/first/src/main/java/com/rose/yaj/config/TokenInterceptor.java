@@ -4,7 +4,6 @@ package com.rose.yaj.config;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rose.yaj.annotation.LoginToken;
 import com.rose.yaj.annotation.PassToken;
-import com.rose.yaj.entity.YanAnswer;
 import com.rose.yaj.entity.YanUser;
 import com.rose.yaj.service.YanUserService;
 import com.rose.yaj.util.JwtTokenUtil;
