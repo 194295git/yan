@@ -63,71 +63,7 @@ const router = createRouter({
         index: 1
       }
     },
-    {
-      path: '/circle',
-      name: 'circle',
-      component: () => import(/* webpackChunkName: "login" */ '@/views/Circle.vue'),
-      meta: {
-        index: 1
-      }
-    },
-    {
-      path: '/question',
-      name: 'question',
-      component: () => import(/* webpackChunkName: "login" */ '@/views/Question.vue'),
-      meta: {
-        index: 1
-      }
-    },
-    {
-      path: '/answer',
-      name: 'answer',
-      component: () => import(/* webpackChunkName: "login" */ '@/views/Answer.vue'),
-      meta: {
-        index: 1
-      }
-    },
-    {
-      path: '/majorWatch',
-      name: 'majorWatch',
-      component: () => import(/* webpackChunkName: "login" */ '@/views/Major.vue'),
-      meta: {
-        index: 1
-      }
-    },
-    {
-      path: '/majorWatchSon',
-      name: 'majorWatchSon',
-      component: () => import(/* webpackChunkName: "login" */ '@/views/MajorWatchSon.vue'),
-      meta: {
-        index: 1
-      }
-    },
-    {
-      path: '/recommend',
-      name: 'recommend',
-      component: () => import(/* webpackChunkName: "login" */ '@/views/Recommend.vue'),
-      meta: {
-        index: 1
-      }
-    },
-    {
-      path: '/majorQuestion',
-      name: 'majorQuestion',
-      component: () => import(/* webpackChunkName: "login" */ '@/views/MajorQuestion.vue'),
-      meta: {
-        index: 1
-      }
-    },
-    
-    {
-      path: '/course',
-      name: 'course',
-      component: () => import(/* webpackChunkName: "login" */ '@/views/Course.vue'),
-      meta: {
-        index: 1
-      }
-    },
+   
   ]
 })
 

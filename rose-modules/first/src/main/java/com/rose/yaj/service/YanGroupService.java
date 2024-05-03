@@ -2,7 +2,6 @@ package com.rose.yaj.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.rose.yaj.dto.GroupDto;
-import com.rose.yaj.entity.YanAnswer;
 import com.rose.yaj.entity.YanGroup;
 import com.rose.yaj.entity.YanUser;
 
