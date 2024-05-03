@@ -24,13 +24,13 @@ public class YanUserChatServiceImpl extends ServiceImpl<YanUserChatMapper, YanUs
     @Autowired
     YanUserChatMapper  yanUserChatMapper;
     @Override
-    public void saveChat(String openid, ChatDto chatDto,Integer rs) {
+    public void saveChat(String openid, ChatDto chatDto,Integer rs,String status) {
         YanUserChat yanUserChat = new YanUserChat();
         //现在拷贝的时候相当于把group也给拷贝了进去
         BeanUtils.copyProperties(chatDto,yanUserChat);
         yanUserChat.setUserOpenid(openid);
         yanUserChat.setIsRead(rs);
-        yanUserChat.setStatus("send");
+        yanUserChat.setStatus(status);
         yanUserChat.setMsgId(chatDto.getMsgId());
         this.save(yanUserChat);
     }

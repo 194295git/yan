@@ -54,7 +54,7 @@ public class MessageController {
                                      HttpServletRequest request) throws IOException {
         //todo  已读和未读待做 需要和netty产生联动
         String openid = Util.fromRequestToOpenid(request);
-        yanUserChatService.saveChat(openid,chatDto,1);
+        yanUserChatService.saveChat(openid,chatDto,1,"send");
 
         return  GenericResponse.response(ServiceError.NORMAL,"消息已经成功发送");
     }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author rose
@@ -23,4 +24,10 @@ public interface NettyMqFeign {
     @RequestMapping(value="rocketmq/mqmessage/message/send",method = RequestMethod.POST,
             headers = {"Content-Type=application/json;charset=UTF-8"})
     public GenericResponse send(@RequestBody @Valid SendRequest request);
+
+
+    @ApiOperation(value="消息推送接口批量推送", notes="根据用户标识进行推送，返回不存在的用户")
+    @RequestMapping(value="rocketmq/mqmessage/message/sendList",method = RequestMethod.POST,
+            headers = {"Content-Type=application/json;charset=UTF-8"})
+    public GenericResponse sendList(@RequestBody @Valid List<SendRequest> request);
 }

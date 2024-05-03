@@ -92,6 +92,7 @@ import {
 import SocketService from "@/common/js/websocket";
 import { getUserInfoMe } from "@/service/user";
 import { useStore } from "vuex";
+import * as imconstant from "@/common/js/imconstant";
 import { getLocal } from "@/common/js/utils";
 export default {
   components: {
@@ -150,6 +151,23 @@ export default {
 
       store.commit("setUserInfo", res.content);
     };
+
+     //发送注册的数据
+    const sendRegisterData = () => {
+      var data = {
+        type: imconstant.REGISTER,
+        params: {
+          openid: store.state.userInfo.openid,
+          userName: store.state.userInfo.email,
+          loginStatus: "1",
+        },
+      };
+      state.socketServe.send(data);
+      console.log("【IM日志】 发送注册数据", data);
+    };
+
+
+
     const init = async () => {
           //建立连接
 
@@ -164,7 +182,7 @@ export default {
       // state.list = data;
       
       //向后端发送注册的消息
-      // sendRegisterData();
+      sendRegisterData();
       // Toast.clear();
       const avatarMap = await getAvatarUrlALL();
       //初始化map

@@ -9,7 +9,6 @@ import com.rose.common.mqutil.MqMessage;
 import com.rose.common.mqutil.SendRequest;
 import com.rose.common.netty.Commond;
 import com.rose.common.utils.UUIDUtils;
-import com.rose.yaj.config.RoseFeignConfig;
 import com.rose.yaj.dto.ChatDto;
 import com.rose.yaj.dto.UserDto;
 import com.rose.yaj.feign.NettyMqFeign;
@@ -47,7 +46,8 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-
+    @Autowired
+    AsyncSend asyncSend;
     /**
      * 幂等的方法,判断list存不存在。存在的话直接删除，下次进来就不存在了。
      * @param token
@@ -88,26 +88,28 @@ public class RocketMqConsumerService implements RocketMQListener<String>, Rocket
                         /**
                          * 用户在线需要去推送一下，群聊的话需要找一下需要推送的人。单聊的话报文里面有
                          */
-                        yanUserChatService.saveChat(message1.getFromId(),chatDto,1);
+                        yanUserChatService.saveChat(message1.getFromId(),chatDto,1,"sending");
                         if (message1.getState()){
 
                             SendRequest send = buildSendRequest(message1);
                             //设置过滤应该有的token
-                            RoseFeignConfig.token.set(message1.getToken());
-                            nettyMqFeign.send(send);
+//                            RoseFeignConfig.token.set(message1.getToken());
+//                            nettyMqFeign.send(send);
+                            asyncSend.pushMessage(message1.getToken(),send);
                         }else{
                             //群聊
                             SendRequest send = buildSendRequestGroup(message1);
                             //设置过滤应该有的token
-                            RoseFeignConfig.token.set(message1.getToken());
-                            nettyMqFeign.send(send);
+                            asyncSend.pushMessage(message1.getToken(),send);
+//                            RoseFeignConfig.token.set(message1.getToken());
+//                            nettyMqFeign.send(send);
                         }
 
                     }else {
                         /**
                          * 离线消息直接落库就链路就结束了
                          */
-                        yanUserChatService.saveChat(message1.getFromId(),chatDto,0);
+                        yanUserChatService.saveChat(message1.getFromId(),chatDto,0,"saved");
                     }
                 }
 

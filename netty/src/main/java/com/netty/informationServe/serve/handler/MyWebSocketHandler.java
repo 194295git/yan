@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -199,9 +200,6 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 WebsocketMessage websocketMessage= new  WebsocketMessage();
                 websocketMessage.setFrom("client");
                 websocketMessage.setMessageId(parmas.getString("msgid"));
-                websocketMessage.setFrom(parmas.getString("fromUser"));
-                String[] touser = {parmas.getString("toUser")};
-                websocketMessage.setTo(touser);
                 ackmessageRequestPacket.setWebsocketMessage(websocketMessage);
                 packet = ackmessageRequestPacket;
                 break;
@@ -231,7 +229,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
                 ByteBuf buf = createPongByteBuf(ctx);
                  TextWebSocketFrame tws = new TextWebSocketFrame(buf);
                 ctx.writeAndFlush(tws);
-                log.info("收到了ping");
+//                log.info("收到了ping");
                 break;
 
             default:
@@ -313,7 +311,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
         data.put("status", 200);
         JSONObject params = new JSONObject();
         params.put("message", message);
-        params.put("date", new Date().toString());
+//        params.put("date", new Date().toString());
         params.put("msgid",msgid);
         params.put("online",toUserChannel);
         //是否重传的消息
@@ -325,14 +323,22 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<WebSocketFra
     }
 
 
-
+    /**
+     * 创建心跳回复消息.
+     * @param ctx
+     * @return
+     */
     public ByteBuf createPongByteBuf(ChannelHandlerContext ctx) {
         ByteBuf byteBuf = ctx.alloc().buffer();
 
         JSONObject data = new JSONObject();
         JSONObject params = new JSONObject();
         params.put("type", "pong");
-        params.put("date", new Date().toString());
+        Date currentDate = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = formatter.format(currentDate);
+//        params.put("date", formattedDate);
+        //简单点，就先注释掉日期。
         data.put("params", params);
         byte []bytes = data.toJSONString().getBytes(Charset.forName("utf-8"));
         byteBuf.writeBytes(bytes);
