@@ -1,10 +1,12 @@
 package com.rose.yaj.controller;
 
 
+import com.rose.common.feignDto.RegisterFeign;
 import com.rose.yaj.common.GenericResponse;
 import com.rose.yaj.common.ServiceError;
 import com.rose.yaj.dto.ChatDto;
 import com.rose.yaj.dto.UserDto;
+import com.rose.yaj.service.WeChatService;
 import com.rose.yaj.service.YanUserChatService;
 import com.rose.yaj.service.YanUserService;
 import com.rose.yaj.util.Util;
@@ -38,6 +40,15 @@ public class YanUserController {
 
     @Autowired
     private YanUserChatService yanUserChatService;
+    @Autowired
+    private WeChatService weChatService;
+
+    @ApiOperation("注册用户表")
+    @PostMapping(value="/registByOpenid")
+    public GenericResponse registByOpenid(@RequestBody RegisterFeign dto){
+        return weChatService.registByOpenid(dto);
+    }
+
     /**
      *
      * @param openid 如果有openid ，则查询当前openid 的账号信息，如果没有openid，则查询其他用户的信息

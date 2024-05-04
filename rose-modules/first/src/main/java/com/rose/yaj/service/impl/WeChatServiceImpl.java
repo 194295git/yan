@@ -1,10 +1,10 @@
 package com.rose.yaj.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.rose.common.feignDto.RegisterFeign;
 import com.rose.yaj.common.GenericResponse;
 import com.rose.yaj.common.ServiceError;
 import com.rose.yaj.entity.YanUser;
-import com.rose.yaj.feign.dto.RegisterFeign;
 import com.rose.yaj.service.WeChatService;
 import com.rose.yaj.service.YanUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -100,6 +100,7 @@ public class WeChatServiceImpl implements WeChatService {
         //明明已经设置了oenid了 这是为什么保存不成功呢；简直离谱
         user.setOpenid(dto.getOpenid());
         user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
         boolean save = yanUserService.save(user);
         if (save){
             return GenericResponse.response(ServiceError.NORMAL);

@@ -73,7 +73,12 @@ public class ShiroConfig {
         filterMap.put("/app/**", "anon");
         filterMap.put("/shrio/login", "anon");
         filterMap.put("/sys/login", "anon");
+
+
         filterMap.put("/sys/registByWeb", "anon");
+        //给first模块的注册功能取消掉权限.
+        filterMap.put("/yaj/yan-user/registByOpenid", "anon");
+
         filterMap.put("/swagger/**", "anon");
         filterMap.put("/v2/api-docs", "anon");
         filterMap.put("/swagger-ui.html", "anon");

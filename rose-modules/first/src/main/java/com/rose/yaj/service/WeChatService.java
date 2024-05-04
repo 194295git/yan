@@ -1,8 +1,8 @@
 package com.rose.yaj.service;
 
 
+import com.rose.common.feignDto.RegisterFeign;
 import com.rose.yaj.common.GenericResponse;
-import com.rose.yaj.feign.dto.RegisterFeign;
 
 /**
  * 微信业务接口

@@ -1,4 +1,4 @@
-package com.rose.loginUser.sys.feign.dto;
+package com.rose.common.feignDto;
 
 import lombok.Data;
 
@@ -16,6 +16,8 @@ public class RegisterFeign implements Serializable {
     private String openid;
     
     private String username;
+
+    private String email;
 
 
 }
