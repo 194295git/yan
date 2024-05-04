@@ -27,7 +27,6 @@ import com.rose.loginUser.sys.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
-import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.Sha256Hash;
@@ -57,11 +56,7 @@ public class SysLoginController extends AbstractController {
 	@Autowired
 	private SysUserService sysUserService;
 
-	/**
-	 * 执行事务消息
-	 */
-	@Autowired
-	private RocketMQTemplate rocketMQTemplate;
+
 
 	@Autowired
 	private SysCaptchaService sysCaptchaService;
