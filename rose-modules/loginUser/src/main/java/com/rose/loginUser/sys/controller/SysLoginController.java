@@ -15,8 +15,10 @@ import com.rose.common.base.R;
 import com.rose.common.base.ServiceError;
 import com.rose.common.constant.RedisPrefix;
 import com.rose.common.feignDto.RegisterFeign;
+import com.rose.common.mqutil.Topic;
 import com.rose.common.utils.CommonUser;
 import com.rose.common.utils.JwtTokenUtil;
+import com.rose.loginUser.common.utils.RocketMqHelper;
 import com.rose.loginUser.sys.entity.SysUserEntity;
 import com.rose.loginUser.sys.feign.FirstLoginFeign;
 import com.rose.loginUser.sys.form.SysLoginForm;
@@ -27,12 +29,14 @@ import com.rose.loginUser.sys.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
+import org.apache.rocketmq.client.producer.TransactionSendResult;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -55,8 +59,9 @@ public class SysLoginController extends AbstractController {
 
 	@Autowired
 	private SysUserService sysUserService;
-
-
+	//工具类
+	@Autowired
+	RocketMqHelper rocketMqHelper;
 
 	@Autowired
 	private SysCaptchaService sysCaptchaService;
@@ -124,25 +129,25 @@ public class SysLoginController extends AbstractController {
 	 * @return
 	 * @throws Exception
 	 */
-	@ApiOperation("使用邮箱和密码注册")
-	@PostMapping("/sys/registByWeb")
-	public GenericResponse registByWeb(@RequestBody SysRegisterForm dto) throws Exception {
-		String uuid = UUID.randomUUID().toString() +new Random().nextInt();
-		SysUserEntity sysUserEntity = new SysUserEntity();
-		sysUserEntity.setPassword(dto.getPassword());
-		sysUserEntity.setUsername(dto.getUsername());
-		sysUserEntity.setOpenid(uuid);
-		sysUserService.saveUser(sysUserEntity);
-		//还需要调用first服务，给器存入一个openid来唯一关联；目前感觉这样设计合适。可以说兼容两套系统
-		//2023-1-22得出结论这块是需要待优化的。先更新一下数据库吧。然后区分角色和功能。
-		//最起码这些角色隶属于普通基本模块的角色。
-		RegisterFeign registerFeign = new RegisterFeign();
-		registerFeign.setOpenid(uuid);
-		registerFeign.setUsername(dto.getUsername());
-		registerFeign.setEmail(dto.getEmail());
-		firstLoginFeign.registByOpenid(registerFeign);
-		return GenericResponse.response(ServiceError.NORMAL);
-	}
+//	@ApiOperation("使用邮箱和密码注册")
+//	@PostMapping("/sys/registByWeb")
+//	public GenericResponse registByWeb(@RequestBody SysRegisterForm dto) throws Exception {
+//		String uuid = UUID.randomUUID().toString() +new Random().nextInt();
+//		SysUserEntity sysUserEntity = new SysUserEntity();
+//		sysUserEntity.setPassword(dto.getPassword());
+//		sysUserEntity.setUsername(dto.getUsername());
+//		sysUserEntity.setOpenid(uuid);
+//		sysUserService.saveUser(sysUserEntity);
+//		//还需要调用first服务，给器存入一个openid来唯一关联；目前感觉这样设计合适。可以说兼容两套系统
+//		//2023-1-22得出结论这块是需要待优化的。先更新一下数据库吧。然后区分角色和功能。
+//		//最起码这些角色隶属于普通基本模块的角色。
+//		RegisterFeign registerFeign = new RegisterFeign();
+//		registerFeign.setOpenid(uuid);
+//		registerFeign.setUsername(dto.getUsername());
+//		registerFeign.setEmail(dto.getEmail());
+//		firstLoginFeign.registByOpenid(registerFeign);
+//		return GenericResponse.response(ServiceError.NORMAL);
+//	}
 
 
 	/**
@@ -152,15 +157,24 @@ public class SysLoginController extends AbstractController {
 	 * @throws Exception
 	 */
 	@ApiOperation("使用邮箱和密码注册")
-	@PostMapping("/sys/registByWebTX")
+	@PostMapping("/sys/registByWeb")
 	public GenericResponse registByWebTX(@RequestBody SysRegisterForm dto) throws Exception {
-//		String uuid = UUID.randomUUID().toString() + new Random().nextInt();
-//		SysUserEntity sysUserEntity = new SysUserEntity();
-//		sysUserEntity.setPassword(dto.getPassword());
-//		sysUserEntity.setUsername(dto.getUsername());
-//		sysUserEntity.setOpenid(uuid);
-
-
+		String uuid = UUID.randomUUID().toString() + new Random().nextInt();
+		SysUserEntity sysUserEntity = new SysUserEntity();
+		sysUserEntity.setPassword(dto.getPassword());
+		sysUserEntity.setUsername(dto.getUsername());
+		sysUserEntity.setOpenid(uuid);
+		//注册需要的实体类
+		RegisterFeign registerFeign = new RegisterFeign();
+		registerFeign.setOpenid(uuid);
+		registerFeign.setUsername(dto.getUsername());
+		registerFeign.setEmail(dto.getEmail());
+		TransactionSendResult sendResult= rocketMqHelper.transactionSend(Topic.REGISTER,
+				MessageBuilder.withPayload(sysUserEntity).build(),registerFeign);
+		String sendStatus = sendResult.getSendStatus().name();
+		String localTXState = sendResult.getLocalTransactionState().name();
+		logger.info("sendStatus---" + sendStatus);
+		logger.info("localTXState---"+localTXState);
 
 		// 注意：这里不能立即返回成功，因为事务还未完成，实际应用中可能需要设计异步回调通知客户端事务结果
 		// 以下仅为示例逻辑，实际应用中需根据业务需求调整

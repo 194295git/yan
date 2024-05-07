@@ -103,7 +103,8 @@ export default {
         await register({
           // "username": values.username1,
           "password": values.password1,
-          "username":values.email1
+           "username":values.username1,
+           "email":values.email1,
         })
         Toast.success('注册成功')
         state.type = 'login'

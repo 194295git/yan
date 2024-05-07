@@ -88,3 +88,8 @@ mybatis-plus:
     call-setters-on-nulls: true
     jdbc-type-for-null: 'null'
 
+rocketmq:
+  name-server: 192.168.56.20:9876
+  producer:
+    group: Login-group
+    sendMessageTimeout: 300000

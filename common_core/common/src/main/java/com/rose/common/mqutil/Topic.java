@@ -31,4 +31,8 @@ public class Topic {
      */
     public static final String LogTopic = "NettyLog";
 
+    /**
+     * 日志Topic
+     */
+    public static final String REGISTER = "TX_REGISTER_ADD";
 }

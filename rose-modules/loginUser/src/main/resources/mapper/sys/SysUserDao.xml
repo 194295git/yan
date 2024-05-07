@@ -21,4 +21,9 @@
 		select * from sys_user where username = #{username}
 	</select>
 
+
+	<select id="queryUserByOpenid" resultType="map">
+		select * from sys_user where openid = #{openid} and  username = #{username}
+	</select>
+
 </mapper>

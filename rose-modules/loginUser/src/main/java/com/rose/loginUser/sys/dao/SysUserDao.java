@@ -14,6 +14,7 @@ import com.rose.loginUser.sys.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统用户
@@ -39,4 +40,9 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	 */
 	SysUserEntity queryByUserName(String username);
 
+	/**
+	 * 根据openid查询是否已经存在于数据库
+	 *
+	 */
+	List<Map> queryUserByOpenid(String openid,String username);
 }
