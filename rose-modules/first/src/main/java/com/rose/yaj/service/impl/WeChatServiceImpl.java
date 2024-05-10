@@ -76,13 +76,13 @@ public class WeChatServiceImpl implements WeChatService {
 
         }else {
             YanUser user = new YanUser();
-            //明明已经设置了oenid了 这是为什么保存不成功呢；简直离谱
             String newOpenid = uuid();
 
 //            user.setOpenid(newOpenid);
             user.setUsername("test"+new Random().nextInt());
             user.setEmail(email);
-            user.setPassword(password);
+            //注册服务由用户中心接管
+//            user.setPassword(password);
             boolean save = yanUserService.save(user);
             if (save){
                 return GenericResponse.response(ServiceError.NORMAL);
@@ -97,7 +97,6 @@ public class WeChatServiceImpl implements WeChatService {
     @Override
     public GenericResponse registByOpenid(RegisterFeign dto) {
         YanUser user = new YanUser();
-        //明明已经设置了oenid了 这是为什么保存不成功呢；简直离谱
         user.setOpenid(dto.getOpenid());
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());

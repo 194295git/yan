@@ -151,7 +151,7 @@ public class SysLoginController extends AbstractController {
 
 
 	/**
-	 * 使用rocketmq实现半事务
+	 * 使用rocketmq实现事务
 	 * @param dto
 	 * @return
 	 * @throws Exception

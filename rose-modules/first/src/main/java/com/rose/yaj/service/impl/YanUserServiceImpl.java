@@ -105,20 +105,25 @@ public class YanUserServiceImpl extends ServiceImpl<YanUserMapper, YanUser> impl
         return eyeUsers;
 }
 
+    /**
+     * 接口暂时改造
+     * @param openid
+     * @param addInfo
+     */
     @Override
     public void addInfo(String openid, UserDto.AddInfo addInfo) {
         YanUser yanUser = new YanUser();
-        if (yanUser.getPassword()!= null && !yanUser.getPassword().equals("") ){
-            BeanUtils.copyProperties(addInfo,yanUser);
-        }else {
+//        if (yanUser.getPassword()!= null && !yanUser.getPassword().equals("") ){
+//            BeanUtils.copyProperties(addInfo,yanUser);
+//        }else {
             yanUser.setUsername(addInfo.getUsername());
             yanUser.setAvatarUrl(addInfo.getAvatarUrl());
             yanUser.setMajor(addInfo.getMajor());
             yanUser.setCollege(addInfo.getCollege());
 
-        }
-
-        yanUser.setOpenid(openid);
+//        }
+//
+//        yanUser.setOpenid(openid);
         this.updateById(yanUser);
     }
 

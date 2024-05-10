@@ -30,15 +30,15 @@ public class YanUser implements Serializable {
     @TableId(type = IdType.UUID)
     private String openid;
 
-    //希望这个地方自己开的与数据库大小写转换
-    private Integer chatId;
+//
+//    private Integer chatId;
 
     /**
      * 用户名
      */
     private String username;
 
-    private String password;
+
 
     private Integer isAlive;
 
